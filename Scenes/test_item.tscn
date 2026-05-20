@@ -1,14 +1,16 @@
 [gd_scene format=3 uid="uid://b8mg6txafrem4"]
 
-[ext_resource type="Texture2D" uid="uid://7glqb3k3vwks" path="res://icon.svg" id="1_0l3m6"]
+[ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scenes/test_item.gd" id="1_ce7se"]
+[ext_resource type="Texture2D" uid="uid://7glqb3k3vwks" path="res://icon.svg" id="1_p0rmc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e5x20"]
 size = Vector2(126, 125)
 
 [node name="TestItem" type="Area2D" unique_id=1264360636]
+script = ExtResource("1_ce7se")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1726742071]
-texture = ExtResource("1_0l3m6")
+texture = ExtResource("1_p0rmc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=921391206]
 position = Vector2(0, -0.5)
