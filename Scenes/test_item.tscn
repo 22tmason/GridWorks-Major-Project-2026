@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b8mg6txafrem4"]
 
-[ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scenes/test_item.gd" id="1_ce7se"]
+[ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scripts/test_item.gd" id="1_ce7se"]
 [ext_resource type="Texture2D" uid="uid://7glqb3k3vwks" path="res://icon.svg" id="1_p0rmc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e5x20"]
