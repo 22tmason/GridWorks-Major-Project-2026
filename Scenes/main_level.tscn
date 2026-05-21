@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dg07bledi2jap"]
 
-[ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/test_item.tscn" id="1_cowf1"]
+[ext_resource type="PackedScene" uid="uid://dumd22i5qussy" path="res://GridWorks Major Project 2026/Scenes/belt.tscn" id="1_cowf1"]
+[ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/test_item.tscn" id="2_y266r"]
 
 [sub_resource type="TileSet" id="TileSet_jixft"]
 
@@ -9,4 +10,7 @@
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=893010129]
 tile_set = SubResource("TileSet_jixft")
 
-[node name="TestItem" parent="." unique_id=1264360636 instance=ExtResource("1_cowf1")]
+[node name="Belt" parent="." unique_id=883872601 instance=ExtResource("1_cowf1")]
+current_direction = 0
+
+[node name="TestItem" parent="." unique_id=1264360636 instance=ExtResource("2_y266r")]
