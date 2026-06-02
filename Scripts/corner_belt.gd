@@ -1,12 +1,9 @@
-extends Area2D
+extends Node2D
 
 enum Direction { UP, RIGHT, DOWN, LEFT }
 
 @export var current_direction: Direction = Direction.DOWN 
 var is_placed := false
-var speed: float = 64.0 
-var push_direction: Vector2 = Vector2.DOWN 
-@export var lane_offset: float = 16.0 
 
 func _ready() -> void:
 	if not is_placed:
@@ -27,7 +24,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
 		return
 		
-	# --- NEW: Press "R" to rotate the preview belt ---
 	if event is InputEventKey and event.keycode == KEY_R and event.pressed:
 		rotate_belt()
 		
@@ -39,23 +35,23 @@ func _unhandled_input(event: InputEvent) -> void:
 			is_placed = true
 			modulate.a = 1.0 
 			
-			var next_belt = BuildManager.selected_scene.instantiate()
-			get_parent().add_child(next_belt)
+			# Activate the child areas so the item recognizes them!
+			if has_node("EntranceArea"):
+				$EntranceArea.is_placed = true
+			if has_node("ExitArea"):
+				$ExitArea.is_placed = true
 			
+			var next_belt = BuildManager.selected_scene.instantiate()
 			var current_sprite = $AnimatedSprite2D
 			var next_sprite = next_belt.get_node("AnimatedSprite2D")
 			
-			# Sync the animation frame
 			next_sprite.set_frame_and_progress(current_sprite.frame, current_sprite.frame_progress)
 			
-			# --- NEW: Sync the rotation! ---
-			# Instead of transferring local Vector2s, just transfer the node's physical rotation
-			next_belt.rotation_degrees = rotation_degrees
 			next_belt.current_direction = current_direction
+			next_belt.rotation_degrees = rotation_degrees
+			
+			get_parent().add_child(next_belt)
 
 func rotate_belt() -> void:
-	# Keep your enum for logic/saving if you need it
 	current_direction = (current_direction + 1) % 4 as Direction
-	
-	# Just physically rotate the whole root node by 90 degrees.
 	rotation_degrees += 90

@@ -124,7 +124,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_guvdi"]
-size = Vector2(64, 64)
+size = Vector2(62, 62)
 
 [node name="Belt" type="Area2D" unique_id=883872601]
 collision_priority = 0.0

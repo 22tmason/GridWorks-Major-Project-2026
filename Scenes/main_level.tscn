@@ -1,16 +1,32 @@
 [gd_scene format=3 uid="uid://dg07bledi2jap"]
 
-[ext_resource type="PackedScene" uid="uid://dumd22i5qussy" path="res://GridWorks Major Project 2026/Scenes/belt.tscn" id="1_cowf1"]
+[ext_resource type="Script" uid="uid://bt8foho3wrtv0" path="res://GridWorks Major Project 2026/Scripts/main_level.gd" id="1_7vhcm"]
 [ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/test_item.tscn" id="2_y266r"]
+[ext_resource type="PackedScene" uid="uid://cug5po0m1vw1r" path="res://GridWorks Major Project 2026/Scenes/corner_belt.tscn" id="4_nyu2a"]
+[ext_resource type="Script" uid="uid://s4ohav6h7p7" path="res://GridWorks Major Project 2026/Scripts/toolbar.gd" id="4_sh7fp"]
 
 [sub_resource type="TileSet" id="TileSet_jixft"]
 
 [node name="MainLevel" type="Node2D" unique_id=1807510388]
+script = ExtResource("1_7vhcm")
+test_item_scene = ExtResource("2_y266r")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=893010129]
 tile_set = SubResource("TileSet_jixft")
 
-[node name="Belt" parent="." unique_id=883872601 instance=ExtResource("1_cowf1")]
-current_direction = 0
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2095309792]
+script = ExtResource("4_sh7fp")
 
-[node name="TestItem" parent="." unique_id=1264360636 instance=ExtResource("2_y266r")]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer" unique_id=1367705276]
+offset_right = 100.0
+offset_bottom = 66.0
+
+[node name="StraightButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=2019693180]
+layout_mode = 2
+text = "Straight"
+
+[node name="CornerButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=2038491678]
+layout_mode = 2
+text = "Corner"
+
+[node name="CornerBelt" parent="." unique_id=440220761 instance=ExtResource("4_nyu2a")]
