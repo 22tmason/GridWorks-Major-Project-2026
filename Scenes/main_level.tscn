@@ -29,4 +29,8 @@ text = "Straight"
 layout_mode = 2
 text = "Corner"
 
+[node name="InserterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1168308411]
+layout_mode = 2
+text = "Inserter"
+
 [node name="CornerBelt" parent="." unique_id=440220761 instance=ExtResource("4_nyu2a")]

@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://bdxfeq6bo8j0b"]
+
+[ext_resource type="Texture2D" uid="uid://2qg0pl2frg7d" path="res://GridWorks Major Project 2026/Assets/New Piskel (3).png" id="1_d8m1h"]
+[ext_resource type="Script" uid="uid://dx4okp3o475r2" path="res://GridWorks Major Project 2026/Scripts/inserter.gd" id="1_xrcwv"]
+[ext_resource type="Texture2D" uid="uid://b5knk3j4greda" path="res://GridWorks Major Project 2026/Assets/New Piskel (1).png" id="2_xrcwv"]
+[ext_resource type="Texture2D" uid="uid://mgns4kuqsidi" path="res://GridWorks Major Project 2026/Assets/New Piskel (4).png" id="5_j0gby"]
+[ext_resource type="Texture2D" uid="uid://c73kyxlu7qapk" path="res://GridWorks Major Project 2026/Assets/New Piskel (5).png" id="6_luyqq"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w83id"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_d8m1h")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8aqt3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xrcwv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jhq02"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_j0gby")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8luwq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_luyqq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j0gby"]
+
+[node name="Inserter" type="Node2D" unique_id=30982405]
+script = ExtResource("1_xrcwv")
+swing_time = 5.0
+
+[node name="Base" type="AnimatedSprite2D" parent="." unique_id=1250178131]
+sprite_frames = SubResource("SpriteFrames_w83id")
+
+[node name="ArmSprite" type="AnimatedSprite2D" parent="." unique_id=703276081]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_8aqt3")
+
+[node name="Handle1" type="AnimatedSprite2D" parent="ArmSprite" unique_id=91639501]
+sprite_frames = SubResource("SpriteFrames_jhq02")
+
+[node name="Handle2" type="AnimatedSprite2D" parent="ArmSprite" unique_id=1712954392]
+sprite_frames = SubResource("SpriteFrames_8luwq")
+
+[node name="GrabPoint" type="Marker2D" parent="ArmSprite" unique_id=1991619528]
+position = Vector2(-49, 0)
+gizmo_extents = 19.2
+
+[node name="PickupArea" type="Area2D" parent="." unique_id=1440000777]
+position = Vector2(-49, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea" unique_id=983717460]
+shape = SubResource("RectangleShape2D_j0gby")
+
+[node name="DropArea" type="Marker2D" parent="." unique_id=1270509927]
+position = Vector2(54, 0)
