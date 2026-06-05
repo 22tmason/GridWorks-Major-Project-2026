@@ -4,9 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://7glqb3k3vwks" path="res://icon.svg" id="1_p0rmc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e5x20"]
-size = Vector2(72, 72)
+size = Vector2(112, 112)
 
-[node name="TestItem" type="Area2D" unique_id=1264360636]
+[node name="TestItem" type="Area2D" unique_id=1264360636 groups=["items"]]
 z_index = 1
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_ce7se")

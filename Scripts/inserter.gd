@@ -9,6 +9,7 @@ var is_placed := false
 var current_direction := 0 # Prevents the BuildManager crash!
 var held_item: Node2D = null
 @export var swing_time: float = 0.5 # Time in seconds it takes to swing
+var is_busy := false # Tracks if the arm is currently in motion
 
 func _ready() -> void:
 	if not is_placed:
@@ -58,19 +59,21 @@ func _unhandled_input(event: InputEvent) -> void:
 # --- AUTOMATED MOVEMENT LOGIC ---
 
 func _on_pickup_area_entered(area: Area2D) -> void:
-	# Check if we are empty-handed and if the thing that entered is actually an item
-	if held_item == null and area.is_in_group("items"):
-		grab_item(area)
+	if area.is_in_group("items") and not is_busy:
+		# Use call_deferred to safely trigger the grab AFTER physics math is done
+		call_deferred("grab_item", area)
 
 func grab_item(item: Node2D) -> void:
+	is_busy = true
 	held_item = item
 	
-	# Optional: Disable the item's own movement script here so it stops trying to ride the belt
-	# item.set_process(false) 
+	item.remove_from_group("items")
+	item.set_physics_process(false) 
 	
-	# Snap the item to the arm's claw
-	item.get_parent().remove_child(item)
-	grab_point.add_child(item)
+	# --- NEW: Use Godot 4's reparent function! ---
+	# Passing 'false' tells it NOT to keep its world position,
+	# making it snap directly to the claw's local space.
+	item.reparent(grab_point, false)
 	item.position = Vector2.ZERO 
 	
 	swing_arm_forward()
@@ -80,21 +83,21 @@ func swing_arm_forward() -> void:
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.tween_property(arm_sprite, "rotation_degrees", 180.0, swing_time)
 	
-	# When the tween finishes swinging, trigger the drop_item function
 	tween.tween_callback(drop_item)
 
 func drop_item() -> void:
 	if held_item:
-		# Unparent from the arm and put it back into the main world
 		var main_level = get_tree().current_scene
-		grab_point.remove_child(held_item)
-		main_level.add_child(held_item)
 		
-		# Set the item's global position to exactly where the DropArea is
+		held_item.reparent(main_level)
 		held_item.global_position = $DropArea.global_position
 		
-		# Optional: Re-enable the item's movement here
-		# held_item.set_process(true)
+		# --- NEW: Tell the item it needs to yield to traffic! ---
+		if "is_waiting_for_gap" in held_item:
+			held_item.is_waiting_for_gap = true
+		
+		held_item.add_to_group("items")
+		held_item.set_physics_process(true)
 		
 		held_item = null
 		swing_arm_back()
@@ -103,3 +106,15 @@ func swing_arm_back() -> void:
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.tween_property(arm_sprite, "rotation_degrees", 0.0, swing_time)
+	
+	# When the arm is completely finished swinging back, reset it
+	tween.tween_callback(reset_arm)
+
+func reset_arm() -> void:
+	is_busy = false # Unlock the arm
+	
+	# Check if another item rolled into the area while we were busy!
+	for area in pickup_area.get_overlapping_areas():
+		if area.is_in_group("items"):
+			grab_item(area)
+			break # Stop checking after grabbing one
