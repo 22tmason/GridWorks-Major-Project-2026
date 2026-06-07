@@ -129,6 +129,7 @@ size = Vector2(62, 62)
 [node name="Belt" type="Area2D" unique_id=883872601]
 collision_priority = 0.0
 script = ExtResource("1_joqql")
+speed = 128.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=879803508]
 sprite_frames = SubResource("SpriteFrames_pyjg1")

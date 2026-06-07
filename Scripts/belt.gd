@@ -4,7 +4,7 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 
 @export var current_direction: Direction = Direction.DOWN 
 var is_placed := false
-@export var speed: float = 64.0 
+@export var speed: float = 128
 var push_direction: Vector2 = Vector2.DOWN 
 @export var lane_offset: float = 16.0 
 

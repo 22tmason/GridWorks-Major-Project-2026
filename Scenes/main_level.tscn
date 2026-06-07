@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://s4ohav6h7p7" path="res://GridWorks Major Project 2026/Scripts/toolbar.gd" id="4_sh7fp"]
 
 [sub_resource type="TileSet" id="TileSet_jixft"]
+tile_size = Vector2i(96, 96)
 
 [node name="MainLevel" type="Node2D" unique_id=1807510388]
 script = ExtResource("1_7vhcm")

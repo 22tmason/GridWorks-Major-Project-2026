@@ -72,9 +72,13 @@ z_index = 1
 sprite_frames = SubResource("SpriteFrames_8aqt3")
 
 [node name="Handle1" type="AnimatedSprite2D" parent="ArmSprite" unique_id=91639501]
+position = Vector2(2, -18)
+rotation = 0.34906584
 sprite_frames = SubResource("SpriteFrames_jhq02")
 
 [node name="Handle2" type="AnimatedSprite2D" parent="ArmSprite" unique_id=1712954392]
+position = Vector2(2, 18)
+rotation = -0.34906584
 sprite_frames = SubResource("SpriteFrames_8luwq")
 
 [node name="GrabPoint" type="Marker2D" parent="ArmSprite" unique_id=1991619528]

@@ -1,7 +1,6 @@
 extends Area2D
 
-@onready var raycast: RayCast2D = $RayCast2D
-var is_waiting_for_gap := false # --- NEW: Tracks if we were just dropped 
+var is_waiting_for_gap := false # Tracks if we were just dropped by an inserter
 
 func _ready() -> void:
 	add_to_group("items")
@@ -51,42 +50,58 @@ func _physics_process(delta: float) -> void:
 		
 		var can_move = true
 		
-		# --- NEW: Gap Waiting Logic (For newly dropped items) ---
+		# --- ROBUST Gap Waiting (Checking a full footprint, not just center points) ---
 		if is_waiting_for_gap:
+			var gap_query = PhysicsShapeQueryParameters2D.new()
+			var gap_shape = RectangleShape2D.new()
+			gap_shape.size = Vector2(30, 30) # A box roughly the size of your item's collision
+			gap_query.shape = gap_shape
+			gap_query.transform = Transform2D(0, global_position)
+			gap_query.collide_with_areas = true
+			gap_query.exclude = [self.get_rid()]
+			
+			var overlaps = space_state.intersect_shape(gap_query)
 			var is_blocked = false
-			# Check if we are physically sitting on top of any other item
-			for area in get_overlapping_areas():
-				if area.is_in_group("items") and area != self:
+			
+			for o in overlaps:
+				if o.collider.is_in_group("items"):
 					is_blocked = true
 					break
-			
+					
 			if is_blocked:
-				can_move = false # Freeze and wait!
+				can_move = false # Freeze! The footprint isn't clear yet.
 			else:
-				is_waiting_for_gap = false # The gap opened up! Join the flow!
+				is_waiting_for_gap = false # The footprint is 100% clear. Join the flow!
 				
 		
-		# --- 2a. Queueing Logic (Hitting other items) ---
-		# (Only run the raycast check if we aren't already waiting for a gap)
+		# --- ROBUST Queueing (Thick Box Projection instead of RayCast) ---
 		if can_move: 
-			raycast.target_position = world_dir * 32.0
-			raycast.force_raycast_update()
+			var queue_query = PhysicsShapeQueryParameters2D.new()
+			var queue_shape = RectangleShape2D.new()
 			
-			if raycast.is_colliding():
-				var hit = raycast.get_collider()
-				if hit and hit.is_in_group("items") and hit != self:
-					can_move = false
-		
-		# --- 2a. Queueing Logic (Hitting other items) ---
-		raycast.target_position = world_dir * 32.0
-		raycast.force_raycast_update()
-		
-		if raycast.is_colliding():
-			var hit = raycast.get_collider()
-			if hit and hit.is_in_group("items"):
-				can_move = false
+			# Create a wide but VERY THIN bumper (24px across, but only 4px deep)
+			# We flip the dimensions based on which way we are moving
+			if world_dir.x != 0:
+				queue_shape.size = Vector2(4, 24) # Moving X: 4 wide, 24 tall
+			else:
+				queue_shape.size = Vector2(24, 4) # Moving Y: 24 wide, 4 tall
+			
+			queue_query.shape = queue_shape
+			
+			# Project this thin bumper exactly 24 pixels from the center of the item.
+			# This puts it just barely in front of the item's visual graphic.
+			queue_query.transform = Transform2D(0, global_position + (world_dir * 12.0))
+			queue_query.collide_with_areas = true
+			queue_query.exclude = [self.get_rid()]
+			
+			var blockers = space_state.intersect_shape(queue_query)
+			
+			for b in blockers:
+				if b.collider.is_in_group("items"):
+					can_move = false # Stop only when we are physically touching!
+					break
 
-		# --- 2b. End of Belt Logic (Looking for the next belt) ---
+		# --- End of Belt Logic (Looking for the next belt) ---
 		var offset_from_center = global_position - tile_center
 		var progress_forward = offset_from_center.dot(world_dir)
 		var stop_distance = 16.0 
@@ -94,7 +109,7 @@ func _physics_process(delta: float) -> void:
 		if can_move and progress_forward > stop_distance:
 			var next_tile_center = tile_center + (world_dir * 64.0)
 			
-			# --- FIXED: Use a 4x4 box instead of a point so it doesn't slip through corner gaps! ---
+			# Use a 4x4 box instead of a point so it doesn't slip through corner gaps
 			var belt_query = PhysicsShapeQueryParameters2D.new()
 			belt_query.shape = query_shape # Reuse the 4x4 box shape
 			belt_query.transform = Transform2D(0, next_tile_center)

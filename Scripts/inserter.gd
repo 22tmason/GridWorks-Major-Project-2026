@@ -3,6 +3,7 @@ extends Node2D
 @onready var arm_sprite = $ArmSprite
 @onready var pickup_area = $PickupArea
 @onready var grab_point = $ArmSprite/GrabPoint
+@onready var drop_area = $DropArea
 
 # State variables
 var is_placed := false
@@ -10,6 +11,7 @@ var current_direction := 0 # Prevents the BuildManager crash!
 var held_item: Node2D = null
 @export var swing_time: float = 0.5 # Time in seconds it takes to swing
 var is_busy := false # Tracks if the arm is currently in motion
+var is_waiting_to_drop := false # Tracks if the arm is hovering, waiting for a gap
 
 func _ready() -> void:
 	if not is_placed:
@@ -26,6 +28,11 @@ func _process(_delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
 	global_position = GridManager.grid_to_world(current_grid_cell)
+
+func _physics_process(_delta: float) -> void:
+	# Run the drop checking logic every physics frame if we are waiting for a gap
+	if is_waiting_to_drop:
+		try_drop_item()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_placed:
@@ -51,7 +58,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	else:
 		# If the building IS placed, listen for F and B to manually test the arm
 		if event is InputEventKey and event.pressed:
-			if event.keycode == KEY_F:
+			if event.keycode == KEY_F and not is_busy:
 				swing_arm_forward()
 			elif event.keycode == KEY_B:
 				swing_arm_back()
@@ -60,19 +67,24 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_pickup_area_entered(area: Area2D) -> void:
 	if area.is_in_group("items") and not is_busy:
+		# Lock it INSTANTLY so it can't queue multiple grabs from competing arms
+		is_busy = true
 		# Use call_deferred to safely trigger the grab AFTER physics math is done
 		call_deferred("grab_item", area)
 
 func grab_item(item: Node2D) -> void:
-	is_busy = true
+	# Abort if another inserter stole it while we were waiting for the frame to end!
+	if not item.is_in_group("items"):
+		is_busy = false
+		return
+		
 	held_item = item
 	
 	item.remove_from_group("items")
 	item.set_physics_process(false) 
 	
-	# --- NEW: Use Godot 4's reparent function! ---
-	# Passing 'false' tells it NOT to keep its world position,
-	# making it snap directly to the claw's local space.
+	# Use Godot 4's reparent function! 
+	# Passing 'false' snaps it directly to the claw's local space.
 	item.reparent(grab_point, false)
 	item.position = Vector2.ZERO 
 	
@@ -86,15 +98,48 @@ func swing_arm_forward() -> void:
 	tween.tween_callback(drop_item)
 
 func drop_item() -> void:
+	# Instead of dropping instantly, tell the inserter to start scanning for a gap!
 	if held_item:
+		is_waiting_to_drop = true
+
+func try_drop_item() -> void:
+	if not held_item:
+		is_waiting_to_drop = false
+		return
+		
+	# --- 1. Calculate the FAR lane precisely ---
+	# Find the direction from the base to the drop area, and push 16 pixels further
+	var reach_dir = (drop_area.global_position - global_position).normalized()
+	var far_lane_pos = drop_area.global_position + (reach_dir * 16.0)
+	
+	# --- 2. Check if that exact spot is clear ---
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsShapeQueryParameters2D.new()
+	var shape = RectangleShape2D.new()
+	
+	# Use a 26x26 box (slightly larger than the bumper) to guarantee a clean gap
+	shape.size = Vector2(26, 26) 
+	query.shape = shape
+	query.transform = Transform2D(0, far_lane_pos)
+	query.collide_with_areas = true
+	
+	var hits = space_state.intersect_shape(query)
+	var blocked = false
+	
+	for hit in hits:
+		if hit.collider.is_in_group("items") and hit.collider != held_item:
+			blocked = true
+			break
+			
+	# --- 3. If clear, release the item! ---
+	if not blocked:
+		is_waiting_to_drop = false
+		
 		var main_level = get_tree().current_scene
-		
 		held_item.reparent(main_level)
-		held_item.global_position = $DropArea.global_position
 		
-		# --- NEW: Tell the item it needs to yield to traffic! ---
-		if "is_waiting_for_gap" in held_item:
-			held_item.is_waiting_for_gap = true
+		# Spawn exactly on the far lane!
+		held_item.global_position = far_lane_pos
 		
 		held_item.add_to_group("items")
 		held_item.set_physics_process(true)
@@ -116,5 +161,7 @@ func reset_arm() -> void:
 	# Check if another item rolled into the area while we were busy!
 	for area in pickup_area.get_overlapping_areas():
 		if area.is_in_group("items"):
-			grab_item(area)
+			# Lock immediately again and grab the item that waited!
+			is_busy = true
+			call_deferred("grab_item", area)
 			break # Stop checking after grabbing one
