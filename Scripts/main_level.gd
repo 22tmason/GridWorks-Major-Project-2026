@@ -4,7 +4,7 @@ extends Node2D
 @export var test_item_scene: PackedScene
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Listen for Left Mouse Button clicks
+	# Listen for Right Mouse Button clicks (assuming this is your test-spawn button!)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		
 		# Make sure we actually assigned a scene in the inspector
@@ -12,15 +12,42 @@ func _unhandled_input(event: InputEvent) -> void:
 			spawn_item()
 
 func spawn_item() -> void:
-	# 1. Create a brand new instance of the item
-	var new_item = test_item_scene.instantiate()
-	
-	# 2. Figure out where the mouse is and snap it to the grid
+	# 1. Figure out where the mouse is and snap it to the grid
 	var mouse_pos = get_global_mouse_position()
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
+	var snapped_position = GridManager.grid_to_world(current_grid_cell)
 	
-	# 3. Force the item into the correct snapped position
-	new_item.global_position = GridManager.grid_to_world(current_grid_cell)
+	# 2. NEW: Check if the physical space is actually empty
+	if is_tile_clear_for_item(snapped_position):
+		# 3. Create a brand new instance of the item
+		var new_item = test_item_scene.instantiate()
+		
+		# 4. Force the item into the correct snapped position
+		new_item.global_position = snapped_position
+		
+		# 5. Finally, add it to the game world!
+		add_child(new_item)
+	else:
+		# Optional: Let you know in the console why it didn't spawn
+		print("Placement blocked: Item already exists at this coordinate.")
+
+
+# --- SPATIAL CHECK HELPER FUNCTION ---
+func is_tile_clear_for_item(target_global_position: Vector2) -> bool:
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsPointQueryParameters2D.new()
 	
-	# 4. Finally, add it to the game world!
-	add_child(new_item)
+	query.position = target_global_position
+	# Ensure it detects your item's Area2D or CharacterBody2D
+	query.collide_with_areas = true 
+	query.collide_with_bodies = true
+	
+	var results = space_state.intersect_point(query)
+	
+	for hit in results:
+		var collider = hit["collider"]
+		# Check if the object we hit is in the "items" group
+		if collider.is_in_group("items"):
+			return false # The space is occupied!
+			
+	return true # The space is completely clear.

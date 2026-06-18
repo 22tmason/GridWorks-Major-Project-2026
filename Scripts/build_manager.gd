@@ -4,6 +4,9 @@ extends Node
 var straight_belt_scene = preload("res://GridWorks Major Project 2026/Scenes/belt.tscn")
 var corner_belt_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt.tscn")
 var inserter_scene = load("res://GridWorks Major Project 2026/Scenes/inserter.tscn")
+var splitter_scene = load("res://GridWorks Major Project 2026/Scenes/Splitter.tscn")
+var merger_scene = load("res://GridWorks Major Project 2026/Scenes/Merger.tscn")
+var underground_belt_scene = load("res://GridWorks Major Project 2026/Scenes/underground_belt.tscn")
 
 # Set the default building
 @onready var selected_scene: PackedScene = straight_belt_scene

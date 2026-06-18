@@ -34,4 +34,16 @@ text = "Corner"
 layout_mode = 2
 text = "Inserter"
 
+[node name="SplitterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1797135393]
+layout_mode = 2
+text = "Splitter"
+
+[node name="MergerButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=146010715]
+layout_mode = 2
+text = "Merger"
+
+[node name="UndergroundButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=161730994]
+layout_mode = 2
+text = "Underground"
+
 [node name="CornerBelt" parent="." unique_id=440220761 instance=ExtResource("4_nyu2a")]
