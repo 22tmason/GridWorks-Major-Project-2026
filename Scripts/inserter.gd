@@ -13,6 +13,17 @@ var held_item: Node2D = null
 var is_busy := false # Tracks if the arm is currently in motion
 var is_waiting_to_drop := false # Tracks if the arm is hovering, waiting for a gap
 
+func check_for_existing_items() -> void:
+	# Wait one physics frame for the collision boundaries to actually exist in the world
+	await get_tree().physics_frame
+	
+	# Manually poll the area for items
+	for area in pickup_area.get_overlapping_areas():
+		if area.is_in_group("items") and not is_busy:
+			is_busy = true
+			call_deferred("grab_item", area)
+			break # Stop checking after grabbing the first one
+			
 func _ready() -> void:
 	if not is_placed:
 		BuildManager.current_preview = self
@@ -41,6 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			rotation_degrees += 90
 			current_direction = (current_direction + 1) % 4
 			
+			
 		# Place building
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
@@ -50,6 +62,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				is_placed = true
 				modulate.a = 1.0 
 				pickup_area.area_entered.connect(_on_pickup_area_entered)
+				
+				# --- NEW FIX: Check for stranded items immediately upon placement ---
+				check_for_existing_items()
 				
 				var next_arm = load(scene_file_path).instantiate()
 				next_arm.current_direction = current_direction
