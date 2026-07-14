@@ -42,16 +42,18 @@ func _unhandled_input(event: InputEvent) -> void:
 			var next_belt = BuildManager.selected_scene.instantiate()
 			get_parent().add_child(next_belt)
 			
-			var current_sprite = $AnimatedSprite2D
-			var next_sprite = next_belt.get_node("AnimatedSprite2D")
+			var current_sprite = get_node_or_null("AnimatedSprite2D")
+			var next_sprite = next_belt.get_node_or_null("AnimatedSprite2D")
 			
-			# Sync the animation frame
-			next_sprite.set_frame_and_progress(current_sprite.frame, current_sprite.frame_progress)
+			# Only try to sync the animation if BOTH objects actually have an AnimatedSprite2D
+			if current_sprite != null and next_sprite != null:
+				next_sprite.set_frame_and_progress(current_sprite.frame, current_sprite.frame_progress)
 			
 			# --- NEW: Sync the rotation! ---
 			# Instead of transferring local Vector2s, just transfer the node's physical rotation
 			next_belt.rotation_degrees = rotation_degrees
-			next_belt.current_direction = current_direction
+			if "current_direction" in next_belt: # Safe check in case you place something without this variable
+				next_belt.current_direction = current_direction
 
 func rotate_belt() -> void:
 	# Keep your enum for logic/saving if you need it

@@ -45,6 +45,39 @@ func _process(_delta: float) -> void:
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
 	var snapped_position = GridManager.grid_to_world(current_grid_cell)
 	
+	# --- THE FIX: Axis Locking, Forward Forcing, AND Max Distance ---
+	if not is_entrance and is_instance_valid(linked_partner):
+		var entrance_pos = linked_partner.global_position
+		
+		# Assuming your grid tiles are 64x64.
+		var min_distance = 64.0  # Minimum 1 block away
+		var max_distance = 320.0 # Maximum 5 blocks away (5 * 64)
+		
+		match current_direction:
+			Direction.UP:
+				snapped_position.y = entrance_pos.y
+				# In Godot, UP is negative Y. 
+				# Clamp between (Entrance - 384) and (Entrance - 64)
+				snapped_position.x = clamp(snapped_position.x, entrance_pos.x - max_distance, entrance_pos.x - min_distance)
+				
+			Direction.DOWN:
+				snapped_position.y = entrance_pos.y
+				# In Godot, DOWN is positive Y.
+				# Clamp between (Entrance + 64) and (Entrance + 384)
+				snapped_position.x = clamp(snapped_position.x, entrance_pos.x + min_distance, entrance_pos.x + max_distance)
+				
+			Direction.LEFT:
+				snapped_position.x = entrance_pos.x
+				# In Godot, LEFT is negative X.
+				# Clamp between (Entrance - 384) and (Entrance - 64)
+				snapped_position.y = clamp(snapped_position.y, entrance_pos.y - max_distance, entrance_pos.y - min_distance)
+				
+			Direction.RIGHT:
+				snapped_position.x = entrance_pos.x
+				# In Godot, RIGHT is positive X.
+				# Clamp between (Entrance + 64) and (Entrance + 384)
+				snapped_position.y = clamp(snapped_position.y, entrance_pos.y + min_distance, entrance_pos.y + max_distance)
+				
 	global_position = snapped_position
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -77,7 +110,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					linked_partner.linked_partner = self 
 				
 				var next_entrance = load(scene_file_path).instantiate()
-				next_entrance.is_entrance = true 
+				next_entrance.is_entrance = true
 				next_entrance.current_direction = current_direction
 				next_entrance.rotation_degrees = rotation_degrees
 				get_parent().add_child(next_entrance)
@@ -87,8 +120,6 @@ func rotate_belt() -> void:
 	rotation_degrees += 90
 
 # --- ITEM HANDLING ---
-# --- ITEM HANDLING ---
-# --- ITEM HANDLING ---
 func _on_area_entered(hit_area: Area2D) -> void:
 	if not is_entrance: return 
 	
@@ -96,13 +127,13 @@ func _on_area_entered(hit_area: Area2D) -> void:
 		hit_area.set_physics_process(false)
 		hit_area.visible = false
 		
-		# --- NEW: SAVE THE LANE OFFSET ---
 		# 1. Figure out which way the belt is facing
 		var forward_dir = push_direction.rotated(global_rotation).round()
 		# 2. Get the cross-axis (the line cutting left-to-right across the belt)
 		var sideways_dir = Vector2(-forward_dir.y, forward_dir.x) 
-		# 3. Extract ONLY the left/right offset from the item's current position
-		var lane_offset = (hit_area.global_position - global_position).project(sideways_dir)
+		
+		# --- FIXED: Renamed to saved_lane_offset to prevent shadowing ---
+		var saved_lane_offset = (hit_area.global_position - global_position).project(sideways_dir)
 		
 		# Send to the void so it doesn't block traffic
 		hit_area.global_position = Vector2(-99999, -99999)
@@ -111,21 +142,19 @@ func _on_area_entered(hit_area: Area2D) -> void:
 		var travel_time = distance / speed 
 		
 		var timer = get_tree().create_timer(travel_time)
-		# Pass the lane_offset through the bind so the exit knows where to place it!
-		timer.timeout.connect(_on_item_arrived.bind(hit_area, lane_offset))
+		timer.timeout.connect(_on_item_arrived.bind(hit_area, saved_lane_offset))
 
-# Notice we added `lane_offset` as a required parameter here
-func _on_item_arrived(item: Area2D, lane_offset: Vector2) -> void:
+# --- FIXED: Parameter renamed to saved_lane_offset ---
+func _on_item_arrived(item: Area2D, saved_lane_offset: Vector2) -> void:
 	if is_instance_valid(item) and is_instance_valid(linked_partner):
 		
 		# Teleport to the exit's center PLUS the saved lane offset!
-		item.global_position = linked_partner.global_position + lane_offset
+		item.global_position = linked_partner.global_position + saved_lane_offset
 		item.visible = true
 		
 		if not linked_partner.ejecting_items.has(item):
 			linked_partner.ejecting_items.append(item)
 
-# --- EXACT STRAIGHT BELT PUSH LOGIC ---
 # --- EXACT STRAIGHT BELT PUSH LOGIC ---
 func _physics_process(delta: float) -> void:
 	if not is_placed: return
@@ -137,11 +166,9 @@ func _physics_process(delta: float) -> void:
 			if is_instance_valid(item):
 				item.global_position += world_dir * speed * delta
 				
-				# --- THE FIX: Measure only the distance traveled forward ---
 				var offset_vector = item.global_position - global_position
 				var distance_forward = offset_vector.dot(world_dir)
 				
-				# Now it will always push exactly to the flat edge of the 32px tile
 				if distance_forward >= 32.0:
 					item.set_physics_process(true)
 					ejecting_items.erase(item)

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cyocy07mjn614"]
+[gd_scene format=3 uid="uid://car3mj50snq5f"]
 
 [ext_resource type="Script" uid="uid://cokgi6qt60fwk" path="res://GridWorks Major Project 2026/Scripts/underground_belt.gd" id="1_1lwoq"]
 [ext_resource type="Texture2D" uid="uid://cp3268vr8e1r6" path="res://GridWorks Major Project 2026/Assets/Underground Belt Entrance.png" id="2_5bpry"]

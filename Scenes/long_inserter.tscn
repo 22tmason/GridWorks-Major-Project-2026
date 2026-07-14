@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://dj3qhocokpmuu"]
+
+[ext_resource type="Script" uid="uid://dx4okp3o475r2" path="res://GridWorks Major Project 2026/Scripts/inserter.gd" id="1_gfs64"]
+[ext_resource type="Texture2D" uid="uid://mhb4sbxn0qpw" path="res://GridWorks Major Project 2026/Assets/RedInserterBase.png" id="2_v5iwt"]
+[ext_resource type="Texture2D" uid="uid://bdopiv7rxo0d5" path="res://GridWorks Major Project 2026/Assets/RedInserterArm.png" id="3_knxwp"]
+[ext_resource type="Texture2D" uid="uid://b7a7nl57wu33n" path="res://GridWorks Major Project 2026/Assets/RedHandleLeft.png" id="4_p3uub"]
+[ext_resource type="Texture2D" uid="uid://dsln3w4gespb" path="res://GridWorks Major Project 2026/Assets/RedHandleRight.png" id="5_dq41s"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j0gby"]
+size = Vector2(84, 92)
+
+[node name="LongInserter" type="Node2D" unique_id=30982405]
+script = ExtResource("1_gfs64")
+swing_time = 0.1
+
+[node name="PickupArea" type="Area2D" parent="." unique_id=1440000777]
+position = Vector2(128, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea" unique_id=983717460]
+position = Vector2(-1, 0)
+scale = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_j0gby")
+
+[node name="DropArea" type="Marker2D" parent="." unique_id=1270509927]
+position = Vector2(-141, 0)
+
+[node name="Base" type="Sprite2D" parent="." unique_id=1697379302]
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("2_v5iwt")
+
+[node name="ArmSprite" type="Sprite2D" parent="." unique_id=2072162369]
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("3_knxwp")
+
+[node name="GrabPoint" type="Marker2D" parent="ArmSprite" unique_id=1991619528]
+position = Vector2(658.82355, 0)
+scale = Vector2(5.8823524, 5.8823524)
+
+[node name="Sprite2D" type="Sprite2D" parent="ArmSprite" unique_id=1030947690]
+position = Vector2(247.05882, -111.764694)
+rotation = 0.34906584
+texture = ExtResource("4_p3uub")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ArmSprite" unique_id=63898075]
+position = Vector2(247.05882, 111.764694)
+rotation = -0.34906584
+texture = ExtResource("5_dq41s")

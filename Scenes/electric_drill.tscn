@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bijukx76ghrn7"]
+
+[ext_resource type="Script" uid="uid://bivu1cc65jrhi" path="res://GridWorks Major Project 2026/Scripts/electric_drill.gd" id="1_a1hje"]
+[ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/test_item.tscn" id="2_55r3v"]
+[ext_resource type="Texture2D" uid="uid://3xuipyw7k426" path="res://GridWorks Major Project 2026/Assets/Screenshot 2026-07-02 at 1.20.53 PM.png" id="3_5auh5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a1hje"]
+size = Vector2(38, 27.625)
+
+[node name="ElectricDrill" type="Node2D" unique_id=1717353137]
+script = ExtResource("1_a1hje")
+mining_speed = 5.0
+item_scene = ExtResource("2_55r3v")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1754598614]
+position = Vector2(2.3841858e-07, 1.0000114)
+scale = Vector2(0.64383554, 0.65068483)
+texture = ExtResource("3_5auh5")
+
+[node name="MiningTimer" type="Timer" parent="." unique_id=1914295354]
+
+[node name="OutputMarker" type="Marker2D" parent="." unique_id=695506692]
+position = Vector2(-1, -106)
+
+[node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=75597092]
+position = Vector2(0, 124)
+
+[node name="OutputCheckArea" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=36311922]
+position = Vector2(0, -123)
+shape = SubResource("RectangleShape2D_a1hje")

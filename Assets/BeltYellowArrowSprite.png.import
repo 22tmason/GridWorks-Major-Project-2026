@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5knk3j4greda"
-path="res://.godot/imported/New Piskel (1).png-405519080f2d5d2e8f7633f4a8459f44.ctex"
+uid="uid://ch1j4cdwipcpc"
+path="res://.godot/imported/BeltYellowArrowSprite.png-7070b4db51e60695cd8092e89b4a3c59.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/New Piskel (1).png"
-dest_files=["res://.godot/imported/New Piskel (1).png-405519080f2d5d2e8f7633f4a8459f44.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/BeltYellowArrowSprite.png"
+dest_files=["res://.godot/imported/BeltYellowArrowSprite.png-7070b4db51e60695cd8092e89b4a3c59.ctex"]
 
 [params]
 

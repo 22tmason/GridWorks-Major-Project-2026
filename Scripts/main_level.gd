@@ -4,12 +4,17 @@ extends Node2D
 @export var test_item_scene: PackedScene
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Listen for Right Mouse Button clicks (assuming this is your test-spawn button!)
+	# Check for Right-Click (Demolish)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		
-		# Make sure we actually assigned a scene in the inspector
-		if test_item_scene:
-			spawn_item()
+		# (We removed the lines that delete the preview so you can keep building!)
+		
+		# Find out what grid cell we are pointing at
+		var mouse_pos = get_global_mouse_position()
+		var grid_cell = GridManager.world_to_grid(mouse_pos)
+		
+		# Demolish whatever is in that cell!
+		GridManager.remove_item(grid_cell)
 
 func spawn_item() -> void:
 	# 1. Figure out where the mouse is and snap it to the grid

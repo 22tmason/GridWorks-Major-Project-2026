@@ -7,12 +7,10 @@ var grid_data := {}
 
 # Load your scenes here
 var straight_belt_scene = preload("res://GridWorks Major Project 2026/Scenes/belt.tscn")
-var corner_belt_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt.tscn")
+var corner_belt_right_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_right.tscn")
+var corner_belt_left_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_left.tscn")
+var inserter_scene = preload("res://GridWorks Major Project 2026/Scenes/inserter.tscn") 
 
-# --- NEW: Load the Inserter scene ---
-var inserter_scene = preload("res://GridWorks Major Project 2026/Scenes/inserter.tscn") # Make sure this path is correct!
-
-# ... rest of your script ...
 func world_to_grid(world_pos: Vector2) -> Vector2i:
 	var grid_x = floor(world_pos.x / CELL_SIZE.x)
 	var grid_y = floor(world_pos.y / CELL_SIZE.y)
@@ -25,12 +23,24 @@ func grid_to_world(grid_pos: Vector2i) -> Vector2:
 
 # Tries to place an item at a specific grid coordinate
 func place_item(grid_pos: Vector2i, item_node: Node) -> bool:
-	# Check if the cell is already occupied
 	if grid_data.has(grid_pos):
 		print("Cell ", grid_pos, " is already occupied!")
 		return false
 	
-	# If empty, save the item node into our grid tracking dictionary
 	grid_data[grid_pos] = item_node
 	print("Successfully placed item at ", grid_pos)
 	return true
+
+# --- NEW DEMOLISH FUNCTION ---
+func remove_item(grid_pos: Vector2i) -> void:
+	# Check if the dictionary has an item at this coordinate
+	if grid_data.has(grid_pos):
+		var item_to_remove = grid_data[grid_pos]
+		
+		# Make sure the item hasn't already been destroyed somehow
+		if is_instance_valid(item_to_remove):
+			item_to_remove.queue_free()
+			
+		# Remove it from the dictionary so the cell is empty again!
+		grid_data.erase(grid_pos)
+		print("Demolished item at: ", grid_pos)

@@ -2,11 +2,19 @@
 
 [ext_resource type="Script" uid="uid://bt8foho3wrtv0" path="res://GridWorks Major Project 2026/Scripts/main_level.gd" id="1_7vhcm"]
 [ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/test_item.tscn" id="2_y266r"]
-[ext_resource type="PackedScene" uid="uid://cug5po0m1vw1r" path="res://GridWorks Major Project 2026/Scenes/corner_belt.tscn" id="4_nyu2a"]
+[ext_resource type="Texture2D" uid="uid://c0riauigh32hh" path="res://GridWorks Major Project 2026/Assets/GridWorksBackgroundSand-1.png.png" id="3_nyu2a"]
+[ext_resource type="PackedScene" uid="uid://dajs24eg5ero1" path="res://GridWorks Major Project 2026/Scenes/corner_belt_right.tscn" id="4_nyu2a"]
 [ext_resource type="Script" uid="uid://s4ohav6h7p7" path="res://GridWorks Major Project 2026/Scripts/toolbar.gd" id="4_sh7fp"]
+[ext_resource type="Script" uid="uid://b6cvxm58vmja5" path="res://GridWorks Major Project 2026/Scripts/map_generator.gd" id="6_xi6xi"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xi6xi"]
+texture = ExtResource("3_nyu2a")
+texture_region_size = Vector2i(384, 384)
+0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_jixft"]
-tile_size = Vector2i(96, 96)
+tile_size = Vector2i(64, 64)
+sources/1 = SubResource("TileSetAtlasSource_xi6xi")
 
 [node name="MainLevel" type="Node2D" unique_id=1807510388]
 script = ExtResource("1_7vhcm")
@@ -26,13 +34,21 @@ offset_bottom = 66.0
 layout_mode = 2
 text = "Straight"
 
-[node name="CornerButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=2038491678]
+[node name="CornerRightButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=2038491678]
 layout_mode = 2
-text = "Corner"
+text = "CornerRight"
+
+[node name="CornerLeftButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1789623704]
+layout_mode = 2
+text = "CornerLeft"
 
 [node name="InserterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1168308411]
 layout_mode = 2
 text = "Inserter"
+
+[node name="LongInserterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=916950948]
+layout_mode = 2
+text = "Long Inserter"
 
 [node name="SplitterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1797135393]
 layout_mode = 2
@@ -46,4 +62,12 @@ text = "Merger"
 layout_mode = 2
 text = "Underground"
 
-[node name="CornerBelt" parent="." unique_id=440220761 instance=ExtResource("4_nyu2a")]
+[node name="ElectricDrillButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1587630007]
+layout_mode = 2
+text = "Electric Drill"
+
+[node name="Improvedcornerbelt" parent="." unique_id=1766372570 instance=ExtResource("4_nyu2a")]
+
+[node name="MapGenerator" type="Node2D" parent="." unique_id=735054150 node_paths=PackedStringArray("ground_tilemap")]
+script = ExtResource("6_xi6xi")
+ground_tilemap = NodePath("../TileMapLayer")

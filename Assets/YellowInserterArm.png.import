@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2qg0pl2frg7d"
-path="res://.godot/imported/New Piskel (3).png-5f411fb92cedef4b294b2edaa361b186.ctex"
+uid="uid://cwml0ecemw0dm"
+path="res://.godot/imported/YellowInserterArm.png-59fac0887155ca0e03203bc661879055.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/New Piskel (3).png"
-dest_files=["res://.godot/imported/New Piskel (3).png-5f411fb92cedef4b294b2edaa361b186.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/YellowInserterArm.png"
+dest_files=["res://.godot/imported/YellowInserterArm.png-59fac0887155ca0e03203bc661879055.ctex"]
 
 [params]
 

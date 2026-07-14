@@ -29,8 +29,11 @@ func _ready() -> void:
 		BuildManager.current_preview = self
 		modulate.a = 0.5
 	else:
-		# If placed, start listening for items in the pickup area
+		# If placed via the editor, start listening for items
 		pickup_area.area_entered.connect(_on_pickup_area_entered)
+		
+		# --- NEW FIX: Check for stranded items upon map load ---
+		check_for_existing_items()
 
 func _process(_delta: float) -> void:
 	if is_placed:
@@ -98,13 +101,17 @@ func grab_item(item: Node2D) -> void:
 	item.remove_from_group("items")
 	item.set_physics_process(false) 
 	
+	# --- NEW: Hide the item from the physics engine while carried ---
+	item.set_deferred("monitorable", false)
+	item.set_deferred("monitoring", false)
+	
 	# Use Godot 4's reparent function! 
 	# Passing 'false' snaps it directly to the claw's local space.
 	item.reparent(grab_point, false)
 	item.position = Vector2.ZERO 
 	
 	swing_arm_forward()
-
+	
 func swing_arm_forward() -> void:
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE)
@@ -158,6 +165,10 @@ func try_drop_item() -> void:
 		
 		held_item.add_to_group("items")
 		held_item.set_physics_process(true)
+		
+		# --- NEW: Reveal the item so it triggers area_entered again! ---
+		held_item.set_deferred("monitorable", true)
+		held_item.set_deferred("monitoring", true)
 		
 		held_item = null
 		swing_arm_back()
