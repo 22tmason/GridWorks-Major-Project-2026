@@ -19,6 +19,10 @@ func _ready() -> void:
 	else:
 		area.area_entered.connect(_on_area_entered)
 
+# --- NEW: 1x1 Building footprint ---
+func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
+	return [center_cell]
+
 func _process(_delta: float) -> void:
 	if is_placed:
 		return
@@ -27,6 +31,14 @@ func _process(_delta: float) -> void:
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
 	global_position = GridManager.grid_to_world(current_grid_cell)
 
+	# --- NEW: Universal Red/White Overlay Check ---
+	var cells_to_check = get_occupied_cells(current_grid_cell)
+	
+	if GridManager.is_placement_blocked(cells_to_check):
+		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
+	else:
+		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_placed:
 		if event is InputEventKey and event.keycode == KEY_R and event.pressed:
@@ -34,10 +46,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			current_direction = (current_direction + 1) % 4
 			
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var cell = GridManager.world_to_grid(get_global_mouse_position())
-			if GridManager.place_item(cell, self):
+			var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
+			
+			# --- UPDATED: Pass the ARRAY of cells to the GridManager! ---
+			var cells_to_claim = get_occupied_cells(current_grid_cell)
+			if GridManager.place_item(cells_to_claim, self):
 				is_placed = true
-				modulate.a = 1.0 
+				modulate = Color(1.0, 1.0, 1.0, 1.0) # Reset color fully back to normal
 				area.area_entered.connect(_on_area_entered)
 				
 				var next_splitter = load(scene_file_path).instantiate()

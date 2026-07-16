@@ -25,6 +25,10 @@ func _ready() -> void:
 	make_perfect_quarter_circle()
 	setup_multiple_arrows()
 
+# --- NEW: 1x1 Building footprint ---
+func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
+	return [center_cell]
+
 func _process(delta: float) -> void:
 	# Animate all arrows constantly
 	for follower in followers:
@@ -39,6 +43,14 @@ func _process(delta: float) -> void:
 	
 	global_position = snapped_position
 
+	# --- NEW: Universal Red/White Overlay Check ---
+	var cells_to_check = get_occupied_cells(current_grid_cell)
+	
+	if GridManager.is_placement_blocked(cells_to_check):
+		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
+	else:
+		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
+
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
 		return
@@ -48,11 +60,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
-		var success = GridManager.place_item(current_grid_cell, self)
+		
+		# --- UPDATED: Pass the ARRAY of cells to the GridManager! ---
+		var cells_to_claim = get_occupied_cells(current_grid_cell)
+		var success = GridManager.place_item(cells_to_claim, self)
 		
 		if success:
 			is_placed = true
-			modulate.a = 1.0 
+			modulate = Color(1.0, 1.0, 1.0, 1.0) # Reset color fully back to normal
 			
 			# Activate the child areas so the item recognizes them!
 			if has_node("EntranceArea"):

@@ -1,63 +1,66 @@
-extends Area2D
+extends Node2D
 
+# --- MATCHING STRAIGHT BELT VARIABLES ---
 enum Direction { UP, RIGHT, DOWN, LEFT }
-
-@export var current_direction: Direction = Direction.DOWN 
+@export var current_direction: Direction = Direction.RIGHT
 var is_placed := false
-@export var speed: float = 128
-var push_direction: Vector2 = Vector2.DOWN 
-@export var lane_offset: float = 16.0 
+@export var speed: float = 128.0
+var push_direction: Vector2 = Vector2.RIGHT
+
+# (Assume your other onready vars and item arrays are here)
 
 func _ready() -> void:
 	if not is_placed:
 		BuildManager.current_preview = self
 		modulate.a = 0.5
+	else:
+		# (Connect your area signals here)
+		pass
+
+# --- NEW: 1x1 Building footprint ---
+func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
+	return [center_cell]
 
 func _process(_delta: float) -> void:
-	if is_placed:
-		return
+	if is_placed: return
 		
 	var mouse_pos = get_global_mouse_position()
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
-	var snapped_position = GridManager.grid_to_world(current_grid_cell)
+	global_position = GridManager.grid_to_world(current_grid_cell)
+
+	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	global_position = snapped_position
+	if GridManager.is_placement_blocked(cells_to_check):
+		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
+	else:
+		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
+		
+	# --- NEW: DRAG BUILDING LOGIC ---
+	# If the mouse is currently held down, constantly attempt to place!
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attempt_placement(current_grid_cell)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if is_placed:
-		return
+	if is_placed: return
 		
-	# --- NEW: Press "R" to rotate the preview belt ---
 	if event is InputEventKey and event.keycode == KEY_R and event.pressed:
-		rotate_belt()
-		
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
-		var success = GridManager.place_item(current_grid_cell, self)
-		
-		if success:
-			is_placed = true
-			modulate.a = 1.0 
-			
-			var next_belt = BuildManager.selected_scene.instantiate()
-			get_parent().add_child(next_belt)
-			
-			var current_sprite = get_node_or_null("AnimatedSprite2D")
-			var next_sprite = next_belt.get_node_or_null("AnimatedSprite2D")
-			
-			# Only try to sync the animation if BOTH objects actually have an AnimatedSprite2D
-			if current_sprite != null and next_sprite != null:
-				next_sprite.set_frame_and_progress(current_sprite.frame, current_sprite.frame_progress)
-			
-			# --- NEW: Sync the rotation! ---
-			# Instead of transferring local Vector2s, just transfer the node's physical rotation
-			next_belt.rotation_degrees = rotation_degrees
-			if "current_direction" in next_belt: # Safe check in case you place something without this variable
-				next_belt.current_direction = current_direction
+		rotation_degrees += 90
+		current_direction = (current_direction + 1) % 4 as Direction
 
-func rotate_belt() -> void:
-	# Keep your enum for logic/saving if you need it
-	current_direction = (current_direction + 1) % 4 as Direction
+# --- NEW: Dedicated placement function ---
+func attempt_placement(target_cell: Vector2i) -> void:
+	var cells_to_claim = get_occupied_cells(target_cell)
 	
-	# Just physically rotate the whole root node by 90 degrees.
-	rotation_degrees += 90
+	# GridManager handles the check, so this will simply return false if we are 
+	# hovering over an already-placed belt while dragging.
+	if GridManager.place_item(cells_to_claim, self):
+		is_placed = true
+		modulate = Color(1.0, 1.0, 1.0, 1.0) 
+		
+		# (Activate your item collision areas here)
+		
+		# Spawn the next preview
+		var next_belt = load(scene_file_path).instantiate()
+		next_belt.current_direction = current_direction
+		next_belt.rotation_degrees = rotation_degrees
+		get_parent().add_child(next_belt)

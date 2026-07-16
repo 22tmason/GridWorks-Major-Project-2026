@@ -22,25 +22,44 @@ func grid_to_world(grid_pos: Vector2i) -> Vector2:
 	return Vector2(world_x, world_y)
 
 # Tries to place an item at a specific grid coordinate
-func place_item(grid_pos: Vector2i, item_node: Node) -> bool:
-	if grid_data.has(grid_pos):
-		print("Cell ", grid_pos, " is already occupied!")
+# --- NEW: Checks if a placement is valid without actually placing it ---
+func is_placement_blocked(cells: Array[Vector2i]) -> bool:
+	for cell in cells:
+		if grid_data.has(cell):
+			return true # Blocked!
+	return false # Clear!
+
+# --- UPGRADED: Now accepts an ARRAY of cells instead of just one ---
+func place_item(cells: Array[Vector2i], item_node: Node) -> bool:
+	# 1. Double check that all cells are still clear
+	if is_placement_blocked(cells):
 		return false
 	
-	grid_data[grid_pos] = item_node
-	print("Successfully placed item at ", grid_pos)
+	# 2. Claim every requested cell in the dictionary
+	for cell in cells:
+		grid_data[cell] = item_node
+		
+	print("Successfully placed item covering cells: ", cells)
 	return true
 
 # --- NEW DEMOLISH FUNCTION ---
+# --- UPDATED DEMOLISH FUNCTION ---
 func remove_item(grid_pos: Vector2i) -> void:
-	# Check if the dictionary has an item at this coordinate
 	if grid_data.has(grid_pos):
 		var item_to_remove = grid_data[grid_pos]
 		
-		# Make sure the item hasn't already been destroyed somehow
+		# 1. Find EVERY cell in the grid that belongs to this specific building
+		var cells_to_clear = []
+		for cell in grid_data:
+			if grid_data[cell] == item_to_remove:
+				cells_to_clear.append(cell)
+				
+		# 2. Erase all of those cells so the space is empty again!
+		for cell in cells_to_clear:
+			grid_data.erase(cell)
+		
+		# 3. Destroy the physical building
 		if is_instance_valid(item_to_remove):
 			item_to_remove.queue_free()
 			
-		# Remove it from the dictionary so the cell is empty again!
-		grid_data.erase(grid_pos)
-		print("Demolished item at: ", grid_pos)
+		print("Demolished item! Cleared cells: ", cells_to_clear)

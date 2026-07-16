@@ -37,6 +37,10 @@ func _update_visuals() -> void:
 	entrance_sprite.visible = is_entrance
 	exit_sprite.visible = not is_entrance
 
+# --- NEW: 1x1 Building footprint ---
+func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
+	return [center_cell]
+
 func _process(_delta: float) -> void:
 	if is_placed:
 		return
@@ -80,6 +84,16 @@ func _process(_delta: float) -> void:
 				
 	global_position = snapped_position
 
+	# --- NEW: Universal Red/White Overlay Check ---
+	# We use the position AFTER clamping so the red/white colors match where the belt actually is
+	var actual_grid_cell = GridManager.world_to_grid(global_position)
+	var cells_to_check = get_occupied_cells(actual_grid_cell)
+	
+	if GridManager.is_placement_blocked(cells_to_check):
+		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
+	else:
+		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
+
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed: return
 		
@@ -88,11 +102,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_belt()
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var cell = GridManager.world_to_grid(get_global_mouse_position())
+		# Use the current global_position instead of the mouse to respect the clamping!
+		var actual_cell = GridManager.world_to_grid(global_position)
 		
-		if GridManager.place_item(cell, self):
+		# --- UPDATED: Pass the ARRAY of cells to the GridManager! ---
+		var cells_to_claim = get_occupied_cells(actual_cell)
+		
+		if GridManager.place_item(cells_to_claim, self):
 			is_placed = true
-			modulate.a = 1.0 
+			modulate = Color(1.0, 1.0, 1.0, 1.0) # Reset fully back to normal color
 			area.area_entered.connect(_on_area_entered)
 			
 			# If Entrance placed -> Spawn Exit Preview

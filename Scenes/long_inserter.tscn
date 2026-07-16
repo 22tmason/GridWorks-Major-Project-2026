@@ -11,7 +11,7 @@ size = Vector2(84, 92)
 
 [node name="LongInserter" type="Node2D" unique_id=30982405]
 script = ExtResource("1_gfs64")
-swing_time = 0.1
+swing_time = 1.0
 
 [node name="PickupArea" type="Area2D" parent="." unique_id=1440000777]
 position = Vector2(128, 1)
@@ -22,7 +22,7 @@ scale = Vector2(0.5, 0.5)
 shape = SubResource("RectangleShape2D_j0gby")
 
 [node name="DropArea" type="Marker2D" parent="." unique_id=1270509927]
-position = Vector2(-141, 0)
+position = Vector2(-133, 0)
 
 [node name="Base" type="Sprite2D" parent="." unique_id=1697379302]
 scale = Vector2(0.17, 0.17)

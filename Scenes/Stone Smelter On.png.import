@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3xuipyw7k426"
-path="res://.godot/imported/Screenshot 2026-07-02 at 1.20.53 PM.png-5ad7316479540304dd290b6705749b79.ctex"
+uid="uid://cq0mcri6pvqoh"
+path="res://.godot/imported/Stone Smelter On.png-cd0b248125af4307ae4f902d0eec1e02.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Screenshot 2026-07-02 at 1.20.53 PM.png"
-dest_files=["res://.godot/imported/Screenshot 2026-07-02 at 1.20.53 PM.png-5ad7316479540304dd290b6705749b79.ctex"]
+source_file="res://GridWorks Major Project 2026/Scenes/Stone Smelter On.png"
+dest_files=["res://.godot/imported/Stone Smelter On.png-cd0b248125af4307ae4f902d0eec1e02.ctex"]
 
 [params]
 
