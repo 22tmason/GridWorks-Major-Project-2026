@@ -11,6 +11,7 @@ func _ready() -> void:
 	$HBoxContainer/MergerButton.pressed.connect(_on_merger_pressed)
 	$HBoxContainer/UndergroundButton.pressed.connect(_on_underground_pressed)
 	$HBoxContainer/ElectricDrillButton.pressed.connect(_on_electric_drill_pressed)
+	$HBoxContainer/StoneFurnaceButton.pressed.connect(_on_stone_furnace_pressed)
 
 func _on_straight_pressed() -> void:
 	BuildManager.change_building(BuildManager.straight_belt_scene)
@@ -39,3 +40,5 @@ func _on_underground_pressed() -> void:
 func _on_electric_drill_pressed() -> void:
 	BuildManager.change_building(BuildManager.electric_drill_scene)
 	
+func _on_stone_furnace_pressed() -> void:
+	BuildManager.change_building(BuildManager.stone_furnace_scene)

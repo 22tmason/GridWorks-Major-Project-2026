@@ -1,4 +1,5 @@
 extends Area2D
+@export var item_id: String = "test_item"
 
 var is_waiting_for_gap := false # Tracks if we were just dropped by an inserter
 

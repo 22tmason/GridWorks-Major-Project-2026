@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://0qlbqc5pn8gy"]
+
+[ext_resource type="Script" uid="uid://cycrrfdjm4v2w" path="res://GridWorks Major Project 2026/Scripts/stone_furnace.gd" id="1_qg34s"]
+[ext_resource type="Texture2D" uid="uid://dp3wwsqpnvdaf" path="res://GridWorks Major Project 2026/Assets/Stone Smelter Off.png" id="2_8yvic"]
+[ext_resource type="PackedScene" uid="uid://4hdkb72pu3ic" path="res://GridWorks Major Project 2026/Scenes/copper_ingot.tscn" id="2_20nwo"]
+[ext_resource type="Texture2D" uid="uid://cq0mcri6pvqoh" path="res://GridWorks Major Project 2026/Assets/Stone Smelter On.png" id="4_20nwo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
+size = Vector2(129, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20nwo"]
+size = Vector2(120, 119)
+
+[node name="StoneFurnace" type="Node2D" unique_id=1905251074]
+script = ExtResource("1_qg34s")
+smelting_time = 10.0
+max_storage = 10
+recipes = {
+"copper_ore": ExtResource("2_20nwo")
+}
+
+[node name="FurnaceOff" type="Sprite2D" parent="." unique_id=2067550932]
+texture = ExtResource("2_8yvic")
+
+[node name="InputArea" type="Area2D" parent="." unique_id=126425833]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="InputArea" unique_id=1482730492]
+shape = SubResource("RectangleShape2D_36agx")
+
+[node name="OutputMarker" type="Marker2D" parent="." unique_id=552904695]
+
+[node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=2035809150]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=563858654]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_20nwo")
+
+[node name="SmeltingTimer" type="Timer" parent="." unique_id=665999875]
+
+[node name="GlowSprite" type="Sprite2D" parent="." unique_id=1321602352]
+texture = ExtResource("4_20nwo")

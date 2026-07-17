@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://n7vu8p0d8mvt" path="res://GridWorks Major Project 2026/Assets/YellowHandleRight.png" id="5_xrcwv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j0gby"]
-size = Vector2(84, 92)
+size = Vector2(90, 102)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_w83id"]
 animations = [{
@@ -61,7 +61,7 @@ swing_time = 0.1
 position = Vector2(60, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea" unique_id=983717460]
-position = Vector2(-1, 0)
+position = Vector2(0.5, 0.5)
 scale = Vector2(0.5, 0.5)
 shape = SubResource("RectangleShape2D_j0gby")
 

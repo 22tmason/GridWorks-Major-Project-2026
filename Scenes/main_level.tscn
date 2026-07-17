@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dg07bledi2jap"]
 
 [ext_resource type="Script" uid="uid://bt8foho3wrtv0" path="res://GridWorks Major Project 2026/Scripts/main_level.gd" id="1_7vhcm"]
-[ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/test_item.tscn" id="2_y266r"]
+[ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/copper_ore.tscn" id="2_y266r"]
 [ext_resource type="Texture2D" uid="uid://c0riauigh32hh" path="res://GridWorks Major Project 2026/Assets/GridWorksBackgroundSand-1.png.png" id="3_nyu2a"]
-[ext_resource type="PackedScene" uid="uid://dajs24eg5ero1" path="res://GridWorks Major Project 2026/Scenes/corner_belt_right.tscn" id="4_nyu2a"]
 [ext_resource type="Script" uid="uid://s4ohav6h7p7" path="res://GridWorks Major Project 2026/Scripts/toolbar.gd" id="4_sh7fp"]
+[ext_resource type="PackedScene" uid="uid://dumd22i5qussy" path="res://GridWorks Major Project 2026/Scenes/belt.tscn" id="6_bowd8"]
 [ext_resource type="Script" uid="uid://b6cvxm58vmja5" path="res://GridWorks Major Project 2026/Scripts/map_generator.gd" id="6_xi6xi"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xi6xi"]
@@ -18,7 +18,7 @@ sources/1 = SubResource("TileSetAtlasSource_xi6xi")
 
 [node name="MainLevel" type="Node2D" unique_id=1807510388]
 script = ExtResource("1_7vhcm")
-test_item_scene = ExtResource("2_y266r")
+default_item_scene = ExtResource("2_y266r")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=893010129]
 tile_set = SubResource("TileSet_jixft")
@@ -66,8 +66,12 @@ text = "Underground"
 layout_mode = 2
 text = "Electric Drill"
 
-[node name="Improvedcornerbelt" parent="." unique_id=1766372570 instance=ExtResource("4_nyu2a")]
+[node name="StoneFurnaceButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1229802655]
+layout_mode = 2
+text = "Stone Furnace"
 
 [node name="MapGenerator" type="Node2D" parent="." unique_id=735054150 node_paths=PackedStringArray("ground_tilemap")]
 script = ExtResource("6_xi6xi")
 ground_tilemap = NodePath("../TileMapLayer")
+
+[node name="Belt" parent="." unique_id=883872601 instance=ExtResource("6_bowd8")]

@@ -10,6 +10,7 @@ var splitter_scene = load("res://GridWorks Major Project 2026/Scenes/splitter.ts
 var merger_scene = load("res://GridWorks Major Project 2026/Scenes/merger.tscn")
 var underground_belt_scene = load("res://GridWorks Major Project 2026/Scenes/underground_belt.tscn")
 var electric_drill_scene = load("res://GridWorks Major Project 2026/Scenes/electric_drill.tscn")
+var stone_furnace_scene = load("res://GridWorks Major Project 2026/Scenes/stone_furnace.tscn")
 
 # Set the default building
 @onready var selected_scene: PackedScene = straight_belt_scene

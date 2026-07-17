@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dsln3w4gespb" path="res://GridWorks Major Project 2026/Assets/RedHandleRight.png" id="5_dq41s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j0gby"]
-size = Vector2(84, 92)
+size = Vector2(96, 104)
 
 [node name="LongInserter" type="Node2D" unique_id=30982405]
 script = ExtResource("1_gfs64")

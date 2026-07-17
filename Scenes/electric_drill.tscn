@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bijukx76ghrn7"]
 
 [ext_resource type="Script" uid="uid://bivu1cc65jrhi" path="res://GridWorks Major Project 2026/Scripts/electric_drill.gd" id="1_a1hje"]
-[ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/test_item.tscn" id="2_55r3v"]
+[ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/copper_ore.tscn" id="2_55r3v"]
 [ext_resource type="Texture2D" uid="uid://cg7pvpfhiv5fl" path="res://GridWorks Major Project 2026/Assets/Mechanical Drill Bottom (1).png" id="3_a1hje"]
 [ext_resource type="Texture2D" uid="uid://dj3jrw8phi5pd" path="res://GridWorks Major Project 2026/Assets/Mechanical Drill Top.png" id="4_55r3v"]
 
@@ -10,7 +10,8 @@ size = Vector2(27, 27.625)
 
 [node name="ElectricDrill" type="Node2D" unique_id=1717353137]
 script = ExtResource("1_a1hje")
-mining_speed = 1.0
+mining_speed = 10.0
+rotation_speed = 9.0
 item_scene = ExtResource("2_55r3v")
 
 [node name="BottomPart" type="Sprite2D" parent="." unique_id=1754598614]
