@@ -6,8 +6,8 @@ var corner_belt_right_scene = preload("res://GridWorks Major Project 2026/Scenes
 var corner_belt_left_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_left.tscn")
 var inserter_scene = load("res://GridWorks Major Project 2026/Scenes/inserter.tscn")
 var long_inserter_scene = load("res://GridWorks Major Project 2026/Scenes/long_inserter.tscn")
-var splitter_scene = load("res://GridWorks Major Project 2026/Scenes/Splitter.tscn")
-var merger_scene = load("res://GridWorks Major Project 2026/Scenes/Merger.tscn")
+var splitter_scene = load("res://GridWorks Major Project 2026/Scenes/splitter.tscn")
+var merger_scene = load("res://GridWorks Major Project 2026/Scenes/merger.tscn")
 var underground_belt_scene = load("res://GridWorks Major Project 2026/Scenes/underground_belt.tscn")
 var electric_drill_scene = load("res://GridWorks Major Project 2026/Scenes/electric_drill.tscn")
 

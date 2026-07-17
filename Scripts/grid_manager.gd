@@ -42,7 +42,6 @@ func place_item(cells: Array[Vector2i], item_node: Node) -> bool:
 	print("Successfully placed item covering cells: ", cells)
 	return true
 
-# --- NEW DEMOLISH FUNCTION ---
 # --- UPDATED DEMOLISH FUNCTION ---
 func remove_item(grid_pos: Vector2i) -> void:
 	if grid_data.has(grid_pos):

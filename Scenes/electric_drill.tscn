@@ -10,7 +10,7 @@ size = Vector2(27, 27.625)
 
 [node name="ElectricDrill" type="Node2D" unique_id=1717353137]
 script = ExtResource("1_a1hje")
-mining_speed = 5.0
+mining_speed = 1.0
 item_scene = ExtResource("2_55r3v")
 
 [node name="BottomPart" type="Sprite2D" parent="." unique_id=1754598614]
@@ -21,13 +21,13 @@ texture = ExtResource("3_a1hje")
 [node name="MiningTimer" type="Timer" parent="." unique_id=1914295354]
 
 [node name="OutputMarker" type="Marker2D" parent="." unique_id=695506692]
-position = Vector2(-1, -106)
+position = Vector2(0, -112)
 
 [node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=75597092]
 position = Vector2(0, 124)
 
 [node name="OutputCheckArea" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=36311922]
-position = Vector2(-0.5, -123)
+position = Vector2(0, -124)
 shape = SubResource("RectangleShape2D_a1hje")
 
 [node name="TopPart" type="Sprite2D" parent="." unique_id=1827259775]

@@ -16,7 +16,6 @@ func _ready() -> void:
 		BuildManager.current_preview = self
 		modulate.a = 0.5 
 		
-	# Ensure collision areas push items in the correct directions
 	# NEW ORIENTATION: Enters moving RIGHT, exits moving DOWN
 	if has_node("EntranceArea"):
 		$EntranceArea.push_direction = Vector2(1, 0)

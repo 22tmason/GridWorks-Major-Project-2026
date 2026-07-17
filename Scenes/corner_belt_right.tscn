@@ -1,14 +1,14 @@
-[gd_scene format=3 uid="uid://dajs24eg5ero1"]
+[gd_scene format=3 uid="uid://brwd67vjym7ld"]
 
-[ext_resource type="Script" uid="uid://efvuyehqbubx" path="res://GridWorks Major Project 2026/Scripts/improved_corner_belt.gd" id="1_uv7qk"]
+[ext_resource type="Script" uid="uid://efvuyehqbubx" path="res://GridWorks Major Project 2026/Scripts/corner_belt_right.gd" id="1_uv7qk"]
 [ext_resource type="Texture2D" uid="uid://ch1j4cdwipcpc" path="res://GridWorks Major Project 2026/Assets/BeltYellowArrowSprite.png" id="2_uv7qk"]
 [ext_resource type="Texture2D" uid="uid://cs76pub2515kc" path="res://GridWorks Major Project 2026/Assets/BeltCurveCorner.png" id="3_re4w5"]
 [ext_resource type="Texture2D" uid="uid://bspt8biushfwu" path="res://GridWorks Major Project 2026/Assets/BeltGreyBackground.png" id="4_u0esf"]
 [ext_resource type="Script" uid="uid://dnxhnonsu1cyk" path="res://GridWorks Major Project 2026/Scripts/belt_section.gd" id="5_shumf"]
 
-[node name="Improvedcornerbelt" type="Node2D" unique_id=1766372570]
+[node name="corner_belt_right" type="Node2D" unique_id=1766372570]
 script = ExtResource("1_uv7qk")
-animation_speed = 1.0
+animation_speed = 1.2
 
 [node name="Path2D" type="Path2D" parent="." unique_id=2050426795]
 
