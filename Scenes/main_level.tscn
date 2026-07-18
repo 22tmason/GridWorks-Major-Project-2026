@@ -46,6 +46,10 @@ text = "CornerLeft"
 layout_mode = 2
 text = "Inserter"
 
+[node name="FastInserterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=704372227]
+layout_mode = 2
+text = "Fast Inserter"
+
 [node name="LongInserterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=916950948]
 layout_mode = 2
 text = "Long Inserter"

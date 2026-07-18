@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://bdxfeq6bo8j0b"]
+[gd_scene format=3 uid="uid://bh13w3c4quenw"]
 
-[ext_resource type="Script" uid="uid://dx4okp3o475r2" path="res://GridWorks Major Project 2026/Scripts/inserter.gd" id="1_xrcwv"]
-[ext_resource type="Texture2D" uid="uid://dmbhhxh0hsqr5" path="res://GridWorks Major Project 2026/Assets/YellowInserterBase.png" id="2_xrcwv"]
-[ext_resource type="Texture2D" uid="uid://cwml0ecemw0dm" path="res://GridWorks Major Project 2026/Assets/YellowInserterArm.png" id="3_j0gby"]
-[ext_resource type="Texture2D" uid="uid://dwgdfk2277oa2" path="res://GridWorks Major Project 2026/Assets/YellowHandleLeft.png" id="4_xrcwv"]
-[ext_resource type="Texture2D" uid="uid://n7vu8p0d8mvt" path="res://GridWorks Major Project 2026/Assets/YellowHandleRight.png" id="5_xrcwv"]
+[ext_resource type="Script" uid="uid://dx4okp3o475r2" path="res://GridWorks Major Project 2026/Scripts/inserter.gd" id="1_irtbb"]
+[ext_resource type="Texture2D" uid="uid://bh7q23c0gme2r" path="res://GridWorks Major Project 2026/Assets/BlueInserterBase.png" id="2_irtbb"]
+[ext_resource type="Texture2D" uid="uid://cx04x2pwvqn54" path="res://GridWorks Major Project 2026/Assets/BlueInserterArm.png" id="3_osr40"]
+[ext_resource type="Texture2D" uid="uid://dpsclil4727or" path="res://GridWorks Major Project 2026/Assets/BlueHandleLeft.png" id="4_t0bvi"]
+[ext_resource type="Texture2D" uid="uid://gvjs6o3nhqqv" path="res://GridWorks Major Project 2026/Assets/BlueHandleRight.png" id="5_xvtco"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j0gby"]
 size = Vector2(90, 102)
@@ -13,7 +13,7 @@ size = Vector2(90, 102)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_xrcwv")
+"texture": ExtResource("2_irtbb")
 }],
 "loop": true,
 "name": &"default",
@@ -24,7 +24,7 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_j0gby")
+"texture": ExtResource("3_osr40")
 }],
 "loop": true,
 "name": &"default",
@@ -35,7 +35,7 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_xrcwv")
+"texture": ExtResource("4_t0bvi")
 }],
 "loop": true,
 "name": &"default",
@@ -46,16 +46,15 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("5_xrcwv")
+"texture": ExtResource("5_xvtco")
 }],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
 
-[node name="Inserter" type="Node2D" unique_id=30982405]
-script = ExtResource("1_xrcwv")
-swing_time = 1.0
+[node name="FastInserter" type="Node2D" unique_id=30982405]
+script = ExtResource("1_irtbb")
 
 [node name="PickupArea" type="Area2D" parent="." unique_id=1440000777]
 position = Vector2(60, 0)
