@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://cmt61f5ik36da"]
+
+[ext_resource type="Script" uid="uid://dncw47k15bkn4" path="res://GridWorks Major Project 2026/Scripts/processer.gd" id="1_t1slx"]
+[ext_resource type="PackedScene" uid="uid://derr5mq28x1hy" path="res://GridWorks Major Project 2026/Scenes/iron_gear.tscn" id="2_fbebe"]
+[ext_resource type="Texture2D" uid="uid://oxgbdb8ihftv" path="res://GridWorks Major Project 2026/Assets/Processer_MK1.png" id="4_ig03g"]
+[ext_resource type="Texture2D" uid="uid://bimkbvgxe6ajh" path="res://GridWorks Major Project 2026/Assets/Processer_MK1_ON.png" id="5_20mqw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
+size = Vector2(129, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20nwo"]
+size = Vector2(120, 119)
+
+[node name="ProcessorMK1" type="Node2D" unique_id=1905251074]
+script = ExtResource("1_t1slx")
+recipes = {
+"iron_ingot": ExtResource("2_fbebe")
+}
+recipe_costs = {
+"iron_ingot": 2
+}
+
+[node name="ProcessorOff" type="Sprite2D" parent="." unique_id=2067550932]
+texture = ExtResource("4_ig03g")
+
+[node name="InputArea" type="Area2D" parent="." unique_id=126425833]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="InputArea" unique_id=1482730492]
+shape = SubResource("RectangleShape2D_36agx")
+
+[node name="OutputMarker" type="Marker2D" parent="." unique_id=552904695]
+
+[node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=2035809150]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=563858654]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_20nwo")
+
+[node name="ProcessingTimer" type="Timer" parent="." unique_id=665999875]
+
+[node name="GlowSprite" type="Sprite2D" parent="." unique_id=1321602352]
+texture = ExtResource("5_20mqw")

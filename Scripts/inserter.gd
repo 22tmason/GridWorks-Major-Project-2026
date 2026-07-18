@@ -56,6 +56,10 @@ func _process(_delta: float) -> void:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
 
 func _physics_process(_delta: float) -> void:
+	# --- FIX: Keep the held item completely upright relative to the screen ---
+	if held_item:
+		held_item.global_rotation = 0.0
+
 	# Run the drop checking logic every physics frame if we are waiting for a gap
 	if is_waiting_to_drop:
 		try_drop_item()
