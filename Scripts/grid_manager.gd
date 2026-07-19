@@ -4,6 +4,8 @@ const CELL_SIZE := Vector2(64, 64)
 
 # Tracks which building is in which cell -> Keys: Vector2i, Values: Node/String
 var grid_data := {}
+# Inside your GridManager.gd script
+var resource_data: Dictionary = {}
 
 # Load your scenes here
 var straight_belt_scene = preload("res://GridWorks Major Project 2026/Scenes/belt.tscn")
@@ -22,7 +24,15 @@ func grid_to_world(grid_pos: Vector2i) -> Vector2:
 	return Vector2(world_x, world_y)
 
 # Tries to place an item at a specific grid coordinate
-# --- NEW: Checks if a placement is valid without actually placing it ---
+# Key: Vector2i(cell), Value: String ("iron_ore" / "copper_ore")
+var natural_resources: Dictionary = {}
+
+func register_resource_node(cell: Vector2i, resource_type: String) -> void:
+	natural_resources[cell] = resource_type
+
+func get_resource_at_cell(cell: Vector2i) -> String:
+	return natural_resources.get(cell, "")
+	
 func is_placement_blocked(cells: Array[Vector2i]) -> bool:
 	for cell in cells:
 		if grid_data.has(cell):

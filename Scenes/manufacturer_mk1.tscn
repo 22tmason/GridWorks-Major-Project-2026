@@ -1,24 +1,36 @@
 [gd_scene format=3 uid="uid://ks5yvm47aed0"]
 
-[ext_resource type="Script" uid="uid://bccn6safi7q7y" path="res://GridWorks Major Project 2026/Scenes/manufacturer.gd" id="1_vgodh"]
-[ext_resource type="Texture2D" uid="uid://oxgbdb8ihftv" path="res://GridWorks Major Project 2026/Assets/Processer_MK1.png" id="3_qswfd"]
-[ext_resource type="Texture2D" uid="uid://bimkbvgxe6ajh" path="res://GridWorks Major Project 2026/Assets/Processer_MK1_ON.png" id="4_x8gvv"]
+[ext_resource type="Script" uid="uid://bccn6safi7q7y" path="res://GridWorks Major Project 2026/Scripts/manufacturer.gd" id="1_vgodh"]
+[ext_resource type="PackedScene" uid="uid://bnedck08qya12" path="res://GridWorks Major Project 2026/Scenes/electronic_circuit.tscn" id="2_p8rs1"]
+[ext_resource type="Texture2D" uid="uid://dikuav7nvcdd7" path="res://GridWorks Major Project 2026/Assets/Manufacturer MK1.png" id="2_vgodh"]
+[ext_resource type="Texture2D" uid="uid://docgq3jp5cjm" path="res://GridWorks Major Project 2026/Assets/Manufacturer MK1 ON.png" id="3_vgodh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
-size = Vector2(129, 128)
+size = Vector2(193, 194)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_20nwo"]
-size = Vector2(120, 119)
+size = Vector2(182, 182)
 
 [node name="ManufacturerMK1" type="Node2D" unique_id=1905251074]
 script = ExtResource("1_vgodh")
+selected_recipe = "electronic_circuit"
+recipes = {
+"electronic_circuit": ExtResource("2_p8rs1")
+}
+recipe_requirements = {
+"electronic_circuit": {
+"copper_ingot": 2,
+"iron_ingot": 1
+}
+}
 
 [node name="ManufacturerOff" type="Sprite2D" parent="." unique_id=2067550932]
-texture = ExtResource("3_qswfd")
+texture = ExtResource("2_vgodh")
 
 [node name="InputArea" type="Area2D" parent="." unique_id=126425833]
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="InputArea" unique_id=1482730492]
+position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_36agx")
 
 [node name="OutputMarker" type="Marker2D" parent="." unique_id=552904695]
@@ -26,10 +38,10 @@ shape = SubResource("RectangleShape2D_36agx")
 [node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=2035809150]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=563858654]
-position = Vector2(0, 0.5)
+position = Vector2(-1, 1)
 shape = SubResource("RectangleShape2D_20nwo")
 
-[node name="ManufacturerTimer" type="Timer" parent="." unique_id=665999875]
+[node name="ProcessingTimer" type="Timer" parent="." unique_id=665999875]
 
 [node name="GlowSprite" type="Sprite2D" parent="." unique_id=1321602352]
-texture = ExtResource("4_x8gvv")
+texture = ExtResource("3_vgodh")

@@ -13,6 +13,8 @@ var electric_drill_scene = load("res://GridWorks Major Project 2026/Scenes/elect
 var stone_furnace_scene = load("res://GridWorks Major Project 2026/Scenes/stone_furnace.tscn")
 var fast_inserter_scene = load("res://GridWorks Major Project 2026/Scenes/fast_inserter.tscn")
 var processor_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/processor_mk1.tscn")
+var manufacturer_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/manufacturer_mk1.tscn")
+
 
 # Set the default building
 @onready var selected_scene: PackedScene = straight_belt_scene

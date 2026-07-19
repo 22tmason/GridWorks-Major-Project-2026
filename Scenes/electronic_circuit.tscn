@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bnedck08qya12"]
+
+[ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scripts/item.gd" id="1_87ha4"]
+[ext_resource type="Texture2D" uid="uid://bsrhcylmffn38" path="res://GridWorks Major Project 2026/Assets/Electronic Circuit.png" id="2_87ha4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e5x20"]
+size = Vector2(64, 64)
+
+[node name="copper_ore" type="Area2D" unique_id=1264360636 groups=["items"]]
+z_index = 1
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_87ha4")
+item_id = "electronic_circuit"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1726742071]
+texture = ExtResource("2_87ha4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=921391206]
+shape = SubResource("RectangleShape2D_e5x20")

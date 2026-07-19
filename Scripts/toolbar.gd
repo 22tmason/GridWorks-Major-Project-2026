@@ -14,6 +14,7 @@ func _ready() -> void:
 	$HBoxContainer/StoneFurnaceButton.pressed.connect(_on_stone_furnace_pressed)
 	$HBoxContainer/FastInserterButton.pressed.connect(_on_fast_inserter_pressed)
 	$HBoxContainer/ProcessorMK1Button.pressed.connect(_on_processor_mk1_pressed)
+	$HBoxContainer/ManufacturerMK1Button.pressed.connect(_on_manufacturer_mk1_pressed)
 
 func _on_straight_pressed() -> void:
 	BuildManager.change_building(BuildManager.straight_belt_scene)
@@ -50,3 +51,6 @@ func _on_fast_inserter_pressed() -> void:
 	
 func _on_processor_mk1_pressed() -> void:
 	BuildManager.change_building(BuildManager.processor_mk1_scene)
+
+func _on_manufacturer_mk1_pressed() -> void:
+	BuildManager.change_building(BuildManager.manufacturer_mk1_scene)

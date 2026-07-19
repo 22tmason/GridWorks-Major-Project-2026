@@ -2,26 +2,90 @@
 
 [ext_resource type="Script" uid="uid://bt8foho3wrtv0" path="res://GridWorks Major Project 2026/Scripts/main_level.gd" id="1_7vhcm"]
 [ext_resource type="PackedScene" uid="uid://beelhlptqaib6" path="res://GridWorks Major Project 2026/Scenes/iron_ore.tscn" id="2_xi6xi"]
-[ext_resource type="Texture2D" uid="uid://c0riauigh32hh" path="res://GridWorks Major Project 2026/Assets/GridWorksBackgroundSand-1.png.png" id="3_nyu2a"]
 [ext_resource type="Script" uid="uid://s4ohav6h7p7" path="res://GridWorks Major Project 2026/Scripts/toolbar.gd" id="4_sh7fp"]
+[ext_resource type="Texture2D" uid="uid://dqpys0qi8ac4u" path="res://GridWorks Major Project 2026/Assets/SandyBackground1.png" id="5_bowd8"]
 [ext_resource type="PackedScene" uid="uid://dumd22i5qussy" path="res://GridWorks Major Project 2026/Scenes/belt.tscn" id="6_bowd8"]
+[ext_resource type="Texture2D" uid="uid://ccwl8gb0to67d" path="res://GridWorks Major Project 2026/Assets/SandyBackground2.png" id="6_ee7x2"]
 [ext_resource type="Script" uid="uid://b6cvxm58vmja5" path="res://GridWorks Major Project 2026/Scripts/map_generator.gd" id="6_xi6xi"]
+[ext_resource type="Texture2D" uid="uid://cr0du6533ud44" path="res://GridWorks Major Project 2026/Assets/SandyBackground3 (1).png" id="7_ewncr"]
+[ext_resource type="Texture2D" uid="uid://bq4jllfhta41a" path="res://GridWorks Major Project 2026/Assets/CopperNode3.png" id="8_hgqtv"]
+[ext_resource type="Texture2D" uid="uid://bh53fo1fwvajk" path="res://GridWorks Major Project 2026/Assets/CopperNodeBorder.png" id="8_ko61b"]
+[ext_resource type="Texture2D" uid="uid://ddxal2eeot4ka" path="res://GridWorks Major Project 2026/Assets/IronNode3.png" id="8_rqca6"]
+[ext_resource type="Texture2D" uid="uid://bcvwvq1ablsk0" path="res://GridWorks Major Project 2026/Assets/IronNode2.png" id="9_geysq"]
+[ext_resource type="Texture2D" uid="uid://cdy4njvxvawjl" path="res://GridWorks Major Project 2026/Assets/IronNode1.png" id="10_rqca6"]
+[ext_resource type="Texture2D" uid="uid://cawug1xpeb50f" path="res://GridWorks Major Project 2026/Assets/IronNodeBorder.png" id="11_rqca6"]
+[ext_resource type="PackedScene" uid="uid://dqmsyuk4rqllk" path="res://GridWorks Major Project 2026/Scenes/player.tscn" id="12_geysq"]
+[ext_resource type="Texture2D" uid="uid://dcgqe14pcrftw" path="res://GridWorks Major Project 2026/Assets/CopperNode2.png" id="15_hgbet"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xi6xi"]
-texture = ExtResource("3_nyu2a")
-texture_region_size = Vector2i(384, 384)
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g0vbp"]
+texture = ExtResource("5_bowd8")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yv83i"]
+texture = ExtResource("6_ee7x2")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rqca6"]
+texture = ExtResource("7_ewncr")
+texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_jixft"]
 tile_size = Vector2i(64, 64)
-sources/1 = SubResource("TileSetAtlasSource_xi6xi")
+sources/0 = SubResource("TileSetAtlasSource_g0vbp")
+sources/1 = SubResource("TileSetAtlasSource_yv83i")
+sources/2 = SubResource("TileSetAtlasSource_rqca6")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e570s"]
+texture = ExtResource("8_ko61b")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ivtk"]
+texture = ExtResource("8_rqca6")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hgqtv"]
+texture = ExtResource("9_geysq")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ko61b"]
+texture = ExtResource("10_rqca6")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u0kvv"]
+texture = ExtResource("11_rqca6")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_easix"]
+texture = ExtResource("8_hgqtv")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1m6df"]
+texture = ExtResource("15_hgbet")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ewncr"]
+tile_size = Vector2i(64, 64)
+sources/6 = SubResource("TileSetAtlasSource_u0kvv")
+sources/5 = SubResource("TileSetAtlasSource_ko61b")
+sources/4 = SubResource("TileSetAtlasSource_hgqtv")
+sources/3 = SubResource("TileSetAtlasSource_7ivtk")
+sources/9 = SubResource("TileSetAtlasSource_1m6df")
+sources/7 = SubResource("TileSetAtlasSource_easix")
+sources/10 = SubResource("TileSetAtlasSource_e570s")
 
 [node name="MainLevel" type="Node2D" unique_id=1807510388]
 script = ExtResource("1_7vhcm")
 default_item_scene = ExtResource("2_xi6xi")
-
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=893010129]
-tile_set = SubResource("TileSet_jixft")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2095309792]
 script = ExtResource("4_sh7fp")
@@ -78,8 +142,21 @@ text = "Stone Furnace"
 layout_mode = 2
 text = "Processor MK1"
 
-[node name="MapGenerator" type="Node2D" parent="." unique_id=735054150 node_paths=PackedStringArray("ground_tilemap")]
+[node name="ManufacturerMK1Button" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=956730634]
+layout_mode = 2
+text = "ManufacturerMK1"
+
+[node name="MapGenerator" type="Node2D" parent="." unique_id=735054150 node_paths=PackedStringArray("player")]
 script = ExtResource("6_xi6xi")
-ground_tilemap = NodePath("../TileMapLayer")
+player = NodePath("Player")
+iron_min_threshold = 0.56
+
+[node name="GroundLayer" type="TileMapLayer" parent="MapGenerator" unique_id=893010129]
+tile_set = SubResource("TileSet_jixft")
+
+[node name="ResourceLayer" type="TileMapLayer" parent="MapGenerator" unique_id=975657964]
+tile_set = SubResource("TileSet_ewncr")
+
+[node name="Player" parent="MapGenerator" unique_id=659558948 instance=ExtResource("12_geysq")]
 
 [node name="Belt" parent="." unique_id=883872601 instance=ExtResource("6_bowd8")]

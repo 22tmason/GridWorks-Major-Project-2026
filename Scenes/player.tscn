@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dqmsyuk4rqllk"]
+
+[ext_resource type="Script" uid="uid://bxrtjgkatlvm4" path="res://GridWorks Major Project 2026/Scripts/player.gd" id="1_ss66k"]
+
+[node name="Player" type="Node2D" unique_id=659558948]
+script = ExtResource("1_ss66k")
+speed = 1800.0
+shift_speed_multiplier = 10.0
+min_zoom = 0.18
+max_zoom = 5.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1638861356]
