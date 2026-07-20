@@ -9,7 +9,7 @@ var is_processing := false:
 	set(value):
 		is_processing = value
 		_update_sprite_visibility()
-
+		
 enum Direction { UP, RIGHT, DOWN, LEFT }
 @export var current_direction: Direction = Direction.DOWN
 var is_placed := false

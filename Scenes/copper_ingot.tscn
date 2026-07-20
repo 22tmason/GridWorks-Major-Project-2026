@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://4hdkb72pu3ic"]
 
 [ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scripts/item.gd" id="1_ptmh3"]
-[ext_resource type="Texture2D" uid="uid://y3f5q6q6wres" path="res://GridWorks Major Project 2026/Assets/Copper Ingot.png" id="2_ptmh3"]
+[ext_resource type="Texture2D" uid="uid://comk7gcb3rvjl" path="res://GridWorks Major Project 2026/Assets/Copper Ingot.png" id="2_ptmh3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e5x20"]
 size = Vector2(64, 64)
@@ -13,7 +13,6 @@ script = ExtResource("1_ptmh3")
 item_id = "copper_ingot"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1726742071]
-rotation = 4.712389
 texture = ExtResource("2_ptmh3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=921391206]

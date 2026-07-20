@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bt8foho3wrtv0" path="res://GridWorks Major Project 2026/Scripts/main_level.gd" id="1_7vhcm"]
 [ext_resource type="PackedScene" uid="uid://beelhlptqaib6" path="res://GridWorks Major Project 2026/Scenes/iron_ore.tscn" id="2_xi6xi"]
-[ext_resource type="Script" uid="uid://s4ohav6h7p7" path="res://GridWorks Major Project 2026/Scripts/toolbar.gd" id="4_sh7fp"]
+[ext_resource type="Script" uid="uid://cvelvvrksgqcf" path="res://GridWorks Major Project 2026/Scripts/inventory_ui.gd" id="3_7ivtk"]
 [ext_resource type="Texture2D" uid="uid://dqpys0qi8ac4u" path="res://GridWorks Major Project 2026/Assets/SandyBackground1.png" id="5_bowd8"]
 [ext_resource type="PackedScene" uid="uid://dumd22i5qussy" path="res://GridWorks Major Project 2026/Scenes/belt.tscn" id="6_bowd8"]
 [ext_resource type="Texture2D" uid="uid://ccwl8gb0to67d" path="res://GridWorks Major Project 2026/Assets/SandyBackground2.png" id="6_ee7x2"]
@@ -16,6 +16,26 @@
 [ext_resource type="Texture2D" uid="uid://cawug1xpeb50f" path="res://GridWorks Major Project 2026/Assets/IronNodeBorder.png" id="11_rqca6"]
 [ext_resource type="PackedScene" uid="uid://dqmsyuk4rqllk" path="res://GridWorks Major Project 2026/Scenes/player.tscn" id="12_geysq"]
 [ext_resource type="Texture2D" uid="uid://dcgqe14pcrftw" path="res://GridWorks Major Project 2026/Assets/CopperNode2.png" id="15_hgbet"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ivtk"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.14509805, 0.14509805, 0.14509805, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 4
+border_width_bottom = 8
+border_color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hgqtv"]
+bg_color = Color(0.14509805, 0.14509805, 0.14509805, 1)
+border_width_left = 4
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.33333334, 0.33333334, 0.33333334, 1)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g0vbp"]
 texture = ExtResource("5_bowd8")
@@ -87,64 +107,83 @@ sources/10 = SubResource("TileSetAtlasSource_e570s")
 script = ExtResource("1_7vhcm")
 default_item_scene = ExtResource("2_xi6xi")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2095309792]
-script = ExtResource("4_sh7fp")
+[node name="InventoryUI" type="CanvasLayer" parent="." unique_id=2095309792]
+script = ExtResource("3_7ivtk")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer" unique_id=1367705276]
-offset_right = 100.0
-offset_bottom = 66.0
+[node name="MainPanel" type="PanelContainer" parent="InventoryUI" unique_id=400351216]
+custom_minimum_size = Vector2(1100, 600)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -300.0
+offset_right = 500.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="StraightButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=2019693180]
+[node name="HBoxContainer" type="HBoxContainer" parent="InventoryUI/MainPanel" unique_id=1108807198]
 layout_mode = 2
-text = "Straight"
 
-[node name="CornerRightButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=2038491678]
+[node name="LeftInventorySection" type="PanelContainer" parent="InventoryUI/MainPanel/HBoxContainer" unique_id=519469459]
 layout_mode = 2
-text = "CornerRight"
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_7ivtk")
 
-[node name="CornerLeftButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1789623704]
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryUI/MainPanel/HBoxContainer/LeftInventorySection" unique_id=453156903]
 layout_mode = 2
-text = "CornerLeft"
 
-[node name="InserterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1168308411]
+[node name="Title" type="Label" parent="InventoryUI/MainPanel/HBoxContainer/LeftInventorySection/VBoxContainer" unique_id=503167226]
 layout_mode = 2
-text = "Inserter"
+text = "Inventory"
 
-[node name="FastInserterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=704372227]
+[node name="InventoryGrid" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/LeftInventorySection/VBoxContainer" unique_id=168781867]
 layout_mode = 2
-text = "Fast Inserter"
+columns = 8
 
-[node name="LongInserterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=916950948]
+[node name="RightCraftingSection" type="PanelContainer" parent="InventoryUI/MainPanel/HBoxContainer" unique_id=1699643166]
 layout_mode = 2
-text = "Long Inserter"
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_hgqtv")
 
-[node name="SplitterButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1797135393]
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection" unique_id=319518734]
 layout_mode = 2
-text = "Splitter"
 
-[node name="MergerButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=146010715]
+[node name="Title" type="Label" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer" unique_id=718096850]
 layout_mode = 2
-text = "Merger"
+text = "Crafting Menu"
 
-[node name="UndergroundButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=161730994]
+[node name="TabContainer" type="TabContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer" unique_id=1672753752]
 layout_mode = 2
-text = "Underground"
+size_flags_vertical = 3
+theme_override_constants/side_margin = 0
+current_tab = 0
+all_tabs_in_front = true
 
-[node name="ElectricDrillButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1587630007]
+[node name="Logistics" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=777588831]
 layout_mode = 2
-text = "Electric Drill"
+columns = 6
+metadata/_tab_index = 0
 
-[node name="StoneFurnaceButton" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1229802655]
+[node name="Processing" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=639255436]
+visible = false
 layout_mode = 2
-text = "Stone Furnace"
+columns = 6
+metadata/_tab_index = 1
 
-[node name="ProcessorMK1Button" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=1782077872]
+[node name="Manufacturing" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=141975023]
+visible = false
 layout_mode = 2
-text = "Processor MK1"
+columns = 6
+metadata/_tab_index = 2
 
-[node name="ManufacturerMK1Button" type="Button" parent="CanvasLayer/HBoxContainer" unique_id=956730634]
+[node name="Intermediates" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=417476610]
+visible = false
 layout_mode = 2
-text = "ManufacturerMK1"
+columns = 6
+metadata/_tab_index = 3
 
 [node name="MapGenerator" type="Node2D" parent="." unique_id=735054150 node_paths=PackedStringArray("player")]
 script = ExtResource("6_xi6xi")

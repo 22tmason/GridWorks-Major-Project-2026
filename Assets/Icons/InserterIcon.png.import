@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crhhi5jkx4icq"
-path="res://.godot/imported/Copper Ore.png-dfaa8b5a723d0fb390affb9d3e262e19.ctex"
+uid="uid://bv16hfqhxkof0"
+path="res://.godot/imported/InserterIcon.png-1d3de1adf1541e20888d8d6dd3c2e8ae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Copper Ore.png"
-dest_files=["res://.godot/imported/Copper Ore.png-dfaa8b5a723d0fb390affb9d3e262e19.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/Icons/InserterIcon.png"
+dest_files=["res://.godot/imported/InserterIcon.png-1d3de1adf1541e20888d8d6dd3c2e8ae.ctex"]
 
 [params]
 
