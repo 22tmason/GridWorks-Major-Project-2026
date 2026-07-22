@@ -66,6 +66,7 @@ func place_item(cells: Array[Vector2i], item_node: Node) -> bool:
 	# 4. Consume the item from the inventory BEFORE placing
 	if cost_id != "":
 		InventoryManager.consume_item(cost_id, 1)
+		TutorialManager.notify_item_placed(cost_id)
 	
 	# 5. Claim every requested cell in the dictionary
 	for cell in cells:

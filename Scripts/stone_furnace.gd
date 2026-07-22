@@ -158,6 +158,11 @@ func _try_empty_output_buffer() -> void:
 	var new_item = ingot_scene.instantiate()
 	new_item.global_position = output_marker.global_position
 	get_parent().add_child(new_item)
+	
+	# --- NOTIFY TUTORIAL OF ITEM PRODUCTION ---
+	if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
+		TutorialManager.notify_item_produced(new_item.item_id)
+		
 	print("Furnace dispatched item from tray!")
 
 func _check_for_waiting_items() -> void:

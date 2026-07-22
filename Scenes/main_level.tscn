@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cawug1xpeb50f" path="res://GridWorks Major Project 2026/Assets/IronNodeBorder.png" id="11_rqca6"]
 [ext_resource type="PackedScene" uid="uid://dqmsyuk4rqllk" path="res://GridWorks Major Project 2026/Scenes/player.tscn" id="12_geysq"]
 [ext_resource type="Texture2D" uid="uid://dcgqe14pcrftw" path="res://GridWorks Major Project 2026/Assets/CopperNode2.png" id="15_hgbet"]
+[ext_resource type="PackedScene" uid="uid://bl046ghhbc0vi" path="res://GridWorks Major Project 2026/Scenes/OnboardingUI.tscn" id="17_hgqtv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ivtk"]
 content_margin_left = 12.0
@@ -199,3 +200,5 @@ tile_set = SubResource("TileSet_ewncr")
 [node name="Player" parent="MapGenerator" unique_id=659558948 instance=ExtResource("12_geysq")]
 
 [node name="Belt" parent="." unique_id=883872601 instance=ExtResource("6_bowd8")]
+
+[node name="OnboardingUI" parent="." unique_id=1679590071 instance=ExtResource("17_hgqtv")]

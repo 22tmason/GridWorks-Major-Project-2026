@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://bl046ghhbc0vi"]
+
+[ext_resource type="Script" uid="uid://byml22j2xkkv0" path="res://GridWorks Major Project 2026/Scenes/onboarding_ui.gd" id="1_gw8vh"]
+
+[node name="OnboardingUI" type="CanvasLayer" unique_id=1679590071]
+process_mode = 3
+script = ExtResource("1_gw8vh")
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=2108713256]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.14509805, 0.14509805, 0.14509805, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay" unique_id=1391439737]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainPanel" type="PanelContainer" parent="Overlay/CenterContainer" unique_id=599148841]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay/CenterContainer/MainPanel" unique_id=1253588954]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/CenterContainer/MainPanel/MarginContainer" unique_id=556257346]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TitleLabel" type="Label" parent="Overlay/CenterContainer/MainPanel/MarginContainer/VBoxContainer" unique_id=1704920640]
+layout_mode = 2
+
+[node name="BodyLabel" type="RichTextLabel" parent="Overlay/CenterContainer/MainPanel/MarginContainer/VBoxContainer" unique_id=659793801]
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Overlay/CenterContainer/MainPanel/MarginContainer/VBoxContainer" unique_id=1644983392]
+layout_mode = 2
+alignment = 1
+
+[node name="StartTutorialButton" type="Button" parent="Overlay/CenterContainer/MainPanel/MarginContainer/VBoxContainer/ButtonContainer" unique_id=915922129]
+layout_mode = 2
+
+[node name="SkipButton" type="Button" parent="Overlay/CenterContainer/MainPanel/MarginContainer/VBoxContainer/ButtonContainer" unique_id=501532375]
+layout_mode = 2

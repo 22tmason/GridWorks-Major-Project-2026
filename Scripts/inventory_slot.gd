@@ -15,10 +15,12 @@ func setup_inventory_slot(slot_idx: int, item_id: String, quantity: int) -> void
 	if item_id == "" or quantity <= 0:
 		icon_rect.texture = null
 		count_label.text = ""
+		tooltip_text = ""
 	else:
 		var data = InventoryManager.item_database[item_id]
 		icon_rect.texture = load(data["texture"])
 		count_label.text = str(quantity)
+		tooltip_text = data["name"] + "\n" + data["description"]
 
 func setup_crafting_slot(item_id: String) -> void:
 	current_item_id = item_id
@@ -28,6 +30,7 @@ func setup_crafting_slot(item_id: String) -> void:
 	var data = InventoryManager.item_database[item_id]
 	icon_rect.texture = load(data["texture"])
 	count_label.text = "" # Free crafting uses no numeric counter text
+	tooltip_text = data["name"] + "\n" + data["description"]
 
 func _pressed() -> void:
 	if current_item_id == "":
@@ -36,6 +39,10 @@ func _pressed() -> void:
 	if is_crafting_button:
 		# Free crafting: Instantly create item out of thin air!
 		InventoryManager.add_item(current_item_id, 1)
+		
+		# Notify tutorial when an item is crafted!
+		if get_node_or_null("/root/TutorialManager"):
+			TutorialManager.notify_item_crafted(current_item_id)
 	else:
 		# Inventory slot clicked: Load scene blueprint into the BuildManager
 		var item_data = InventoryManager.item_database[current_item_id]
