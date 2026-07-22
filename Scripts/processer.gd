@@ -15,17 +15,20 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 @export var current_direction: Direction = Direction.DOWN
 var is_placed := false
 
+# --- NEW: Identify what item this building costs ---
+@export var building_item_id: String = "processor_mk1"
+
 # --- RECIPE & STORAGE VARIABLES ---
 @export var processing_time: float = 2.0 
-@export var max_storage: int = 10 # Slightly higher buffer since it eats items fast!
+@export var max_storage: int = 10 
 
 # Internal hoppers
 var input_buffer: Array[String] = []
 var output_buffer: Array[PackedScene] = []
 
 # --- THE RECIPE ENGINE ---
-@export var recipes: Dictionary = {}       # Key: String ("iron_ingot"), Value: PackedScene (iron_gear.tscn)
-@export var recipe_costs: Dictionary = {}  # Key: String ("iron_ingot"), Value: int (2)
+@export var recipes: Dictionary = {}       
+@export var recipe_costs: Dictionary = {}  
 
 @onready var processing_timer: Timer = $ProcessingTimer
 @onready var input_area: Area2D = $InputArea
@@ -51,7 +54,6 @@ func _update_sprite_visibility() -> void:
 		processor_off.visible = not is_processing
 
 func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
-	# Assumes 2x2 size like the furnace. Change if your processor is 1x1!
 	return [
 		center_cell,
 		center_cell + Vector2i(1, 0),
@@ -68,7 +70,8 @@ func _process(_delta: float) -> void:
 	
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	if GridManager.is_placement_blocked(cells_to_check):
+	# --- UPDATED: GridManager checks if the physical space is clear AND if inventory has stock ---
+	if GridManager.is_placement_blocked(cells_to_check, building_item_id):
 		modulate = Color(1.0, 0.4, 0.4, 0.8) 
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) 
@@ -84,12 +87,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
 		var cells_to_claim = get_occupied_cells(current_grid_cell)
 		
+		# --- UPDATED: GridManager handles checking the inventory AND deducting the item! ---
 		var success = GridManager.place_item(cells_to_claim, self)
 		if success:
 			is_placed = true
 			modulate = Color(1.0, 1.0, 1.0, 1.0)
 			pickup_area_connected_safely()
 			
+			# ALWAYS spawn the next preview
 			var next_processor = load(scene_file_path).instantiate()
 			next_processor.current_direction = current_direction
 			next_processor.rotation_degrees = rotation_degrees
@@ -100,7 +105,6 @@ func rotate_processor() -> void:
 	rotation_degrees += 90
 
 func pickup_area_connected_safely() -> void:
-	# Checks for items already resting inside our zone when placed
 	for area in input_area.get_overlapping_areas():
 		_on_item_entered(area)
 
@@ -108,7 +112,6 @@ func pickup_area_connected_safely() -> void:
 
 func _on_item_entered(area: Area2D) -> void:
 	if not is_placed: return
-	# --- FIX: Ignore items already marked for deletion ---
 	if area.is_queued_for_deletion(): return 
 	
 	if area.is_in_group("items") and "item_id" in area:
@@ -125,24 +128,19 @@ func _physics_process(_delta: float) -> void:
 	if not is_placed: 
 		return
 		
-	# 1. Clear the output tray if possible
 	_try_empty_output_buffer()
 	
-	# 2. Check if we can craft something new
 	if not is_processing and not input_buffer.is_empty() and output_buffer.size() < max_storage:
 		var next_recipe_input = input_buffer[0]
-		var required_cost = recipe_costs.get(next_recipe_input, 1) # Defaults to 1 if not set
+		var required_cost = recipe_costs.get(next_recipe_input, 1) 
 		
-		# Count if we have enough matching items in our buffer
 		if input_buffer.count(next_recipe_input) >= required_cost:
 			_start_processing_recipe(next_recipe_input, required_cost)
 			
-	# 3. Pull in items that are waiting outside on the belt
 	if input_buffer.size() < max_storage:
 		_check_for_waiting_items()
 
 func _start_processing_recipe(item_id: String, cost: int) -> void:
-	# Delete the exact number of ingredients from our buffer array
 	for i in range(cost):
 		input_buffer.erase(item_id)
 		
@@ -170,7 +168,6 @@ func _try_empty_output_buffer() -> void:
 
 func _check_for_waiting_items() -> void:
 	for area in input_area.get_overlapping_areas():
-		# --- FIX: Skip items already marked for deletion ---
 		if area.is_queued_for_deletion(): continue 
 		
 		if input_buffer.size() >= max_storage:
@@ -186,7 +183,6 @@ func is_output_blocked() -> bool:
 	var overlapping_things = output_check_area.get_overlapping_areas()
 	for thing in overlapping_things:
 		if thing.is_in_group("items") and "item_id" in thing:
-			# Ignore raw materials passing through or waiting to get processed
 			if recipes.has(thing.item_id):
 				continue
 			return true

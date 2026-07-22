@@ -55,6 +55,8 @@ animations = [{
 
 [node name="FastInserter" type="Node2D" unique_id=30982405]
 script = ExtResource("1_irtbb")
+swing_time = 0.33
+building_item_id = "fast_inserter"
 
 [node name="PickupArea" type="Area2D" parent="." unique_id=1440000777]
 position = Vector2(60, 0)

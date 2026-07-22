@@ -15,15 +15,16 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 @export var current_direction: Direction = Direction.DOWN
 var is_placed := false
 
+# --- NEW: Identify what item this building costs ---
+@export var building_item_id: String = "stone_furnace"
+
 # --- RECIPE & STORAGE VARIABLES ---
 @export var smelting_time: float = 3.0 
-@export var max_storage: int = 5 # How many items can sit in the input/output buffers
+@export var max_storage: int = 5 
 
-# Our internal hoppers
 var input_buffer: Array[String] = []
 var output_buffer: Array[PackedScene] = []
 
-# This is our Recipe Book! 
 @export var recipes: Dictionary = {} 
 
 @onready var smelting_timer: Timer = $SmeltingTimer
@@ -31,7 +32,7 @@ var output_buffer: Array[PackedScene] = []
 @onready var output_marker: Marker2D = $OutputMarker
 @onready var output_check_area: Area2D = $OutputMarker/OutputCheckArea
 
-var current_output_scene: PackedScene = null # Remembers what we are currently cooking
+var current_output_scene: PackedScene = null 
 
 func _ready() -> void:
 	smelting_timer.one_shot = true
@@ -66,7 +67,8 @@ func _process(_delta: float) -> void:
 	
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	if GridManager.is_placement_blocked(cells_to_check):
+	# --- UPDATED: GridManager checks if the physical space is clear AND if inventory has stock ---
+	if GridManager.is_placement_blocked(cells_to_check, building_item_id):
 		modulate = Color(1.0, 0.4, 0.4, 0.8) 
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) 
@@ -82,12 +84,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
 		var cells_to_claim = get_occupied_cells(current_grid_cell)
 		
+		# --- UPDATED: GridManager handles checking the inventory AND deducting the item! ---
 		var success = GridManager.place_item(cells_to_claim, self)
 		if success:
 			is_placed = true
 			modulate = Color(1.0, 1.0, 1.0, 1.0)
 			
-			var next_furnace = BuildManager.selected_scene.instantiate()
+			# Check for any items stranded directly underneath us upon placement
+			_check_for_waiting_items()
+			
+			var next_furnace = load(scene_file_path).instantiate()
 			next_furnace.current_direction = current_direction
 			next_furnace.rotation_degrees = rotation_degrees
 			get_parent().add_child(next_furnace)
@@ -96,19 +102,16 @@ func rotate_furnace() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction
 	rotation_degrees += 90
 
-# --- STORAGE & SMELTING LOGIC ---
-
 func _on_item_entered(area: Area2D) -> void:
 	if not is_placed: return
 	
 	if area.is_in_group("items") and "item_id" in area:
 		var incoming_ore = area.item_id
 		
-		# If it's a valid recipe and our input hopper isn't full, slurp it up!
 		if recipes.has(incoming_ore):
 			if input_buffer.size() < max_storage:
 				input_buffer.append(incoming_ore)
-				area.queue_free() # Instantly destroy physical item to put in internal storage
+				area.queue_free() 
 				print("Furnace buffered raw input: ", incoming_ore, " (Buffer: ", input_buffer.size(), "/", max_storage, ")")
 			else:
 				print("Furnace input hopper is FULL!")
@@ -120,14 +123,11 @@ func _physics_process(_delta: float) -> void:
 	if not is_placed: 
 		return
 		
-	# 1. Always try to output finished items from our output buffer
 	_try_empty_output_buffer()
 	
-	# 2. FIXED: Only start smelting if we aren't smelting, have raw items, AND our output tray isn't full!
 	if not is_smelting and not input_buffer.is_empty() and output_buffer.size() < max_storage:
 		_start_smelting_next_item()
 		
-	# 3. If we have room in our hopper, check if any items are sitting outside waiting
 	if input_buffer.size() < max_storage:
 		_check_for_waiting_items()
 
@@ -152,9 +152,8 @@ func _try_empty_output_buffer() -> void:
 		return
 		
 	if is_output_blocked():
-		return # Wait until the physical space is clear
+		return 
 		
-	# Space is clear! Spawn the physical item back into the world
 	var ingot_scene = output_buffer.pop_front()
 	var new_item = ingot_scene.instantiate()
 	new_item.global_position = output_marker.global_position
@@ -163,6 +162,8 @@ func _try_empty_output_buffer() -> void:
 
 func _check_for_waiting_items() -> void:
 	for area in input_area.get_overlapping_areas():
+		if area.is_queued_for_deletion(): continue # Safely ignore items already grabbed
+		
 		if input_buffer.size() >= max_storage:
 			break
 			
@@ -178,7 +179,6 @@ func is_output_blocked() -> bool:
 	for thing in overlapping_things:
 		if thing.is_in_group("items"):
 			if "item_id" in thing:
-				# Ignore raw ores that haven't been slurped up yet
 				if recipes.has(thing.item_id):
 					continue
 				return true

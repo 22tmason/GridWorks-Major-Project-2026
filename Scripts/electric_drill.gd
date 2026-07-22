@@ -6,6 +6,9 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 var is_placed := false
 var is_item_ready: bool = false
 
+# --- NEW: Identify what item this building costs ---
+@export var building_item_id: String = "electric_drill"
+
 # --- DRILL VARIABLES ---
 @export var mining_speed: float = 2.0 
 @export var rotation_speed: float = 360.0 
@@ -39,10 +42,8 @@ func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
 	return cells
 
 # Helper function to check what resource is beneath the drill
-# Helper function to check what resource is beneath the drill
 func _find_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
 	for cell in occupied_cells:
-		# FIXED: Now directly calling your actual GridManager method!
 		var raw_res = GridManager.get_resource_at_cell(cell)
 			
 		# Map both core and thin edge tiles to a clean asset identifier string
@@ -63,25 +64,14 @@ func _process(delta: float) -> void:
 		
 	var mouse_pos = get_global_mouse_position()
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
-	var snapped_position = GridManager.grid_to_world(current_grid_cell)
-	
-	global_position = snapped_position
+	global_position = GridManager.grid_to_world(current_grid_cell)
 
 	# --- 3x3 PREVIEW CHECK WITH RESOURCE VALIDATION ---
 	var occupied_cells = get_occupied_cells(current_grid_cell)
-	var is_blocked = false
-	
-	# 1. Check if ANY of the 9 cells are already occupied by another building
-	for cell in occupied_cells:
-		if GridManager.grid_data.has(cell):
-			is_blocked = true
-			break
-			
-	# 2. Check if there is a resource underneath
 	var detected_resource = _find_resource_under_drill(occupied_cells)
 	
-	# Invalid placement if blocked OR completely empty sand land
-	if is_blocked or detected_resource == "":
+	# GridManager handles checking blockages and stock. We also require a resource!
+	if GridManager.is_placement_blocked(occupied_cells, building_item_id) or detected_resource == "":
 		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red visual indicator
 	else:
 		modulate = Color(0.4, 1.0, 0.4, 0.6) # Green visual indicator: Good to go!
@@ -97,33 +87,30 @@ func _unhandled_input(event: InputEvent) -> void:
 		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
 		var occupied_cells = get_occupied_cells(current_grid_cell)
 		
-		# 1. Final Placement Checks
-		for cell in occupied_cells:
-			if GridManager.grid_data.has(cell):
-				return 
-				
+		# 1. Custom Check: Must be on a resource field!
 		var detected_resource = _find_resource_under_drill(occupied_cells)
 		if detected_resource == "":
 			print("Placement failed: Drills must be built on a resource field!")
 			return 
 		
-		# 2. Lock in resource type and claim grid space
-		active_resource = detected_resource
-		for cell in occupied_cells:
-			GridManager.grid_data[cell] = self
+		# 2. GridManager handles grid-claiming AND inventory deduction!
+		var success = GridManager.place_item(occupied_cells, self)
 		
-		print("Successfully placed 3x3 ", active_resource, " Drill at: ", current_grid_cell)
-		
-		is_placed = true
-		modulate = Color(1.0, 1.0, 1.0, 1.0) 
-		_start_mining()
-		
-		# Spawn the next blueprint preview instance
-		var next_drill = BuildManager.selected_scene.instantiate()
-		if "current_direction" in next_drill:
-			next_drill.current_direction = current_direction
-		next_drill.rotation_degrees = rotation_degrees
-		get_parent().add_child(next_drill)
+		if success:
+			# Lock in resource type 
+			active_resource = detected_resource
+			print("Successfully placed 3x3 ", active_resource, " Drill at: ", current_grid_cell)
+			
+			is_placed = true
+			modulate = Color(1.0, 1.0, 1.0, 1.0) 
+			_start_mining()
+			
+			# Spawn the next blueprint preview instance
+			var next_drill = load(scene_file_path).instantiate()
+			if "current_direction" in next_drill:
+				next_drill.current_direction = current_direction
+			next_drill.rotation_degrees = rotation_degrees
+			get_parent().add_child(next_drill)
 
 func rotate_drill() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction

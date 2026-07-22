@@ -14,6 +14,9 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 @export var current_direction: Direction = Direction.DOWN
 var is_placed := false
 
+# --- NEW: Identify what item this building costs ---
+@export var building_item_id: String = "manufacturer_mk1"
+
 # --- RECIPE & CONFIG VARIABLES ---
 @export var selected_recipe: String = "" # e.g., "electronic_circuit"
 @export var processing_time: float = 3.5
@@ -64,7 +67,9 @@ func _process(_delta: float) -> void:
 	global_position = GridManager.grid_to_world(current_grid_cell)
 	
 	var cells_to_check = get_occupied_cells(current_grid_cell)
-	if GridManager.is_placement_blocked(cells_to_check):
+	
+	# --- UPDATED: GridManager checks physical space AND inventory stock ---
+	if GridManager.is_placement_blocked(cells_to_check, building_item_id):
 		modulate = Color(1.0, 0.4, 0.4, 0.8) 
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) 
@@ -80,6 +85,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
 		var cells_to_claim = get_occupied_cells(current_grid_cell)
 		
+		# --- UPDATED: GridManager automatically deducts the item upon successful placement! ---
 		var success = GridManager.place_item(cells_to_claim, self)
 		if success:
 			is_placed = true

@@ -13,6 +13,9 @@ var held_item: Node2D = null
 var is_busy := false # Tracks if the arm is currently in motion
 var is_waiting_to_drop := false # Tracks if the arm is hovering, waiting for a gap
 
+# --- NEW: Identify what item this building costs ---
+@export var building_item_id: String = "inserter"
+
 func check_for_existing_items() -> void:
 	# Wait one physics frame for the collision boundaries to actually exist in the world
 	await get_tree().physics_frame
@@ -50,7 +53,8 @@ func _process(_delta: float) -> void:
 	# --- NEW: Universal Red/White Overlay Check ---
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	if GridManager.is_placement_blocked(cells_to_check):
+	# GridManager checks if the physical space is clear AND if inventory has stock
+	if GridManager.is_placement_blocked(cells_to_check, building_item_id):
 		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
@@ -77,6 +81,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			
 			# --- UPDATED: Pass the ARRAY of cells to the GridManager! ---
 			var cells_to_claim = get_occupied_cells(current_grid_cell)
+			
+			# GridManager now handles checking the inventory AND deducting the item!
 			var success = GridManager.place_item(cells_to_claim, self)
 			
 			if success:

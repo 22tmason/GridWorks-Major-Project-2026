@@ -11,8 +11,26 @@ func _unhandled_input(event: InputEvent) -> void:
 		var mouse_pos = get_global_mouse_position()
 		var grid_cell = GridManager.world_to_grid(mouse_pos)
 		
-		# Demolish whatever is in that cell!
-		GridManager.remove_item(grid_cell)
+		# 1. Check if there is actually a building in this cell
+		if GridManager.grid_data.has(grid_cell):
+			# Grab the actual building node sitting in the grid
+			var building_node = GridManager.grid_data[grid_cell]
+			
+			# 2. Safely extract its inventory item ID
+			var item_to_refund = ""
+			if "building_item_id" in building_node:
+				item_to_refund = building_node.building_item_id
+				
+			# 3. Demolish the building from the world
+			GridManager.remove_item(grid_cell)
+			
+			# 4. Refund the item to the inventory
+			if item_to_refund != "":
+				var success = InventoryManager.add_item(item_to_refund, 1)
+				if success:
+					print("Refunded 1x ", item_to_refund, " to inventory.")
+				else:
+					print("Inventory full! Could not refund ", item_to_refund)
 
 func spawn_item() -> void:
 	var mouse_pos = get_global_mouse_position()

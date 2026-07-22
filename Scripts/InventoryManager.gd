@@ -143,3 +143,28 @@ func remove_item_at_slot(slot_index: int, amount: int = 1) -> void:
 			slots[slot_index]["id"] = ""
 			slots[slot_index]["quantity"] = 0
 		inventory_updated.emit()
+
+# Returns the total amount of a specific item across all inventory slots
+func get_item_count(item_id: String) -> int:
+	var total = 0
+	for slot in slots:
+		if slot["id"] == item_id:
+			total += slot["quantity"]
+	return total
+
+# Deducts the amount from the inventory, handling stacks correctly
+func consume_item(item_id: String, amount: int = 1) -> bool:
+	if get_item_count(item_id) < amount:
+		return false
+	
+	var amount_left = amount
+	for i in range(INVENTORY_SIZE):
+		if slots[i]["id"] == item_id:
+			var slot_qty = slots[i]["quantity"]
+			if slot_qty >= amount_left:
+				remove_item_at_slot(i, amount_left)
+				return true
+			else:
+				amount_left -= slot_qty
+				remove_item_at_slot(i, slot_qty)
+	return false

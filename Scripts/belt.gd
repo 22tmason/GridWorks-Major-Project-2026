@@ -8,6 +8,9 @@ var is_placed := false
 var push_direction: Vector2 = Vector2.DOWN 
 @export var lane_offset: float = 16.0 
 
+# --- NEW: Identify what item this building costs ---
+@export var building_item_id: String = "straight_belt" 
+
 func _ready() -> void:
 	if not is_placed:
 		BuildManager.current_preview = self
@@ -25,10 +28,11 @@ func _process(_delta: float) -> void:
 
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	if GridManager.is_placement_blocked(cells_to_check):
-		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
+	# --- NEW: Check if placement is blocked OR inventory is empty ---
+	if GridManager.is_placement_blocked(cells_to_check) or InventoryManager.get_item_count(building_item_id) <= 0:
+		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked or out of stock
 	else:
-		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
+		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear and in stock
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
@@ -38,25 +42,31 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_belt()
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		# Block placement if we don't have the item
+		if InventoryManager.get_item_count(building_item_id) <= 0:
+			print("Not enough items in inventory!")
+			return
+			
 		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
 		var cells_to_claim = get_occupied_cells(current_grid_cell)
 		var success = GridManager.place_item(cells_to_claim, self)
 		
 		if success:
-			is_placed = true
-			modulate = Color(1.0, 1.0, 1.0, 1.0) # Reset fully back to normal color
+			# Consume the item upon successful placement
 			
+			is_placed = true
+			modulate = Color(1.0, 1.0, 1.0, 1.0) 
+			
+			# ALWAYS spawn the next preview
 			var next_belt = BuildManager.selected_scene.instantiate()
 			get_parent().add_child(next_belt)
 			
 			var current_sprite = get_node_or_null("AnimatedSprite2D")
 			var next_sprite = next_belt.get_node_or_null("AnimatedSprite2D")
 			
-			# Animation Sync
 			if current_sprite != null and next_sprite != null:
 				next_sprite.set_frame_and_progress(current_sprite.frame, current_sprite.frame_progress)
 			
-			# Rotation Sync
 			next_belt.rotation_degrees = rotation_degrees
 			if "current_direction" in next_belt: 
 				next_belt.current_direction = current_direction

@@ -5,6 +5,9 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 @export var current_direction: Direction = Direction.DOWN 
 var is_placed := false
 
+# --- NEW: Identify what item this building costs ---
+@export var building_item_id: String = "corner_belt_left"
+
 # --- CORNER BELT VARIABLES ---
 @onready var my_path = $Path2D
 @export var animation_speed: float = 0.5 
@@ -39,14 +42,12 @@ func _process(delta: float) -> void:
 	
 	var mouse_pos = get_global_mouse_position()
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
-	var snapped_position = GridManager.grid_to_world(current_grid_cell)
-	
-	global_position = snapped_position
+	global_position = GridManager.grid_to_world(current_grid_cell)
 
-	# --- NEW: Universal Red/White Overlay Check ---
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	if GridManager.is_placement_blocked(cells_to_check):
+	# GridManager checks if the physical space is clear AND if inventory has stock
+	if GridManager.is_placement_blocked(cells_to_check, building_item_id):
 		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
@@ -59,31 +60,26 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_belt()
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
-		
-		# --- UPDATED: Pass the ARRAY of cells to the GridManager! ---
+		var current_grid_cell = GridManager.world_to_grid(global_position)
 		var cells_to_claim = get_occupied_cells(current_grid_cell)
+		
+		# GridManager now handles checking the inventory AND deducting the item!
 		var success = GridManager.place_item(cells_to_claim, self)
 		
 		if success:
 			is_placed = true
-			modulate = Color(1.0, 1.0, 1.0, 1.0) # Reset color fully back to normal
+			modulate = Color(1.0, 1.0, 1.0, 1.0)
 			
-			# Activate the child areas so the item recognizes them!
+			# --- THE FIX: Activate the child areas so they actually grab items! ---
 			if has_node("EntranceArea"):
 				$EntranceArea.is_placed = true
 			if has_node("ExitArea"):
 				$ExitArea.is_placed = true
 			
-			# --- Use your BuildManager exactly like the old code! ---
-			var next_belt = BuildManager.selected_scene.instantiate()
-			
-			# Safely pass direction to the next belt (in case you swap to an inserter)
-			if "current_direction" in next_belt:
-				next_belt.current_direction = current_direction
-			
+			# Spawn the next preview
+			var next_belt = load(scene_file_path).instantiate()
+			next_belt.current_direction = current_direction
 			next_belt.rotation_degrees = rotation_degrees
-			
 			get_parent().add_child(next_belt)
 
 func rotate_belt() -> void:

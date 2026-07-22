@@ -9,6 +9,9 @@ var speed := 64.0
 var output_routes = [Vector2(0, -1), Vector2(-1, 0), Vector2(1, 0)]
 var next_route_index := 0
 
+# --- NEW: Identify what item this building costs ---
+@export var building_item_id: String = "splitter"
+
 # Dictionary tracking item -> { state, forbidden_route, route }
 var active_items = {} 
 
@@ -31,10 +34,10 @@ func _process(_delta: float) -> void:
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
 	global_position = GridManager.grid_to_world(current_grid_cell)
 
-	# --- NEW: Universal Red/White Overlay Check ---
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	if GridManager.is_placement_blocked(cells_to_check):
+	# --- UPDATED: GridManager checks if the physical space is clear AND if inventory has stock ---
+	if GridManager.is_placement_blocked(cells_to_check, building_item_id):
 		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
@@ -48,8 +51,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
 			
-			# --- UPDATED: Pass the ARRAY of cells to the GridManager! ---
 			var cells_to_claim = get_occupied_cells(current_grid_cell)
+			
+			# --- UPDATED: GridManager handles checking the inventory AND deducting the item! ---
 			if GridManager.place_item(cells_to_claim, self):
 				is_placed = true
 				modulate = Color(1.0, 1.0, 1.0, 1.0) # Reset color fully back to normal

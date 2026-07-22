@@ -33,24 +33,47 @@ func register_resource_node(cell: Vector2i, resource_type: String) -> void:
 func get_resource_at_cell(cell: Vector2i) -> String:
 	return natural_resources.get(cell, "")
 	
-func is_placement_blocked(cells: Array[Vector2i]) -> bool:
+func is_placement_blocked(cells: Array[Vector2i], item_id: String = "") -> bool:
+	# 1. Check if the physical grid space is blocked
 	for cell in cells:
 		if grid_data.has(cell):
-			return true # Blocked!
-	return false # Clear!
+			return true # Blocked by another building!
+			
+	# 2. Check if we are out of stock (if an ID was provided)
+	if item_id != "" and InventoryManager.get_item_count(item_id) <= 0:
+		return true # Blocked by empty inventory!
+		
+	return false # Clear to place!
 
-# --- UPGRADED: Now accepts an ARRAY of cells instead of just one ---
+
+# --- UPGRADED: Handles grid placement AND inventory consumption! ---
 func place_item(cells: Array[Vector2i], item_node: Node) -> bool:
-	# 1. Double check that all cells are still clear
-	if is_placement_blocked(cells):
+	# 1. Extract the item ID safely
+	var cost_id = ""
+	if "building_item_id" in item_node:
+		cost_id = item_node.building_item_id
+		
+	# 2. Check if we actually have enough to place this
+	if cost_id != "" and InventoryManager.get_item_count(cost_id) <= 0:
+		print("GridManager: Not enough items to place!")
 		return false
+		
+	# 3. Double check that all cells are still physically clear
+	for cell in cells:
+		if grid_data.has(cell):
+			return false
+			
+	# 4. Consume the item from the inventory BEFORE placing
+	if cost_id != "":
+		InventoryManager.consume_item(cost_id, 1)
 	
-	# 2. Claim every requested cell in the dictionary
+	# 5. Claim every requested cell in the dictionary
 	for cell in cells:
 		grid_data[cell] = item_node
 		
 	print("Successfully placed item covering cells: ", cells)
 	return true
+	
 
 # --- UPDATED DEMOLISH FUNCTION ---
 func remove_item(grid_pos: Vector2i) -> void:
