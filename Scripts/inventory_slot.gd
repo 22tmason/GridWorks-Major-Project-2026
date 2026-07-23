@@ -32,20 +32,36 @@ func setup_crafting_slot(item_id: String) -> void:
 	count_label.text = "" # Free crafting uses no numeric counter text
 	tooltip_text = data["name"] + "\n" + data["description"]
 
-func _pressed() -> void:
-	if current_item_id == "":
-		return
+func _gui_input(event: InputEvent) -> void:
+	# Check if the event is a mouse click and if the button was just pressed down
+	if event is InputEventMouseButton and event.pressed:
 		
-	if is_crafting_button:
-		# Free crafting: Instantly create item out of thin air!
-		InventoryManager.add_item(current_item_id, 1)
-		
-		# Notify tutorial when an item is crafted!
-		if get_node_or_null("/root/TutorialManager"):
-			TutorialManager.notify_item_crafted(current_item_id)
-	else:
-		# Inventory slot clicked: Load scene blueprint into the BuildManager
-		var item_data = InventoryManager.item_database[current_item_id]
-		var loaded_scene = load(item_data["scene"])
-		BuildManager.change_building(loaded_scene)
-		print("Equipped blueprint: ", item_data["name"])
+		# Early exit if the slot is empty
+		if current_item_id == "":
+			return
+			
+		if is_crafting_button:
+			var craft_amount = 0
+			
+			# Determine the amount based on which mouse button was clicked
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				craft_amount = 1
+			elif event.button_index == MOUSE_BUTTON_RIGHT:
+				craft_amount = 5
+				
+			# If a valid button was clicked, add the items!
+			if craft_amount > 0:
+				InventoryManager.add_item(current_item_id, craft_amount)
+				
+				# Safely notify the tutorial manager
+				if get_node_or_null("/root/TutorialManager") != null:
+					for i in range(craft_amount):
+						TutorialManager.notify_item_crafted(current_item_id)
+		else:
+			# --- THE RESTORED LOGIC ---
+			# If this is a normal inventory slot, left-clicking it equips the building
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				var data = InventoryManager.item_database[current_item_id]
+				if data.has("scene"):
+					var building_scene = load(data["scene"])
+					BuildManager.change_building(building_scene)

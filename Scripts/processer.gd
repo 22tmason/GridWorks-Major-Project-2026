@@ -15,7 +15,7 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 @export var current_direction: Direction = Direction.DOWN
 var is_placed := false
 
-# --- NEW: Identify what item this building costs ---
+# --- ITEM COST ---
 @export var building_item_id: String = "processor_mk1"
 
 # --- RECIPE & STORAGE VARIABLES ---
@@ -26,7 +26,7 @@ var is_placed := false
 var input_buffer: Array[String] = []
 var output_buffer: Array[PackedScene] = []
 
-# --- THE RECIPE ENGINE ---
+# --- RECIPE ENGINE ---
 @export var recipes: Dictionary = {}       
 @export var recipe_costs: Dictionary = {}  
 
@@ -67,89 +67,98 @@ func _process(_delta: float) -> void:
 		
 	var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
 	global_position = GridManager.grid_to_world(current_grid_cell) + Vector2(32.0, 32.0)
-	
+
 	var cells_to_check = get_occupied_cells(current_grid_cell)
-	
-	# --- UPDATED: GridManager checks if the physical space is clear AND if inventory has stock ---
-	if GridManager.is_placement_blocked(cells_to_check, building_item_id):
-		modulate = Color(1.0, 0.4, 0.4, 0.8) 
+	if GridManager.is_placement_blocked(cells_to_check) or InventoryManager.get_item_count(building_item_id) <= 0:
+		modulate = Color(1.0, 0.4, 0.4, 0.8)
 	else:
-		modulate = Color(1.0, 1.0, 1.0, 0.5) 
+		modulate = Color(1.0, 1.0, 1.0, 0.5)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
 		return
 		
 	if event is InputEventKey and event.keycode == KEY_R and event.pressed:
-		rotate_processor()
+		rotate_building()
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
-		var cells_to_claim = get_occupied_cells(current_grid_cell)
+		attempt_placement()
 		
-		# --- UPDATED: GridManager handles checking the inventory AND deducting the item! ---
-		var success = GridManager.place_item(cells_to_claim, self)
-		if success:
-			is_placed = true
-			modulate = Color(1.0, 1.0, 1.0, 1.0)
-			pickup_area_connected_safely()
-			
-			# ALWAYS spawn the next preview
-			var next_processor = load(scene_file_path).instantiate()
-			next_processor.current_direction = current_direction
-			next_processor.rotation_degrees = rotation_degrees
-			get_parent().add_child(next_processor)
+	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attempt_placement()
 
-func rotate_processor() -> void:
+func rotate_building() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction
 	rotation_degrees += 90
 
-func pickup_area_connected_safely() -> void:
-	for area in input_area.get_overlapping_areas():
-		_on_item_entered(area)
-
-# --- PROCESSING ENGINE LOGIC ---
-
-func _on_item_entered(area: Area2D) -> void:
-	if not is_placed: return
-	if area.is_queued_for_deletion(): return 
-	
-	if area.is_in_group("items") and "item_id" in area:
-		var incoming_item = area.item_id
-		
-		if recipes.has(incoming_item):
-			if input_buffer.size() < max_storage:
-				input_buffer.append(incoming_item)
-				area.queue_free() 
-			else:
-				print("Processor input hopper full!")
-
-func _physics_process(_delta: float) -> void:
-	if not is_placed: 
+func attempt_placement() -> void:
+	if InventoryManager.get_item_count(building_item_id) <= 0:
 		return
 		
-	_try_empty_output_buffer()
+	var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
+	var cells_to_claim = get_occupied_cells(current_grid_cell)
 	
-	if not is_processing and not input_buffer.is_empty() and output_buffer.size() < max_storage:
-		var next_recipe_input = input_buffer[0]
-		var required_cost = recipe_costs.get(next_recipe_input, 1) 
+	if GridManager.is_placement_blocked(cells_to_claim):
+		return
 		
-		if input_buffer.count(next_recipe_input) >= required_cost:
-			_start_processing_recipe(next_recipe_input, required_cost)
-			
-	if input_buffer.size() < max_storage:
-		_check_for_waiting_items()
+	var success = GridManager.place_item(cells_to_claim, self)
+	if success:
+		global_position = GridManager.grid_to_world(current_grid_cell) + Vector2(32.0, 32.0)
+		is_placed = true
+		modulate = Color(1.0, 1.0, 1.0, 1.0)
+		
+		# Spawn next preview
+		var next_building = BuildManager.selected_scene.instantiate()
+		get_parent().add_child(next_building)
+		next_building.rotation_degrees = rotation_degrees
+		if "current_direction" in next_building:
+			next_building.current_direction = current_direction
 
-func _start_processing_recipe(item_id: String, cost: int) -> void:
+func _physics_process(_delta: float) -> void:
+	if not is_placed:
+		return
+		
+	_try_start_processing()
+	_try_empty_output_buffer()
+	_check_for_waiting_items()
+
+func is_output_blocked() -> bool:
+	var overlapping_things = output_check_area.get_overlapping_areas()
+	for thing in overlapping_things:
+		if thing.is_in_group("items"):
+			return true 
+	return false
+
+func _on_item_entered(area: Area2D) -> void:
+	if not is_placed or area.is_queued_for_deletion():
+		return
+		
+	if input_buffer.size() >= max_storage:
+		return
+		
+	if area.is_in_group("items") and "item_id" in area:
+		var incoming_item = area.item_id
+		if recipes.has(incoming_item):
+			input_buffer.append(incoming_item)
+			area.queue_free()
+
+func _try_start_processing() -> void:
+	if is_processing or input_buffer.is_empty():
+		return
+		
+	var item_id = input_buffer[0]
+	var cost = recipe_costs.get(item_id, 1)
+	
+	if input_buffer.count(item_id) < cost:
+		return
+		
 	for i in range(cost):
 		input_buffer.erase(item_id)
 		
 	current_output_scene = recipes[item_id]
-	
 	is_processing = true
 	processing_timer.wait_time = processing_time
 	processing_timer.start()
-	print("Processor consuming ", cost, "x ", item_id, " to make a gear!")
 
 func _on_processing_finished() -> void:
 	is_processing = false
@@ -166,28 +175,16 @@ func _try_empty_output_buffer() -> void:
 	new_item.global_position = output_marker.global_position
 	get_parent().add_child(new_item)
 	
-	# --- NOTIFY TUTORIAL OF ITEM PRODUCTION ---
 	if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
 		TutorialManager.notify_item_produced(new_item.item_id)
 
 func _check_for_waiting_items() -> void:
 	for area in input_area.get_overlapping_areas():
 		if area.is_queued_for_deletion(): continue 
-		
-		if input_buffer.size() >= max_storage:
-			break
+		if input_buffer.size() >= max_storage: break
 			
 		if area.is_in_group("items") and "item_id" in area:
 			var incoming_item = area.item_id
 			if recipes.has(incoming_item):
 				input_buffer.append(incoming_item)
 				area.queue_free()
-
-func is_output_blocked() -> bool:
-	var overlapping_things = output_check_area.get_overlapping_areas()
-	for thing in overlapping_things:
-		if thing.is_in_group("items") and "item_id" in thing:
-			if recipes.has(thing.item_id):
-				continue
-			return true
-	return false

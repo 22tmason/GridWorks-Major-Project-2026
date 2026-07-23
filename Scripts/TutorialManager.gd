@@ -63,7 +63,7 @@ var tutorial_steps: Array = [
 		"target_state": false
 	},
 	{
-		"text": "Place the Mining Drill onto an ore deposit.",
+		"text": "Use WASD and zoom in/out to find an iron ore deposit (greyish blue) and place the Mining Drill.",
 		"type": "placement",
 		"target_item": "electric_drill",
 		"required_amount": 1
@@ -77,7 +77,14 @@ var tutorial_steps: Array = [
 		"required_amount": 1
 	},
 	{
-		"text": "Connect an Inserter to feed raw ore into the Furnace.",
+		"text": "Place Straight Belts to create a path for the ore from the drill output to the Furnace, leaving a one tile gap between the Furnace. (Press 'R' to rotate)",
+		"type": "placement",
+		"target_item": "straight_belt",
+		"required_amount": 3
+	},
+
+	{
+		"text": "Place an Inserter to feed raw ore into the Furnace, face it towards the belt, with the Furnace behind.",
 		"type": "placement",
 		"target_item": "inserter",
 		"required_amount": 1
@@ -105,7 +112,7 @@ var tutorial_steps: Array = [
 		"required_amount": 1
 	},
 	{
-		"text": "Feed Iron Ingots into the Processor MK1 to produce an Intermediate Part.",
+		"text": "Feed Iron Ingots into the Processor MK1 to produce an Intermediate Part in the same way as the Furnace",
 		"type": "production",
 		"target_item": "iron_gear",
 		"required_amount": 1

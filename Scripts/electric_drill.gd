@@ -6,7 +6,7 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 var is_placed := false
 var is_item_ready: bool = false
 
-# --- NEW: Identify what item this building costs ---
+# --- ITEM COST ---
 @export var building_item_id: String = "electric_drill"
 
 # --- DRILL VARIABLES ---
@@ -14,8 +14,8 @@ var is_item_ready: bool = false
 @export var rotation_speed: float = 360.0 
 
 @export_group("Resource Output Items")
-@export var iron_item_scene: PackedScene   # Drag your Iron Ore Item scene here
-@export var copper_item_scene: PackedScene # Drag your Copper Ore Item scene here
+@export var iron_item_scene: PackedScene   # Drag Iron Ore Item scene here
+@export var copper_item_scene: PackedScene # Drag Copper Ore Item scene here
 
 @onready var mining_timer: Timer = $MiningTimer
 @onready var output_marker: Marker2D = $OutputMarker
@@ -33,7 +33,6 @@ func _ready() -> void:
 	else:
 		_start_mining()
 
-# Calculates the 9 grid cells this drill covers based on its center cell
 func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
 	for x in range(-1, 2): 
@@ -41,19 +40,15 @@ func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
 			cells.append(center_cell + Vector2i(x, y))
 	return cells
 
-# Helper function to check what resource is beneath the drill
 func _find_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
 	for cell in occupied_cells:
 		var raw_res = GridManager.get_resource_at_cell(cell)
-			
-		# Map both core and thin edge tiles to a clean asset identifier string
 		if raw_res != "":
 			if "iron" in raw_res: 
 				return "iron"
 			if "copper" in raw_res: 
 				return "copper"
-				
-	return "" # Return blank if no resource was encountered
+	return ""
 
 func _process(delta: float) -> void:
 	if is_placed:
@@ -62,19 +57,14 @@ func _process(delta: float) -> void:
 			top_part.rotation_degrees += rotation_speed * delta
 		return
 		
-	var mouse_pos = get_global_mouse_position()
-	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
+	var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
 	global_position = GridManager.grid_to_world(current_grid_cell)
 
-	# --- 3x3 PREVIEW CHECK WITH RESOURCE VALIDATION ---
-	var occupied_cells = get_occupied_cells(current_grid_cell)
-	var detected_resource = _find_resource_under_drill(occupied_cells)
-	
-	# GridManager handles checking blockages and stock. We also require a resource!
-	if GridManager.is_placement_blocked(occupied_cells, building_item_id) or detected_resource == "":
-		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red visual indicator
+	var cells_to_check = get_occupied_cells(current_grid_cell)
+	if GridManager.is_placement_blocked(cells_to_check) or InventoryManager.get_item_count(building_item_id) <= 0:
+		modulate = Color(1.0, 0.4, 0.4, 0.8)
 	else:
-		modulate = Color(0.4, 1.0, 0.4, 0.6) # Green visual indicator: Good to go!
+		modulate = Color(1.0, 1.0, 1.0, 0.5)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
@@ -84,37 +74,43 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_drill()
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
-		var occupied_cells = get_occupied_cells(current_grid_cell)
+		attempt_placement()
 		
-		# 1. Custom Check: Must be on a resource field!
-		var detected_resource = _find_resource_under_drill(occupied_cells)
-		if detected_resource == "":
-			print("Placement failed: Drills must be built on a resource field!")
-			return 
-		
-		# 2. GridManager handles grid-claiming AND inventory deduction!
-		var success = GridManager.place_item(occupied_cells, self)
-		
-		if success:
-			# Lock in resource type 
-			active_resource = detected_resource
-			print("Successfully placed 3x3 ", active_resource, " Drill at: ", current_grid_cell)
-			
-			is_placed = true
-			modulate = Color(1.0, 1.0, 1.0, 1.0) 
-			_start_mining()
-			
-			# Spawn the next blueprint preview instance
-			var next_drill = load(scene_file_path).instantiate()
-			if "current_direction" in next_drill:
-				next_drill.current_direction = current_direction
-			next_drill.rotation_degrees = rotation_degrees
-			get_parent().add_child(next_drill)
+	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attempt_placement()
 
 func rotate_drill() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction
 	rotation_degrees += 90
+
+func attempt_placement() -> void:
+	if InventoryManager.get_item_count(building_item_id) <= 0:
+		return
+		
+	var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
+	var cells_to_claim = get_occupied_cells(current_grid_cell)
+	
+	if GridManager.is_placement_blocked(cells_to_claim):
+		return
+		
+	var success = GridManager.place_item(cells_to_claim, self)
+	if success:
+		global_position = GridManager.grid_to_world(current_grid_cell)
+		is_placed = true
+		modulate = Color(1.0, 1.0, 1.0, 1.0)
+		
+		# Identify underlying resource deposit
+		active_resource = _find_resource_under_drill(cells_to_claim)
+		
+		# Start mining logic
+		_start_mining()
+		
+		# Spawn next preview
+		var next_building = BuildManager.selected_scene.instantiate()
+		get_parent().add_child(next_building)
+		next_building.rotation_degrees = rotation_degrees
+		if "current_direction" in next_building:
+			next_building.current_direction = current_direction
 
 # --- MINING LOGIC ---
 func _start_mining() -> void:
@@ -138,9 +134,8 @@ func is_output_blocked() -> bool:
 		if thing.is_in_group("items"):
 			return true 
 	return false 
-		
+
 func _try_spawn_item() -> void:
-	# Select item based on active resource type
 	var scene_to_spawn: PackedScene = null
 	if active_resource == "iron":
 		scene_to_spawn = iron_item_scene
@@ -148,15 +143,16 @@ func _try_spawn_item() -> void:
 		scene_to_spawn = copper_item_scene
 		
 	if not scene_to_spawn:
-		push_error("Drill is trying to output but has no matching item scene assigned!")
 		return
+
+	if not is_output_blocked():
+		var new_item = scene_to_spawn.instantiate()
+		new_item.global_position = output_marker.global_position
+		get_parent().add_child(new_item)
 		
-	if is_output_blocked():
-		return
+		# Notify tutorial
+		if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
+			TutorialManager.notify_item_produced(new_item.item_id)
 			
-	var new_item = scene_to_spawn.instantiate()
-	new_item.global_position = output_marker.global_position
-	get_tree().current_scene.add_child(new_item)
-	
-	is_item_ready = false
-	mining_timer.start()
+		is_item_ready = false
+		_start_mining()
