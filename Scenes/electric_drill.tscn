@@ -5,14 +5,17 @@
 [ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/copper_ore.tscn" id="3_5auh5"]
 [ext_resource type="Texture2D" uid="uid://cg7pvpfhiv5fl" path="res://GridWorks Major Project 2026/Assets/Mechanical Drill Bottom (1).png" id="3_a1hje"]
 [ext_resource type="Texture2D" uid="uid://dj3jrw8phi5pd" path="res://GridWorks Major Project 2026/Assets/Mechanical Drill Top.png" id="4_55r3v"]
+[ext_resource type="Script" uid="uid://cxat3bqy5gsau" path="res://GridWorks Major Project 2026/StatusIcon.gd" id="6_k2fgm"]
+[ext_resource type="PackedScene" uid="uid://db1ogiqissscn" path="res://GridWorks Major Project 2026/Scenes/StatusIcon.tscn" id="7_q5tsv"]
+[ext_resource type="Texture2D" uid="uid://bminhr48vax8v" path="res://GridWorks Major Project 2026/Assets/Icons/Icon No Input.png" id="8_gqdxk"]
+[ext_resource type="Texture2D" uid="uid://cyexb4508yowg" path="res://GridWorks Major Project 2026/Assets/Icons/Icon Output Full.png" id="9_4ft64"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a1hje"]
 size = Vector2(27, 27.625)
 
 [node name="ElectricDrill" type="Node2D" unique_id=1717353137]
 script = ExtResource("1_a1hje")
-mining_speed = 10.0
-rotation_speed = 36.0
+mining_speed = 1.0
 iron_item_scene = ExtResource("2_55r3v")
 copper_item_scene = ExtResource("3_5auh5")
 
@@ -35,3 +38,11 @@ shape = SubResource("RectangleShape2D_a1hje")
 
 [node name="TopPart" type="Sprite2D" parent="." unique_id=1827259775]
 texture = ExtResource("4_55r3v")
+
+[node name="WarningIconSprite" type="Sprite2D" parent="." unique_id=1904998886]
+script = ExtResource("6_k2fgm")
+
+[node name="StatusIcon" parent="." unique_id=85233649 instance=ExtResource("7_q5tsv")]
+icon_no_input = ExtResource("8_gqdxk")
+icon_output_full = ExtResource("9_4ft64")
+icon_no_recipe = ExtResource("9_4ft64")

@@ -22,6 +22,9 @@ var is_item_ready: bool = false
 @onready var output_check_area: Area2D = $OutputMarker/OutputCheckArea 
 @onready var top_part: Sprite2D = $TopPart 
 
+# --- STATUS ICON REFERENCE ---
+@onready var status_icon: StatusIcon = $StatusIcon # Ensure child node is exactly named "StatusIcon"
+
 # Will store "iron", "copper", or null
 var active_resource = null 
 
@@ -53,6 +56,16 @@ func _find_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
 func _process(delta: float) -> void:
 	if is_placed:
 		var is_stuck = is_item_ready and is_output_blocked()
+		
+		# --- STATUS ICON UPDATE LOGIC ---
+		if status_icon:
+			if active_resource == "" or active_resource == null:
+				status_icon.set_status(StatusIcon.Status.NO_INPUT) # Placed on empty ground (nothing to mine)
+			elif is_stuck:
+				status_icon.set_status(StatusIcon.Status.OUTPUT_FULL) # Conveyor or output is blocked
+			else:
+				status_icon.set_status(StatusIcon.Status.WORKING) # Spinning normally, hide icon
+		
 		if not is_stuck:
 			top_part.rotation_degrees += rotation_speed * delta
 		return

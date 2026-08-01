@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://db1ogiqissscn"]
+
+[ext_resource type="Script" uid="uid://cxat3bqy5gsau" path="res://GridWorks Major Project 2026/StatusIcon.gd" id="1_yp8oc"]
+
+[node name="StatusIcon" type="Sprite2D" unique_id=85233649]
+script = ExtResource("1_yp8oc")

@@ -34,7 +34,7 @@ var tutorial_steps: Array = [
 
 	# --- PHASE 2: BELTS & ROTATION ---
 	{
-		"text": "Place 3 Straight Belts on the ground. (Press 'R' to rotate)",
+		"text": "Place 3 Straight Belts on the ground. (Press 'R' to rotate, and right click to demolish the belt and have it refunded)",
 		"type": "placement",
 		"target_item": "straight_belt",
 		"required_amount": 3
@@ -63,7 +63,7 @@ var tutorial_steps: Array = [
 		"target_state": false
 	},
 	{
-		"text": "Use WASD and zoom in/out to find an iron ore deposit (greyish blue) and place the Mining Drill.",
+		"text": "Use WASD and zoom in/out (scroll) to find an iron ore deposit (greyish blue) and place the Mining Drill.",
 		"type": "placement",
 		"target_item": "electric_drill",
 		"required_amount": 1

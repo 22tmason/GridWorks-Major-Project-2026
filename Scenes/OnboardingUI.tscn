@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bl046ghhbc0vi"]
 
-[ext_resource type="Script" uid="uid://byml22j2xkkv0" path="res://GridWorks Major Project 2026/Scenes/onboarding_ui.gd" id="1_gw8vh"]
+[ext_resource type="Script" uid="uid://byml22j2xkkv0" path="res://GridWorks Major Project 2026/Scripts/onboarding_ui.gd" id="1_gw8vh"]
 
 [node name="OnboardingUI" type="CanvasLayer" unique_id=1679590071]
 process_mode = 3
