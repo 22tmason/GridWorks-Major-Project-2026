@@ -11,6 +11,7 @@ var item_database: Dictionary = {
 		"name": "Straight Belt",
 		"description": "Transports items in a straight line.",
 		"category": "logistics",
+		"subcategory": "Belts",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/YellowBeltIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/belt.tscn"
 	},
@@ -18,6 +19,7 @@ var item_database: Dictionary = {
 		"name": "Corner Belt Right",
 		"description": "Turns the transport line to the right.",
 		"category": "logistics",
+		"subcategory": "Belts",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltRightIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_right.tscn"
 	},
@@ -25,6 +27,7 @@ var item_database: Dictionary = {
 		"name": "Corner Belt Left",
 		"description": "Turns the transport line to the left.",
 		"category": "logistics",
+		"subcategory": "Belts",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltLeftIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_left.tscn"
 	},
@@ -32,6 +35,7 @@ var item_database: Dictionary = {
 		"name": "Standard Inserter",
 		"description": "Moves items from one place to another.",
 		"category": "logistics",
+		"subcategory": "Inserters",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/InserterIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/inserter.tscn"
 	},
@@ -39,6 +43,7 @@ var item_database: Dictionary = {
 		"name": "Fast Inserter",
 		"description": "Moves items at a faster speed.",
 		"category": "logistics",
+		"subcategory": "Inserters",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/FastInserterIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/fast_inserter.tscn"
 	},
@@ -46,6 +51,7 @@ var item_database: Dictionary = {
 		"name": "Long Inserter",
 		"description": "Moves items over a longer distance.",
 		"category": "logistics",
+		"subcategory": "Inserters",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/LongInserterIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/long_inserter.tscn"
 	},
@@ -53,6 +59,7 @@ var item_database: Dictionary = {
 		"name": "Splitter",
 		"description": "Splits a single belt into two paths.",
 		"category": "logistics",
+		"subcategory": "Flow Control",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/SpliterIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/splitter.tscn"
 	},
@@ -60,6 +67,7 @@ var item_database: Dictionary = {
 		"name": "Merger",
 		"description": "Merges two belts into one path.",
 		"category": "logistics",
+		"subcategory": "Flow Control",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/MergerIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/merger.tscn"
 	},
@@ -67,6 +75,7 @@ var item_database: Dictionary = {
 		"name": "Underground Belt",
 		"description": "Transports items underneath other structures.",
 		"category": "logistics",
+		"subcategory": "Belts",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/UndergroundBeltIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/underground_belt.tscn"
 	},
@@ -76,6 +85,7 @@ var item_database: Dictionary = {
 		"name": "Mechanical Mining Drill",
 		"description": "Automatically extracts resources from the ground.",
 		"category": "processing",
+		"subcategory": "Drilling",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/MechanicalDrillIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/electric_drill.tscn"
 	},
@@ -83,6 +93,7 @@ var item_database: Dictionary = {
 		"name": "Stone Furnace",
 		"description": "Smelts raw resources into usable items.",
 		"category": "processing",
+		"subcategory": "Smelting",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/StoneFurnaceIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/stone_furnace.tscn"
 	},
@@ -92,6 +103,7 @@ var item_database: Dictionary = {
 		"name": "Processor MK1",
 		"description": "Basic processing unit for automated crafting.",
 		"category": "manufacturing",
+		"subcategory": "Basic Processing",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/ProcesserMK1Icon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/processor_mk1.tscn"
 	},
@@ -99,6 +111,7 @@ var item_database: Dictionary = {
 		"name": "Manufacturer MK1",
 		"description": "Basic manufacturing unit for complex crafting.",
 		"category": "manufacturing",
+		"subcategory": "Advanced Processing",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/ManufacturerMK1Icon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/manufacturer_mk1.tscn"
 	},
@@ -108,6 +121,7 @@ var item_database: Dictionary = {
 		"name": "Iron Ingot",
 		"description": "A basic smelted iron ingot used for crafting.",
 		"category": "intermediates",
+		"subcategory": "Iron",
 		"texture": "res://GridWorks Major Project 2026/Assets/Iron Plate.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/iron_ingot.tscn" 
 	},
@@ -115,6 +129,7 @@ var item_database: Dictionary = {
 		"name": "Copper Ingot",
 		"description": "A basic smelted copper ingot used for crafting.",
 		"category": "intermediates",
+		"subcategory": "Copper",
 		"texture": "res://GridWorks Major Project 2026/Assets/Copper Ingot.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/copper_ingot.tscn"
 	},
@@ -122,6 +137,7 @@ var item_database: Dictionary = {
 		"name": "Electronic Circuit",
 		"description": "A basic electronic component used in machines.",
 		"category": "intermediates",
+		"subcategory": "Refined",
 		"texture": "res://GridWorks Major Project 2026/Assets/Electronic Circuit.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/electronic_circuit.tscn"
 	}

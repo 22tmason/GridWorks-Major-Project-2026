@@ -112,7 +112,7 @@ default_item_scene = ExtResource("2_xi6xi")
 script = ExtResource("3_7ivtk")
 
 [node name="MainPanel" type="PanelContainer" parent="InventoryUI" unique_id=400351216]
-custom_minimum_size = Vector2(1100, 600)
+custom_minimum_size = Vector2(1300, 600)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -138,6 +138,7 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="InventoryUI/MainPanel/HBoxContainer/LeftInventorySection/VBoxContainer" unique_id=503167226]
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Inventory"
 
 [node name="InventoryGrid" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/LeftInventorySection/VBoxContainer" unique_id=168781867]
@@ -154,6 +155,7 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer" unique_id=718096850]
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Crafting Menu"
 
 [node name="TabContainer" type="TabContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer" unique_id=1672753752]
@@ -163,27 +165,23 @@ theme_override_constants/side_margin = 0
 current_tab = 0
 all_tabs_in_front = true
 
-[node name="Logistics" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=777588831]
+[node name="Logistics" type="VBoxContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=2014626141]
 layout_mode = 2
-columns = 6
 metadata/_tab_index = 0
 
-[node name="Processing" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=639255436]
+[node name="Processing" type="VBoxContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=326845624]
 visible = false
 layout_mode = 2
-columns = 6
 metadata/_tab_index = 1
 
-[node name="Manufacturing" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=141975023]
+[node name="Manufacturing" type="VBoxContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=1747426033]
 visible = false
 layout_mode = 2
-columns = 6
 metadata/_tab_index = 2
 
-[node name="Intermediates" type="GridContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=417476610]
+[node name="Intermediates" type="VBoxContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer" unique_id=1413508140]
 visible = false
 layout_mode = 2
-columns = 6
 metadata/_tab_index = 3
 
 [node name="MapGenerator" type="Node2D" parent="." unique_id=735054150 node_paths=PackedStringArray("player")]

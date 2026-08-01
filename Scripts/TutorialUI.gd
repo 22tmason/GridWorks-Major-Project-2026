@@ -15,37 +15,37 @@ func _ready() -> void:
 		TutorialManager.tutorial_finished.connect(_on_tutorial_finished)
 
 func _build_ui() -> void:
-	# Create margin container aligned to top-right
+	# 1. INCREASED WIDTTH AND HEIGHT OF THE BOX
 	var margin = MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	margin.offset_left = -340
-	margin.offset_top = 20
-	margin.offset_right = -20
-	margin.offset_bottom = 120
+	margin.offset_left = -420 # Made wider (was -340)
+	margin.offset_top = 24
+	margin.offset_right = -24
+	margin.offset_bottom = 160 # Made taller (was 120)
 	add_child(margin)
 
-	# Panel container for dark background card
 	var panel = PanelContainer.new()
 	margin.add_child(panel)
 
-	# Vertical stack container
 	var vbox = VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 6)
+	vbox.add_theme_constant_override("separation", 10) # More breathing room
 	panel.add_child(vbox)
 
-	# Header title
+	# 2. INCREASED HEADER FONT SIZE
 	var title = Label.new()
 	title.text = "📋 CURRENT OBJECTIVE"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 20) # Made text larger
 	vbox.add_child(title)
 
 	var divider = HSeparator.new()
 	vbox.add_child(divider)
 
-	# Objective text display
+	# 3. INCREASED OBJECTIVE TEXT FONT SIZE
 	objective_label = Label.new()
 	objective_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	objective_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	objective_label.add_theme_font_size_override("font_size", 16) # Made text larger
 	vbox.add_child(objective_label)
 
 func _on_step_changed(_step_idx: int, new_text: String) -> void:

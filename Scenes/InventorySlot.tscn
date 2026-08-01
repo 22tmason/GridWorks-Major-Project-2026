@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cqdidib4e1cn8" path="res://GridWorks Major Project 2026/Scripts/inventory_slot.gd" id="1_3g0w1"]
 
 [node name="SlotButton" type="Button" unique_id=2120956967]
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(88, 88)
 script = ExtResource("1_3g0w1")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=437854667]
@@ -30,5 +30,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/font_size = 20
 horizontal_alignment = 2
 vertical_alignment = 2
