@@ -7,6 +7,20 @@ var associated_slot_index: int = -1
 var current_item_id: String = ""
 var is_crafting_button: bool = false
 
+func _ready() -> void:
+	# Connect the built-in mouse signals dynamically
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
+
+func _on_mouse_entered() -> void:
+	if current_item_id != "":
+		InventoryManager.hovered_item_id = current_item_id
+
+func _on_mouse_exited() -> void:
+	# Only clear it if we are still the hovered item (prevents clearing when moving quickly between slots)
+	if InventoryManager.hovered_item_id == current_item_id:
+		InventoryManager.hovered_item_id = ""
+		
 func setup_inventory_slot(slot_idx: int, item_id: String, quantity: int) -> void:
 	associated_slot_index = slot_idx
 	current_item_id = item_id

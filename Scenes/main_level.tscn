@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dqmsyuk4rqllk" path="res://GridWorks Major Project 2026/Scenes/player.tscn" id="12_geysq"]
 [ext_resource type="Texture2D" uid="uid://dcgqe14pcrftw" path="res://GridWorks Major Project 2026/Assets/CopperNode2.png" id="15_hgbet"]
 [ext_resource type="PackedScene" uid="uid://bl046ghhbc0vi" path="res://GridWorks Major Project 2026/Scenes/OnboardingUI.tscn" id="17_hgqtv"]
+[ext_resource type="PackedScene" uid="uid://blj0ll3d7y2vs" path="res://GridWorks Major Project 2026/Scenes/HotBarUI.tscn" id="18_e570s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ivtk"]
 content_margin_left = 12.0
@@ -200,3 +201,5 @@ tile_set = SubResource("TileSet_ewncr")
 [node name="Belt" parent="." unique_id=883872601 instance=ExtResource("6_bowd8")]
 
 [node name="OnboardingUI" parent="." unique_id=1679590071 instance=ExtResource("17_hgqtv")]
+
+[node name="HotbarUi" parent="." unique_id=764615766 instance=ExtResource("18_e570s")]

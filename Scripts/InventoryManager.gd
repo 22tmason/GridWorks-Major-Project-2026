@@ -2,6 +2,22 @@ extends Node
 
 signal inventory_updated
 
+signal hotbar_updated
+
+# 9 Slots total. The first 4 have defaults, the rest are empty!
+var hotbar_items: Array[String] = [
+	"straight_belt", "inserter", "electric_drill", "stone_furnace",
+	"", "", "", "", "" 
+]
+
+# Tracks what item the player's mouse is currently hovering over
+var hovered_item_id: String = ""
+
+# Function to bind a new item to a slot
+func set_hotbar_item(index: int, item_id: String) -> void:
+	if index >= 0 and index < 9:
+		hotbar_items[index] = item_id
+		hotbar_updated.emit()
 const INVENTORY_SIZE = 80 
 var slots: Array = []
 
