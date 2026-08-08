@@ -11,7 +11,21 @@ func _ready() -> void:
 	# Connect the built-in mouse signals dynamically
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
+	
+var is_display_only: bool = false
 
+func setup_display_slot(item_id: String) -> void:
+	current_item_id = item_id
+	is_display_only = true
+	is_crafting_button = false
+	associated_slot_index = -1
+	
+	if InventoryManager.item_database.has(item_id):
+		var data = InventoryManager.item_database[item_id]
+		icon_rect.texture = load(data["texture"])
+		count_label.text = "" 
+		tooltip_text = data["name"] + "\n" + data["description"]
+		
 func _on_mouse_entered() -> void:
 	if current_item_id != "":
 		InventoryManager.hovered_item_id = current_item_id
@@ -47,6 +61,8 @@ func setup_crafting_slot(item_id: String) -> void:
 	tooltip_text = data["name"] + "\n" + data["description"]
 
 func _gui_input(event: InputEvent) -> void:
+	if is_display_only:
+		return # Let the normal Button pressed signal handle this!
 	# Check if the event is a mouse click and if the button was just pressed down
 	if event is InputEventMouseButton and event.pressed:
 		

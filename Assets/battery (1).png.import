@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://comk7gcb3rvjl"
-path="res://.godot/imported/Copper Ingot.png-50a383d045b66cab3d0c3a156d3c0770.ctex"
+uid="uid://strxcbwow1l"
+path="res://.godot/imported/battery (1).png-5972267a3b5806e4b73bff393c5c0818.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Copper Ingot.png"
-dest_files=["res://.godot/imported/Copper Ingot.png-50a383d045b66cab3d0c3a156d3c0770.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/battery (1).png"
+dest_files=["res://.godot/imported/battery (1).png-5972267a3b5806e4b73bff393c5c0818.ctex"]
 
 [params]
 

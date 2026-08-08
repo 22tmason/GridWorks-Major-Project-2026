@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://b8mg6txafrem4"]
+[gd_scene format=3 uid="uid://day4jmm027qa5"]
 
-[ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scripts/item.gd" id="1_w7dot"]
-[ext_resource type="Texture2D" uid="uid://crhhi5jkx4icq" path="res://GridWorks Major Project 2026/Assets/Copper Ore.png" id="2_w7dot"]
+[ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scripts/item.gd" id="1_gdojn"]
+[ext_resource type="Texture2D" uid="uid://b8xh7ww86yj1" path="res://GridWorks Major Project 2026/Assets/processing_circuit.png" id="2_byd2h"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e5x20"]
 size = Vector2(64, 64)
@@ -9,12 +9,12 @@ size = Vector2(64, 64)
 [node name="item" type="Area2D" unique_id=1264360636 groups=["items"]]
 z_index = 1
 scale = Vector2(0.5, 0.5)
-script = ExtResource("1_w7dot")
-item_id = "copper_ore"
+script = ExtResource("1_gdojn")
+item_id = "processing_circuit"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1726742071]
 scale = Vector2(1, 1.032)
-texture = ExtResource("2_w7dot")
+texture = ExtResource("2_byd2h")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=921391206]
 shape = SubResource("RectangleShape2D_e5x20")

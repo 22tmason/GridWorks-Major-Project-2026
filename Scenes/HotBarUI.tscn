@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://blj0ll3d7y2vs"]
 
-[ext_resource type="Script" uid="uid://6c2qsac8yyqf" path="res://GridWorks Major Project 2026/Scenes/hot_bar_ui.gd" id="1_penle"]
+[ext_resource type="Script" uid="uid://6c2qsac8yyqf" path="res://GridWorks Major Project 2026/Scripts/hot_bar_ui.gd" id="1_penle"]
 
 [node name="HotbarUi" type="CanvasLayer" unique_id=764615766]
 script = ExtResource("1_penle")

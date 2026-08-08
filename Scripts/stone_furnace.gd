@@ -1,90 +1,82 @@
 extends Node2D
 
+# --- SPRITE REFERENCES ---
+@onready var furnace_off: Sprite2D = $FurnaceOff
+@onready var glow_sprite: Sprite2D = $GlowSprite
+
+# --- STATE VARIABLE ---
+var is_smelting := false:
+	set(value):
+		is_smelting = value
+		_update_sprite_visibility()
+			
 # --- BUILDING SYSTEM VARIABLES ---
 enum Direction { UP, RIGHT, DOWN, LEFT }
 @export var current_direction: Direction = Direction.DOWN
 var is_placed := false
-var is_item_ready: bool = false
 
 # --- ITEM COST ---
-@export var building_item_id: String = "electric_drill"
+@export var building_item_id: String = "stone_furnace"
 
-# --- DRILL VARIABLES ---
-@export var mining_speed: float = 2.0 
-@export var rotation_speed: float = 360.0 
+# --- RECIPE & STORAGE VARIABLES ---
+@export var smelting_time: float = 3.0 
+@export var max_storage: int = 5 
 
-@export_group("Resource Output Items")
-@export var iron_item_scene: PackedScene   # Drag Iron Ore Item scene here
-@export var copper_item_scene: PackedScene # Drag Copper Ore Item scene here
+var input_buffer: Array[String] = []
+var output_buffer: Array[PackedScene] = []
 
-@onready var mining_timer: Timer = $MiningTimer
+@export var recipes: Dictionary = {} 
+
+@onready var smelting_timer: Timer = $SmeltingTimer
+@onready var input_area: Area2D = $InputArea
 @onready var output_marker: Marker2D = $OutputMarker
-@onready var output_check_area: Area2D = $OutputMarker/OutputCheckArea 
-@onready var top_part: Sprite2D = $TopPart 
-
-# --- STATUS ICON REFERENCE ---
-@onready var status_icon: StatusIcon = $StatusIcon # Ensure child node is exactly named "StatusIcon"
-
-# Will store "iron", "copper", or null
-var active_resource = null 
+@onready var output_check_area: Area2D = $OutputMarker/OutputCheckArea
+var current_output_scene: PackedScene = null 
 
 func _ready() -> void:
-	mining_timer.one_shot = true
+	smelting_timer.one_shot = true
+	smelting_timer.timeout.connect(_on_smelting_finished)
+	input_area.area_entered.connect(_on_item_entered)
+	
+	_update_sprite_visibility()
+	
 	if not is_placed:
 		BuildManager.current_preview = self
 		modulate.a = 0.5
-	else:
-		_start_mining()
+
+func _update_sprite_visibility() -> void:
+	if furnace_off and glow_sprite:
+		glow_sprite.visible = is_smelting
+		furnace_off.visible = not is_smelting
 
 func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	for x in range(-1, 2): 
-		for y in range(-1, 2): 
-			cells.append(center_cell + Vector2i(x, y))
-	return cells
+	return [
+		center_cell,
+		center_cell + Vector2i(1, 0),
+		center_cell + Vector2i(0, 1),
+		center_cell + Vector2i(1, 1)
+	]
 
-func _find_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
-	for cell in occupied_cells:
-		var raw_res = GridManager.get_resource_at_cell(cell)
-		if raw_res != "":
-			if "iron" in raw_res: 
-				return "iron"
-			if "copper" in raw_res: 
-				return "copper"
-	return ""
-
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_placed:
-		var is_stuck = is_item_ready and is_output_blocked()
-		
-		# --- STATUS ICON UPDATE LOGIC ---
-		if status_icon:
-			if active_resource == "" or active_resource == null:
-				status_icon.set_status(StatusIcon.Status.NO_INPUT) # Placed on empty ground (nothing to mine)
-			elif is_stuck:
-				status_icon.set_status(StatusIcon.Status.OUTPUT_FULL) # Conveyor or output is blocked
-			else:
-				status_icon.set_status(StatusIcon.Status.WORKING) # Spinning normally, hide icon
-		
-		if not is_stuck:
-			top_part.rotation_degrees += rotation_speed * delta
 		return
 		
 	var current_grid_cell = GridManager.world_to_grid(get_global_mouse_position())
-	global_position = GridManager.grid_to_world(current_grid_cell)
-
+	global_position = GridManager.grid_to_world(current_grid_cell) + Vector2(32.0, 32.0)
+	
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	if GridManager.is_placement_blocked(cells_to_check) or InventoryManager.get_item_count(building_item_id) <= 0:
 		modulate = Color(1.0, 0.4, 0.4, 0.8)
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5)
+	
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
 		return
 		
 	if event is InputEventKey and event.keycode == KEY_R and event.pressed:
-		rotate_drill()
+		rotate_building()
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		attempt_placement()
@@ -92,7 +84,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		attempt_placement()
 
-func rotate_drill() -> void:
+func rotate_building() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction
 	rotation_degrees += 90
 
@@ -108,15 +100,9 @@ func attempt_placement() -> void:
 		
 	var success = GridManager.place_item(cells_to_claim, self)
 	if success:
-		global_position = GridManager.grid_to_world(current_grid_cell)
+		global_position = GridManager.grid_to_world(current_grid_cell) + Vector2(32.0, 32.0)
 		is_placed = true
 		modulate = Color(1.0, 1.0, 1.0, 1.0)
-		
-		# Identify underlying resource deposit
-		active_resource = _find_resource_under_drill(cells_to_claim)
-		
-		# Start mining logic
-		_start_mining()
 		
 		# Spawn next preview
 		var next_building = BuildManager.selected_scene.instantiate()
@@ -125,47 +111,69 @@ func attempt_placement() -> void:
 		if "current_direction" in next_building:
 			next_building.current_direction = current_direction
 
-# --- MINING LOGIC ---
-func _start_mining() -> void:
-	mining_timer.wait_time = mining_speed
-	if not mining_timer.timeout.is_connected(_on_mining_finished):
-		mining_timer.timeout.connect(_on_mining_finished)
-	mining_timer.start()
-
-func _on_mining_finished() -> void:
-	is_item_ready = true
-
 func _physics_process(_delta: float) -> void:
-	if not is_placed: 
+	if not is_placed:
 		return
-	if is_item_ready:
-		_try_spawn_item()
+		
+	_try_start_smelting()
+	_try_empty_output_buffer()
+	_check_for_waiting_items()
 
 func is_output_blocked() -> bool:
 	var overlapping_things = output_check_area.get_overlapping_areas()
 	for thing in overlapping_things:
 		if thing.is_in_group("items"):
 			return true 
-	return false 
+	return false
 
-func _try_spawn_item() -> void:
-	var scene_to_spawn: PackedScene = null
-	if active_resource == "iron":
-		scene_to_spawn = iron_item_scene
-	elif active_resource == "copper":
-		scene_to_spawn = copper_item_scene
-		
-	if not scene_to_spawn:
+func _on_item_entered(area: Area2D) -> void:
+	if not is_placed or area.is_queued_for_deletion():
 		return
-
-	if not is_output_blocked():
-		var new_item = scene_to_spawn.instantiate()
-		new_item.global_position = output_marker.global_position
-		get_parent().add_child(new_item)
 		
-		# Notify tutorial
-		if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
-			TutorialManager.notify_item_produced(new_item.item_id)
+	if input_buffer.size() >= max_storage:
+		return
+		
+	if area.is_in_group("items") and "item_id" in area:
+		var incoming_ore = area.item_id
+		if recipes.has(incoming_ore):
+			input_buffer.append(incoming_ore)
+			area.queue_free()
+
+func _try_start_smelting() -> void:
+	if is_smelting or input_buffer.is_empty():
+		return
+		
+	var ore_type = input_buffer.pop_front()
+	current_output_scene = recipes[ore_type]
+	is_smelting = true
+	smelting_timer.wait_time = smelting_time
+	smelting_timer.start()
+
+func _on_smelting_finished() -> void:
+	is_smelting = false
+	if current_output_scene:
+		output_buffer.append(current_output_scene)
+		current_output_scene = null
+
+func _try_empty_output_buffer() -> void:
+	if output_buffer.is_empty() or is_output_blocked():
+		return
+		
+	var ingot_scene = output_buffer.pop_front()
+	var new_item = ingot_scene.instantiate()
+	new_item.global_position = output_marker.global_position
+	get_parent().add_child(new_item)
+	
+	if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
+		TutorialManager.notify_item_produced(new_item.item_id)
+
+func _check_for_waiting_items() -> void:
+	for area in input_area.get_overlapping_areas():
+		if area.is_queued_for_deletion(): continue
+		if input_buffer.size() >= max_storage: break
 			
-		is_item_ready = false
-		_start_mining()
+		if area.is_in_group("items") and "item_id" in area:
+			var incoming_ore = area.item_id
+			if recipes.has(incoming_ore):
+				input_buffer.append(incoming_ore)
+				area.queue_free()

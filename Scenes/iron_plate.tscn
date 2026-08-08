@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://derr5mq28x1hy"]
+[gd_scene format=3 uid="uid://cq718say7ed1s"]
 
-[ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scripts/item.gd" id="1_xtvkf"]
-[ext_resource type="Texture2D" uid="uid://ch7870t6r6res" path="res://GridWorks Major Project 2026/Assets/Iron Gear.png" id="2_xtvkf"]
+[ext_resource type="Script" uid="uid://duy7o36h3lsjk" path="res://GridWorks Major Project 2026/Scripts/item.gd" id="1_eirvb"]
+[ext_resource type="Texture2D" uid="uid://rgx4ctxuvyi2" path="res://GridWorks Major Project 2026/Assets/Iron Plate.png" id="2_eirvb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e5x20"]
 size = Vector2(64, 64)
@@ -9,11 +9,11 @@ size = Vector2(64, 64)
 [node name="item" type="Area2D" unique_id=1264360636 groups=["items"]]
 z_index = 1
 scale = Vector2(0.5, 0.5)
-script = ExtResource("1_xtvkf")
-item_id = "iron_gear"
+script = ExtResource("1_eirvb")
+item_id = "iron_plate"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1726742071]
-texture = ExtResource("2_xtvkf")
+texture = ExtResource("2_eirvb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=921391206]
 shape = SubResource("RectangleShape2D_e5x20")

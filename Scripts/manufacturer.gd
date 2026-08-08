@@ -34,12 +34,16 @@ var output_buffer: Array[PackedScene] = []
 @onready var input_area: Area2D = $InputArea
 @onready var output_marker: Marker2D = $OutputMarker
 @onready var output_check_area: Area2D = $OutputMarker/OutputCheckArea
+# --- RECIPE ENGINE ---
+@export var recipe_times: Dictionary = {}  
 
 func _ready() -> void:
 	processing_timer.one_shot = true
 	processing_timer.timeout.connect(_on_processing_finished)
 	input_area.area_entered.connect(_on_item_entered)
 	
+	input_area.input_pickable = true
+	input_area.input_event.connect(_on_machine_clicked)
 	_update_sprite_visibility()
 	
 	if not is_placed:
@@ -88,6 +92,23 @@ func rotate_building() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction
 	rotation_degrees += 90
 
+func _on_machine_clicked(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	# Only open UI if the machine is placed and left-clicked
+	if is_placed and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		var ui = get_tree().get_first_node_in_group("machine_ui")
+		if ui:
+			ui.open_ui(self)
+
+# This is the function called by machine_ui.gd when you click a button
+func set_active_recipe(recipe_id: String) -> void:
+	selected_recipe = recipe_id
+	
+	# Optional but recommended: Flush the old inventory so you don't 
+	# get copper cables stuck in a machine now trying to build engines!
+	input_inventory.clear() 
+	output_buffer.clear()
+	is_processing = false
+
 func attempt_placement() -> void:
 	if InventoryManager.get_item_count(building_item_id) <= 0:
 		return
@@ -115,7 +136,7 @@ func _physics_process(_delta: float) -> void:
 	if not is_placed:
 		return
 		
-	_try_start_crafting()
+	_try_start_processing()
 	_try_empty_output_buffer()
 	_check_for_waiting_items()
 
@@ -144,16 +165,20 @@ func _does_recipe_need_item(item_id: String) -> bool:
 	var requirements = recipe_requirements[selected_recipe]
 	return requirements.has(item_id)
 
-func _try_start_crafting() -> void:
+func _try_start_processing() -> void:
 	if is_processing or selected_recipe == "" or not _has_required_ingredients():
 		return
 		
 	var requirements = recipe_requirements[selected_recipe]
 	for ingredient in requirements.keys():
-		input_inventory[ingredient] -= requirements[ingredient]
+		var amount = requirements[ingredient]
+		input_inventory[ingredient] -= amount
 		
 	is_processing = true
-	processing_timer.wait_time = processing_time
+	
+	# Look up duration in recipe_times, fallback to default processing_time if missing
+	var craft_duration: float = recipe_times.get(selected_recipe, processing_time)
+	processing_timer.wait_time = craft_duration
 	processing_timer.start()
 
 func _has_required_ingredients() -> bool:

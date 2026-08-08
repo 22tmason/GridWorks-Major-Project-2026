@@ -133,29 +133,164 @@ var item_database: Dictionary = {
 	},
 
 	# --- INTERMEDIATE PARTS ---
-	"iron_plate": {
-		"name": "Iron Ingot",
-		"description": "A basic smelted iron ingot used for crafting.",
+	
+	# -- RAW / SMELTED RESOURCES --
+	"coal_ore": {
+		"name": "Coal",
+		"description": "A combustible fossil fuel mined from the earth that can be turned into plastic.",
 		"category": "intermediates",
-		"subcategory": "Iron",
+		"subcategory": "Raw Materials",
+		"texture": "res://GridWorks Major Project 2026/Assets/Coal_ore (1).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/coal_ore.tscn"
+	},
+	"iron_ore": {
+		"name": "Iron Ore",
+		"description": "A raw material that can be smelted into iron plates.",
+		"category": "intermediates",
+		"subcategory": "Raw Materials",
+		"texture": "res://GridWorks Major Project 2026/Assets/Iron Ore.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/iron_ore.tscn"
+	},
+	"copper_ore": {
+		"name": "Copper Ore",
+		"description": "A raw material that can be smelted into copper plates.",
+		"category": "intermediates",
+		"subcategory": "Raw Materials",
+		"texture": "res://GridWorks Major Project 2026/Assets/Copper Ore.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/copper_ore.tscn"
+	},
+	"iron_plate": {
+		"name": "Iron Plate",
+		"description": "A basic smelted iron plate used for crafting.",
+		"category": "intermediates",
+		"subcategory": "Refined Materials",
 		"texture": "res://GridWorks Major Project 2026/Assets/Iron Plate.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/iron_ingot.tscn" 
+		"scene": "res://GridWorks Major Project 2026/Scenes/iron_plate.tscn" 
+	},
+	"copper_plate": {
+		"name": "Copper Plate",
+		"description": "A basic smelted copper plate used for crafting.",
+		"category": "intermediates",
+		"subcategory": "Refined Materials",
+		"texture": "res://GridWorks Major Project 2026/Assets/Copper Plate.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/copper_plate.tscn"
+	},
+	"steel_plate": {
+		"name": "Steel Plate",
+		"description": "A tough, durable metal alloy.",
+		"category": "intermediates",
+		"subcategory": "Refined Materials",
+		"texture": "res://GridWorks Major Project 2026/Assets/Steel_plate (2).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/steel_plate.tscn"
+	},
+	"plastic_bar": {
+		"name": "Plastic Bar",
+		"description": "A versatile synthetic polymer.",
+		"category": "intermediates",
+		"subcategory": "Refined Materials",
+		"texture": "res://GridWorks Major Project 2026/Assets/Plastic_bar (1).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/plastic_bar.tscn"
+	},
+
+	# -- BASIC COMPONENTS (Processors) --
+	"iron_gear": {
+		"name": "Iron Gear Wheel",
+		"description": "A basic mechanical component.",
+		"category": "intermediates",
+		"subcategory": "Components",
+		"texture": "res://GridWorks Major Project 2026/Assets/Iron Gear.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/iron_gear.tscn"
+	},
+	"iron_rod": {
+		"name": "Iron Rod",
+		"description": "A sturdy iron rod.",
+		"category": "intermediates",
+		"subcategory": "Components",
+		"texture": "res://GridWorks Major Project 2026/Assets/Iron_rod.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/iron_rod.tscn"
 	},
 	"copper_wire": {
-		"name": "Copper Ingot",
-		"description": "A basic smelted copper ingot used for crafting.",
+		"name": "Copper Wire",
+		"description": "Highly conductive wiring.",
 		"category": "intermediates",
-		"subcategory": "Copper",
-		"texture": "res://GridWorks Major Project 2026/Assets/Copper Ingot.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/copper_ingot.tscn"
+		"subcategory": "Components",
+		"texture": "res://GridWorks Major Project 2026/Assets/Copper_wire (2).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/copper_wire.tscn"
 	},
+	
+	# -- ADVANCED COMPONENTS (Manufacturers) --
 	"electronic_circuit": {
 		"name": "Electronic Circuit",
-		"description": "A basic electronic component used in machines.",
+		"description": "A basic electronic component used in machines. (Green)",
 		"category": "intermediates",
-		"subcategory": "Refined",
+		"subcategory": "Electronics",
 		"texture": "res://GridWorks Major Project 2026/Assets/Electronic Circuit.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/electronic_circuit.tscn"
+	},
+	"advanced_circuit": {
+		"name": "Advanced Circuit",
+		"description": "A complex electronic component for high-tech machines. (Red)",
+		"category": "intermediates",
+		"subcategory": "Electronics",
+		"texture": "res://GridWorks Major Project 2026/Assets/advanced_circuit (1).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/advanced_circuit.tscn"
+	},
+	"processing_circuit": {
+		"name": "Processing Circuit",
+		"description": "The ultimate electronic computing component. (Blue)",
+		"category": "intermediates",
+		"subcategory": "Electronics",
+		"texture": "res://GridWorks Major Project 2026/Assets/processing_circuit.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/processing_circuit.tscn"
+	},
+	"engine": {
+		"name": "Engine",
+		"description": "A standard combustion engine.",
+		"category": "intermediates",
+		"subcategory": "Mechanics",
+		"texture": "res://GridWorks Major Project 2026/Assets/Engine.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/engine.tscn"
+	},
+	"battery": {
+		"name": "Battery",
+		"description": "A device to store energy for usage later.",
+		"category": "intermediates",
+		"subcategory": "Electronics",
+		"texture": "res://GridWorks Major Project 2026/Assets/battery (1).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/battery.tscn"
+	},
+	"electric_motor": {
+		"name": "Electric Motor",
+		"description": "A highly efficient electric motor.",
+		"category": "intermediates",
+		"subcategory": "Mechanics",
+		"texture": "res://GridWorks Major Project 2026/Assets/electric_motor.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/electric_motor.tscn"
+	},
+	"low_density_structure": {
+		"name": "Low Density Structure",
+		"description": "A lightweight but incredibly strong composite material.",
+		"category": "intermediates",
+		"subcategory": "Aerospace",
+		"texture": "res://GridWorks Major Project 2026/Assets/low_density_structure (1).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/low_density_structure.tscn"
+	},
+	"flying_robot_frame": {
+		"name": "Flying Robot Frame",
+		"description": "The chassis for aerial robotics.",
+		"category": "intermediates",
+		"subcategory": "Aerospace",
+		"texture": "res://GridWorks Major Project 2026/Assets/flying_robot_frame (1).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/flying_robot_frame.tscn"
+	},
+	# -- ENDGAME --
+	"rocket_control_unit": {
+		"name": "Rocket Control Unit",
+		"description": "The final payload required to complete the Space Elevator.",
+		"category": "intermediates",
+		"subcategory": "Project Parts",
+		"texture": "res://GridWorks Major Project 2026/Assets/rocket_control_unit (1).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/rocket_control_unit.tscn"
 	}
 }
 
