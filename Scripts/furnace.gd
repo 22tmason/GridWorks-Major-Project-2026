@@ -16,7 +16,7 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 var is_placed := false
 
 # --- ITEM COST ---
-@export var building_item_id: String = "stone_furnace"
+@export var building_item_id: String = ""
 
 # --- RECIPE & STORAGE VARIABLES ---
 @export var smelting_time: float = 3.0 

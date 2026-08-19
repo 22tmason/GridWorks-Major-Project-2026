@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://sq7d2epsrgqj"
-path="res://.godot/imported/MechanicalDrillIcon.png-ec529bb220250f754e99f6a5de88c263.ctex"
+uid="uid://dwymql1hb8e4h"
+path="res://.godot/imported/manufacturer_mk2_off.png-524478eac22b06f80e3b496bb2138fb1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Icons/MechanicalDrillIcon.png"
-dest_files=["res://.godot/imported/MechanicalDrillIcon.png-ec529bb220250f754e99f6a5de88c263.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/manufacturer_mk2_off.png"
+dest_files=["res://.godot/imported/manufacturer_mk2_off.png-524478eac22b06f80e3b496bb2138fb1.ctex"]
 
 [params]
 

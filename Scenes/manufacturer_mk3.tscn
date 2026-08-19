@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://c8v8xkivbnu3f"]
+
+[ext_resource type="Script" uid="uid://bccn6safi7q7y" path="res://GridWorks Major Project 2026/Scripts/manufacturer.gd" id="1_7lxdj"]
+[ext_resource type="PackedScene" uid="uid://dyd5qoo1ui4pf" path="res://GridWorks Major Project 2026/Scenes/advanced_circuit.tscn" id="2_ansrm"]
+[ext_resource type="PackedScene" uid="uid://gxgkkpivgu3t" path="res://GridWorks Major Project 2026/Scenes/battery.tscn" id="3_oivc2"]
+[ext_resource type="PackedScene" uid="uid://d0p1xlf6oa7jt" path="res://GridWorks Major Project 2026/Scenes/electric_motor.tscn" id="4_bax4s"]
+[ext_resource type="PackedScene" uid="uid://bnedck08qya12" path="res://GridWorks Major Project 2026/Scenes/electronic_circuit.tscn" id="5_w33i0"]
+[ext_resource type="PackedScene" uid="uid://dtq3hb5sr0vvx" path="res://GridWorks Major Project 2026/Scenes/engine.tscn" id="6_21ay1"]
+[ext_resource type="PackedScene" uid="uid://caksatq3lngi0" path="res://GridWorks Major Project 2026/Scenes/flying_robot_frame.tscn" id="7_3j1rn"]
+[ext_resource type="PackedScene" uid="uid://durvetbphwtkv" path="res://GridWorks Major Project 2026/Scenes/low_density_structure.tscn" id="8_asgu0"]
+[ext_resource type="PackedScene" uid="uid://day4jmm027qa5" path="res://GridWorks Major Project 2026/Scenes/processing_circuit.tscn" id="9_i0ylg"]
+[ext_resource type="PackedScene" uid="uid://djtw67limur2v" path="res://GridWorks Major Project 2026/Scenes/rocket_control_unit.tscn" id="10_1uwsc"]
+[ext_resource type="Texture2D" uid="uid://btb38j1hhsucv" path="res://GridWorks Major Project 2026/Assets/manufacturer_mk3_off.png" id="11_7lxdj"]
+[ext_resource type="Texture2D" uid="uid://c307t7ytvaw8w" path="res://GridWorks Major Project 2026/Assets/manufacturer_mk3_on.png" id="12_ansrm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
+size = Vector2(193, 194)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20nwo"]
+size = Vector2(182, 182)
+
+[node name="ManufacturerMK3" type="Node2D" unique_id=1905251074]
+script = ExtResource("1_7lxdj")
+building_item_id = "manufacturer_mk3"
+processing_time = 2.5
+recipes = {
+"advanced_circuit": ExtResource("2_ansrm"),
+"battery": ExtResource("3_oivc2"),
+"electric_motor": ExtResource("4_bax4s"),
+"electronic_circuit": ExtResource("5_w33i0"),
+"engine": ExtResource("6_21ay1"),
+"flying_robot_frame": ExtResource("7_3j1rn"),
+"low_density_structure": ExtResource("8_asgu0"),
+"processing_circuit": ExtResource("9_i0ylg"),
+"rocket_control_unit": ExtResource("10_1uwsc")
+}
+recipe_requirements = {
+"advanced_circuit": {
+"copper_wire": 4,
+"electronic_circuit": 2,
+"plastic_bar": 2
+},
+"battery": {
+"coal_ore": 2,
+"copper_plate": 1,
+"iron_plate": 1
+},
+"electric_motor": {
+"battery": 1,
+"electronic_circuit": 2,
+"engine": 1
+},
+"electronic_circuit": {
+"copper_wire": 2,
+"iron_plate": 1
+},
+"engine": {
+"iron_gear": 1,
+"iron_rod": 2,
+"steel_plate": 1
+},
+"flying_robot_frame": {
+"battery": 1,
+"electric_motor": 1,
+"electronic_circuit": 2,
+"steel_plate": 1
+},
+"low_density_structure": {
+"copper_plate": 10,
+"plastic_bar": 5,
+"steel_plate": 2
+},
+"processing_circuit": {
+"advanced_circuit": 2,
+"electronic_circuit": 10,
+"steel_plate": 2
+},
+"rocket_control_unit": {
+"advanced_circuit": 1,
+"processing_circuit": 1,
+"steel_plate": 2
+}
+}
+recipe_times = {
+"advanced_circuit": 6.0,
+"battery": 5.0,
+"electric_motor": 10.0,
+"electronic_circuit": 2.0,
+"engine": 10.0,
+"flying_robot_frame": 20.0,
+"low_density_structure": 20.0,
+"processing_circuit": 12.0,
+"rocket_control_unit": 30.0
+}
+
+[node name="ManufacturerOff" type="Sprite2D" parent="." unique_id=2067550932]
+texture = ExtResource("11_7lxdj")
+
+[node name="InputArea" type="Area2D" parent="." unique_id=126425833]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="InputArea" unique_id=1482730492]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_36agx")
+
+[node name="OutputMarker" type="Marker2D" parent="." unique_id=552904695]
+
+[node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=2035809150]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=563858654]
+position = Vector2(-1, 1)
+shape = SubResource("RectangleShape2D_20nwo")
+
+[node name="ProcessingTimer" type="Timer" parent="." unique_id=665999875]
+
+[node name="GlowSprite" type="Sprite2D" parent="." unique_id=1321602352]
+texture = ExtResource("12_ansrm")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://oxgbdb8ihftv"
-path="res://.godot/imported/processer_mk1.png-1e0dfd0a6842a4beed17a5996789ac4e.ctex"
+uid="uid://dcga2tnj3ik53"
+path="res://.godot/imported/furnace_mk3_off-1.png (1).png-a0545bda1a1e5a4205a097c4d0647ca6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/processer_mk1.png"
-dest_files=["res://.godot/imported/processer_mk1.png-1e0dfd0a6842a4beed17a5996789ac4e.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/furnace_mk3_off-1.png (1).png"
+dest_files=["res://.godot/imported/furnace_mk3_off-1.png (1).png-a0545bda1a1e5a4205a097c4d0647ca6.ctex"]
 
 [params]
 

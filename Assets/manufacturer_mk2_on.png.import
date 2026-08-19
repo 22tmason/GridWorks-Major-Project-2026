@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://oxgbdb8ihftv"
-path="res://.godot/imported/processer_mk1.png-1e0dfd0a6842a4beed17a5996789ac4e.ctex"
+uid="uid://cjkcltd5c4el8"
+path="res://.godot/imported/manufacturer_mk2_on.png-3fc157451f3f7086ca031447c57e6b62.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/processer_mk1.png"
-dest_files=["res://.godot/imported/processer_mk1.png-1e0dfd0a6842a4beed17a5996789ac4e.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/manufacturer_mk2_on.png"
+dest_files=["res://.godot/imported/manufacturer_mk2_on.png-3fc157451f3f7086ca031447c57e6b62.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqoh61xw0a87w"
-path="res://.godot/imported/ProcesserMK1Icon.png-d2471124203922df671d3c68684340c7.ctex"
+uid="uid://biuf2fqfj55md"
+path="res://.godot/imported/drill_mk3_ICON-1.png.png-d34e470c079ce108615ad63480a37e55.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Icons/ProcesserMK1Icon.png"
-dest_files=["res://.godot/imported/ProcesserMK1Icon.png-d2471124203922df671d3c68684340c7.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/Icons/drill_mk3_ICON-1.png.png"
+dest_files=["res://.godot/imported/drill_mk3_ICON-1.png.png-d34e470c079ce108615ad63480a37e55.ctex"]
 
 [params]
 

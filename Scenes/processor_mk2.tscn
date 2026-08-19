@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://cwy1svja4urty"]
+
+[ext_resource type="Script" uid="uid://dncw47k15bkn4" path="res://GridWorks Major Project 2026/Scripts/processor.gd" id="1_jj4uo"]
+[ext_resource type="PackedScene" uid="uid://ceepho0k7laca" path="res://GridWorks Major Project 2026/Scenes/copper_wire.tscn" id="2_hoord"]
+[ext_resource type="PackedScene" uid="uid://derr5mq28x1hy" path="res://GridWorks Major Project 2026/Scenes/iron_gear.tscn" id="3_g6yyt"]
+[ext_resource type="PackedScene" uid="uid://dlek1m2688r42" path="res://GridWorks Major Project 2026/Scenes/iron_rod.tscn" id="4_8rjkt"]
+[ext_resource type="PackedScene" uid="uid://b0nu0qlxbuk0m" path="res://GridWorks Major Project 2026/Scenes/plastic_bar.tscn" id="5_pdw3s"]
+[ext_resource type="Texture2D" uid="uid://01rpxy4cnf5j" path="res://GridWorks Major Project 2026/Assets/processor_mk2_off.png" id="6_jj4uo"]
+[ext_resource type="Texture2D" uid="uid://dkgo84xhiu7vs" path="res://GridWorks Major Project 2026/Assets/processor_mk2_on.png" id="7_hoord"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
+size = Vector2(129, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20nwo"]
+size = Vector2(120, 119)
+
+[node name="ProcessorMK2" type="Node2D" unique_id=1905251074]
+script = ExtResource("1_jj4uo")
+building_item_id = "processor_mk2"
+processing_time = 1.0
+recipes = {
+"copper_wire": ExtResource("2_hoord"),
+"iron_gear": ExtResource("3_g6yyt"),
+"iron_rod": ExtResource("4_8rjkt"),
+"plastic_bar": ExtResource("5_pdw3s")
+}
+recipe_requirements = {
+"copper_wire": {
+"copper_plate": 1
+},
+"iron_gear": {
+"iron_plate": 2
+},
+"iron_rod": {
+"iron_plate": 1
+},
+"plastic_bar": {
+"coal_ore": 2
+}
+}
+recipe_times = {
+"copper_wire": 0.25,
+"iron_gear": 0.5,
+"iron_rod": 0.5,
+"plastic_bar": 2.0
+}
+
+[node name="ProcessorOff" type="Sprite2D" parent="." unique_id=2067550932]
+texture = ExtResource("6_jj4uo")
+
+[node name="InputArea" type="Area2D" parent="." unique_id=126425833]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="InputArea" unique_id=1482730492]
+shape = SubResource("RectangleShape2D_36agx")
+
+[node name="OutputMarker" type="Marker2D" parent="." unique_id=552904695]
+
+[node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=2035809150]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=563858654]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_20nwo")
+
+[node name="ProcessingTimer" type="Timer" parent="." unique_id=665999875]
+
+[node name="GlowSprite" type="Sprite2D" parent="." unique_id=1321602352]
+texture = ExtResource("7_hoord")

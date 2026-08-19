@@ -7,7 +7,7 @@ var is_placed := false
 var is_item_ready: bool = false
 
 # --- ITEM COST ---
-@export var building_item_id: String = "electric_drill"
+@export var building_item_id: String = ""
 
 # --- DRILL VARIABLES ---
 @export var mining_speed: float = 2.0 

@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cmt61f5ik36da"]
 
-[ext_resource type="Script" uid="uid://dncw47k15bkn4" path="res://GridWorks Major Project 2026/Scripts/processer.gd" id="1_t1slx"]
+[ext_resource type="Script" uid="uid://dncw47k15bkn4" path="res://GridWorks Major Project 2026/Scripts/processor.gd" id="1_t1slx"]
 [ext_resource type="PackedScene" uid="uid://derr5mq28x1hy" path="res://GridWorks Major Project 2026/Scenes/iron_gear.tscn" id="2_fbebe"]
 [ext_resource type="PackedScene" uid="uid://dlek1m2688r42" path="res://GridWorks Major Project 2026/Scenes/iron_rod.tscn" id="3_ig03g"]
 [ext_resource type="PackedScene" uid="uid://ceepho0k7laca" path="res://GridWorks Major Project 2026/Scenes/copper_wire.tscn" id="4_20mqw"]
-[ext_resource type="Texture2D" uid="uid://oxgbdb8ihftv" path="res://GridWorks Major Project 2026/Assets/Processer_MK1.png" id="4_ig03g"]
-[ext_resource type="Texture2D" uid="uid://bimkbvgxe6ajh" path="res://GridWorks Major Project 2026/Assets/Processer_MK1_ON.png" id="5_20mqw"]
+[ext_resource type="Texture2D" uid="uid://oxgbdb8ihftv" path="res://GridWorks Major Project 2026/Assets/processer_mk1.png" id="4_ig03g"]
+[ext_resource type="Texture2D" uid="uid://bimkbvgxe6ajh" path="res://GridWorks Major Project 2026/Assets/Processer_mk1_ON.png" id="5_20mqw"]
 [ext_resource type="PackedScene" uid="uid://b0nu0qlxbuk0m" path="res://GridWorks Major Project 2026/Scenes/plastic_bar.tscn" id="5_x5tic"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
@@ -16,6 +16,7 @@ size = Vector2(120, 119)
 
 [node name="ProcessorMK1" type="Node2D" unique_id=1905251074]
 script = ExtResource("1_t1slx")
+processing_time = 1.0
 recipes = {
 "copper_wire": ExtResource("4_20mqw"),
 "iron_gear": ExtResource("2_fbebe"),

@@ -6,7 +6,7 @@ signal hotbar_updated
 
 # 9 Slots total. The first 4 have defaults, the rest are empty!
 var hotbar_items: Array[String] = [
-	"straight_belt", "inserter", "electric_drill", "stone_furnace",
+	"straight_belt", "inserter", "drill_mk1", "furnace_mk1",
 	"", "", "", "", "" 
 ]
 
@@ -97,31 +97,79 @@ var item_database: Dictionary = {
 	},
 
 	# --- RESOURCE PROCESSING ---
-	"electric_drill": {
-		"name": "Mechanical Mining Drill",
+	"drill_mk1": {
+		"name": "Mining Drill MK1",
 		"description": "Automatically extracts resources from the ground.",
 		"category": "processing",
 		"subcategory": "Drilling",
-		"texture": "res://GridWorks Major Project 2026/Assets/Icons/MechanicalDrillIcon.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/electric_drill.tscn"
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/drill_mk1_ICON.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/drill_mk1.tscn"
 	},
-	"stone_furnace": {
-		"name": "Stone Furnace",
+	"drill_mk2": {
+		"name": "Mining Drill MK2",
+		"description": "Automatically extracts resources from the ground faster than the mk1 drill.",
+		"category": "processing",
+		"subcategory": "Drilling",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/drill_mk2_ICON-1.png.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/drill_mk2.tscn"
+	},
+	"drill_mk3": {
+		"name": "Mining Drill MK3",
+		"description": "Automatically extracts resources from the ground at maximum speed.",
+		"category": "processing",
+		"subcategory": "Drilling",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/drill_mk3_ICON-1.png.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/drill_mk3.tscn"
+	},
+	"furnace_mk1": {
+		"name": "Furnace MK1",
 		"description": "Smelts raw resources into usable items.",
 		"category": "processing",
 		"subcategory": "Smelting",
-		"texture": "res://GridWorks Major Project 2026/Assets/Icons/StoneFurnaceIcon.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/stone_furnace.tscn"
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/furnace_mk1_ICON.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/furnace_mk1.tscn"
+	},
+	"furnace_mk2": {
+		"name": "Furnace MK2",
+		"description": "Smelts raw resources into usable items faster.",
+		"category": "processing",
+		"subcategory": "Smelting",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/furnace_mk2_ICON.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/furnace_mk2.tscn"
+	},
+	"furnace_mk3": {
+		"name": "Furnace MK3",
+		"description": "Smelts raw resources into usable items at maximum speed.",
+		"category": "processing",
+		"subcategory": "Smelting",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/furnace_mk3_ICON.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/furnace_mk3.tscn"
 	},
 
 	# --- MANUFACTURING ---
 	"processor_mk1": {
 		"name": "Processor MK1",
-		"description": "Basic processing unit for automated crafting.",
+		"description": "Standard processing unit for basic automated crafting.",
 		"category": "manufacturing",
 		"subcategory": "Basic Processing",
-		"texture": "res://GridWorks Major Project 2026/Assets/Icons/ProcesserMK1Icon.png",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/processor_mk1_ICON.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/processor_mk1.tscn"
+	},
+	"processor_mk2": {
+		"name": "Processor MK2",
+		"description": "Accelerated processing unit for basic automated crafting.",
+		"category": "manufacturing",
+		"subcategory": "Basic Processing",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/processor_mk2_ICON.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/processor_mk2.tscn"
+	},
+	"processor_mk3": {
+		"name": "Processor MK3",
+		"description": "Fastest processing unit for basic automated crafting.",
+		"category": "manufacturing",
+		"subcategory": "Basic Processing",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/processor_mk3_ICON.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/processor_mk3.tscn"
 	},
 	"manufacturer_mk1": {
 		"name": "Manufacturer MK1",
@@ -130,6 +178,22 @@ var item_database: Dictionary = {
 		"subcategory": "Advanced Processing",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/ManufacturerMK1Icon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/manufacturer_mk1.tscn"
+	},
+	"manufacturer_mk2": {
+		"name": "Manufacturer MK2",
+		"description": "Fast manufacturing unit for complex crafting.",
+		"category": "manufacturing",
+		"subcategory": "Advanced Processing",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/manufacturer_mk3_ICON.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/manufacturer_mk2.tscn"
+	},
+	"manufacturer_mk3": {
+		"name": "Manufacturer MK3",
+		"description": "Fastest manufacturing unit for complex crafting.",
+		"category": "manufacturing",
+		"subcategory": "Advanced Processing",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/manufacturer_mk2_ICON.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/manufacturer_mk3.tscn"
 	},
 
 	# --- INTERMEDIATE PARTS ---

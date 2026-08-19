@@ -9,12 +9,19 @@ var long_inserter_scene = load("res://GridWorks Major Project 2026/Scenes/long_i
 var splitter_scene = load("res://GridWorks Major Project 2026/Scenes/splitter.tscn")
 var merger_scene = load("res://GridWorks Major Project 2026/Scenes/merger.tscn")
 var underground_belt_scene = load("res://GridWorks Major Project 2026/Scenes/underground_belt.tscn")
-var electric_drill_scene = load("res://GridWorks Major Project 2026/Scenes/electric_drill.tscn")
-var stone_furnace_scene = load("res://GridWorks Major Project 2026/Scenes/stone_furnace.tscn")
+var drill_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/drill_mk1.tscn")
+var drill_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/drill_mk2.tscn")
+var drill_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/drill_mk3.tscn")
+var furnace_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/furnace_mk1.tscn")
+var furnace_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/furnace_mk2.tscn")
+var furnace_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/furnace_mk3.tscn")
 var fast_inserter_scene = load("res://GridWorks Major Project 2026/Scenes/fast_inserter.tscn")
 var processor_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/processor_mk1.tscn")
+var processor_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/processor_mk2.tscn")
+var processor_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/processor_mk3.tscn")
 var manufacturer_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/manufacturer_mk1.tscn")
-
+var manufacturer_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/manufacturer_mk2.tscn")
+var manufacturer_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/manufacturer_mk3.tscn")
 
 # Set the default building
 @onready var selected_scene: PackedScene = straight_belt_scene

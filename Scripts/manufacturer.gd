@@ -180,6 +180,7 @@ func _try_start_processing() -> void:
 	var craft_duration: float = recipe_times.get(selected_recipe, processing_time)
 	processing_timer.wait_time = craft_duration
 	processing_timer.start()
+	
 
 func _has_required_ingredients() -> bool:
 	if not recipe_requirements.has(selected_recipe):

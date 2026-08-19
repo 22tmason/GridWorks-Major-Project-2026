@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://j5e8rgey4857"]
+
+[ext_resource type="Script" uid="uid://bivu1cc65jrhi" path="res://GridWorks Major Project 2026/Scripts/drill.gd" id="1_lm4vy"]
+[ext_resource type="PackedScene" uid="uid://beelhlptqaib6" path="res://GridWorks Major Project 2026/Scenes/iron_ore.tscn" id="2_d5d4j"]
+[ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/copper_ore.tscn" id="3_rcpfk"]
+[ext_resource type="Texture2D" uid="uid://ucjoajgqjl5m" path="res://GridWorks Major Project 2026/Assets/drill_mk2_base.png" id="4_lm4vy"]
+[ext_resource type="Texture2D" uid="uid://ccklgagk0dyu3" path="res://GridWorks Major Project 2026/Assets/drill_mk2_base-2.png.png" id="5_lm4vy"]
+[ext_resource type="Script" uid="uid://cxat3bqy5gsau" path="res://GridWorks Major Project 2026/StatusIcon.gd" id="6_4x074"]
+[ext_resource type="PackedScene" uid="uid://db1ogiqissscn" path="res://GridWorks Major Project 2026/Scenes/StatusIcon.tscn" id="7_doey0"]
+[ext_resource type="Texture2D" uid="uid://bminhr48vax8v" path="res://GridWorks Major Project 2026/Assets/Icons/Icon No Input.png" id="8_8w0xs"]
+[ext_resource type="Texture2D" uid="uid://cyexb4508yowg" path="res://GridWorks Major Project 2026/Assets/Icons/Icon Output Full.png" id="9_8fx4a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a1hje"]
+size = Vector2(27, 27.625)
+
+[node name="Drill" type="Node2D" unique_id=1717353137]
+script = ExtResource("1_lm4vy")
+building_item_id = "drill_mk2"
+mining_speed = 5.0
+rotation_speed = 72.0
+iron_item_scene = ExtResource("2_d5d4j")
+copper_item_scene = ExtResource("3_rcpfk")
+
+[node name="BottomPart" type="Sprite2D" parent="." unique_id=1754598614]
+position = Vector2(2.3841858e-07, 1.0000114)
+scale = Vector2(1, 1.011)
+texture = ExtResource("4_lm4vy")
+
+[node name="MiningTimer" type="Timer" parent="." unique_id=1914295354]
+
+[node name="OutputMarker" type="Marker2D" parent="." unique_id=695506692]
+position = Vector2(0, -112)
+
+[node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=75597092]
+position = Vector2(0, 124)
+
+[node name="OutputCheckArea" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=36311922]
+position = Vector2(0, -124)
+shape = SubResource("RectangleShape2D_a1hje")
+
+[node name="TopPart" type="Sprite2D" parent="." unique_id=1827259775]
+texture = ExtResource("5_lm4vy")
+
+[node name="WarningIconSprite" type="Sprite2D" parent="." unique_id=1904998886]
+script = ExtResource("6_4x074")
+icon_no_input = ExtResource("9_8fx4a")
+icon_output_full = ExtResource("9_8fx4a")
+icon_no_recipe = ExtResource("8_8w0xs")
+
+[node name="StatusIcon" parent="." unique_id=85233649 instance=ExtResource("7_doey0")]
+icon_no_input = ExtResource("8_8w0xs")
+icon_output_full = ExtResource("9_8fx4a")
+icon_no_recipe = ExtResource("9_8fx4a")

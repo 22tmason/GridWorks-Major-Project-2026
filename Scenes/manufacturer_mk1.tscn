@@ -2,9 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bccn6safi7q7y" path="res://GridWorks Major Project 2026/Scripts/manufacturer.gd" id="1_vgodh"]
 [ext_resource type="PackedScene" uid="uid://bnedck08qya12" path="res://GridWorks Major Project 2026/Scenes/electronic_circuit.tscn" id="2_p8rs1"]
-[ext_resource type="Texture2D" uid="uid://dikuav7nvcdd7" path="res://GridWorks Major Project 2026/Assets/Manufacturer MK1.png" id="2_vgodh"]
 [ext_resource type="PackedScene" uid="uid://dtq3hb5sr0vvx" path="res://GridWorks Major Project 2026/Scenes/engine.tscn" id="3_ldmm3"]
-[ext_resource type="Texture2D" uid="uid://docgq3jp5cjm" path="res://GridWorks Major Project 2026/Assets/Manufacturer MK1 ON.png" id="3_vgodh"]
 [ext_resource type="PackedScene" uid="uid://dyd5qoo1ui4pf" path="res://GridWorks Major Project 2026/Scenes/advanced_circuit.tscn" id="4_x6c1f"]
 [ext_resource type="PackedScene" uid="uid://durvetbphwtkv" path="res://GridWorks Major Project 2026/Scenes/low_density_structure.tscn" id="5_xwjm3"]
 [ext_resource type="PackedScene" uid="uid://gxgkkpivgu3t" path="res://GridWorks Major Project 2026/Scenes/battery.tscn" id="6_vlwec"]
@@ -12,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://day4jmm027qa5" path="res://GridWorks Major Project 2026/Scenes/processing_circuit.tscn" id="8_gwg2c"]
 [ext_resource type="PackedScene" uid="uid://caksatq3lngi0" path="res://GridWorks Major Project 2026/Scenes/flying_robot_frame.tscn" id="9_p1lo8"]
 [ext_resource type="PackedScene" uid="uid://djtw67limur2v" path="res://GridWorks Major Project 2026/Scenes/rocket_control_unit.tscn" id="10_l401d"]
+[ext_resource type="Texture2D" uid="uid://dwymql1hb8e4h" path="res://GridWorks Major Project 2026/Assets/manufacturer_mk2_off.png" id="11_x6c1f"]
+[ext_resource type="Texture2D" uid="uid://cjkcltd5c4el8" path="res://GridWorks Major Project 2026/Assets/manufacturer_mk2_on.png" id="12_xwjm3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
 size = Vector2(193, 194)
@@ -21,7 +21,7 @@ size = Vector2(182, 182)
 
 [node name="ManufacturerMK1" type="Node2D" unique_id=1905251074]
 script = ExtResource("1_vgodh")
-selected_recipe = "electronic_circuit"
+processing_time = 5.0
 recipes = {
 "advanced_circuit": ExtResource("4_x6c1f"),
 "battery": ExtResource("6_vlwec"),
@@ -80,9 +80,20 @@ recipe_requirements = {
 "steel_plate": 2
 }
 }
+recipe_times = {
+"advanced_circuit": 6.0,
+"battery": 5.0,
+"electric_motor": 10.0,
+"electronic_circuit": 2.0,
+"engine": 10.0,
+"flying_robot_frame": 20.0,
+"low_density_structure": 20.0,
+"processing_circuit": 12.0,
+"rocket_control_unit": 30.0
+}
 
 [node name="ManufacturerOff" type="Sprite2D" parent="." unique_id=2067550932]
-texture = ExtResource("2_vgodh")
+texture = ExtResource("11_x6c1f")
 
 [node name="InputArea" type="Area2D" parent="." unique_id=126425833]
 
@@ -101,4 +112,4 @@ shape = SubResource("RectangleShape2D_20nwo")
 [node name="ProcessingTimer" type="Timer" parent="." unique_id=665999875]
 
 [node name="GlowSprite" type="Sprite2D" parent="." unique_id=1321602352]
-texture = ExtResource("3_vgodh")
+texture = ExtResource("12_xwjm3")

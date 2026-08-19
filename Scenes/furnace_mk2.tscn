@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://b5tahe4sl8mqf"]
+
+[ext_resource type="Script" uid="uid://cycrrfdjm4v2w" path="res://GridWorks Major Project 2026/Scripts/furnace.gd" id="1_r2ofd"]
+[ext_resource type="PackedScene" uid="uid://4hdkb72pu3ic" path="res://GridWorks Major Project 2026/Scenes/copper_plate.tscn" id="2_lgiyg"]
+[ext_resource type="PackedScene" uid="uid://cq718say7ed1s" path="res://GridWorks Major Project 2026/Scenes/iron_plate.tscn" id="3_yx58f"]
+[ext_resource type="Texture2D" uid="uid://d1agk4tlnf6ke" path="res://GridWorks Major Project 2026/Assets/furnace_mk2_off.png" id="4_r2ofd"]
+[ext_resource type="Texture2D" uid="uid://d371wukgldpjy" path="res://GridWorks Major Project 2026/Assets/furnace_mk2_on.png" id="5_lgiyg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
+size = Vector2(129, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_20nwo"]
+size = Vector2(120, 119)
+
+[node name="FurnaceMK2" type="Node2D" unique_id=1905251074]
+script = ExtResource("1_r2ofd")
+building_item_id = "furnace_mk2"
+smelting_time = 5.0
+recipes = {
+"copper_ore": ExtResource("2_lgiyg"),
+"iron_ore": ExtResource("3_yx58f")
+}
+
+[node name="FurnaceOff" type="Sprite2D" parent="." unique_id=2067550932]
+texture = ExtResource("4_r2ofd")
+
+[node name="InputArea" type="Area2D" parent="." unique_id=126425833]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="InputArea" unique_id=1482730492]
+shape = SubResource("RectangleShape2D_36agx")
+
+[node name="OutputMarker" type="Marker2D" parent="." unique_id=552904695]
+
+[node name="OutputCheckArea" type="Area2D" parent="OutputMarker" unique_id=2035809150]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutputMarker/OutputCheckArea" unique_id=563858654]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_20nwo")
+
+[node name="SmeltingTimer" type="Timer" parent="." unique_id=665999875]
+
+[node name="GlowSprite" type="Sprite2D" parent="." unique_id=1321602352]
+texture = ExtResource("5_lgiyg")

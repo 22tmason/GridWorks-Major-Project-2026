@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bv3e4d6kyfyjq"]
 
-[ext_resource type="Script" uid="uid://w0f3168cp01t" path="res://GridWorks Major Project 2026/Scenes/machine_ui.gd" id="1_dy66g"]
+[ext_resource type="Script" uid="uid://w0f3168cp01t" path="res://GridWorks Major Project 2026/Scripts/machine_ui.gd" id="1_dy66g"]
 
 [node name="MachineUi" type="CanvasLayer" unique_id=2059220643 groups=["machine_ui"]]
 script = ExtResource("1_dy66g")
