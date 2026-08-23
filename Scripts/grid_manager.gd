@@ -12,7 +12,36 @@ var straight_belt_mk1_scene = preload("res://GridWorks Major Project 2026/Scenes
 var corner_belt_right_mk1_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_right_mk1.tscn")
 var corner_belt_left_mk1_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_left_mk1.tscn")
 var inserter_scene = preload("res://GridWorks Major Project 2026/Scenes/inserter.tscn") 
+# GridManager.gd
 
+# Tracks cell quantities: { Vector2i(x,y): {"type": "iron_ore", "amount": 500} }
+var resource_layer: TileMapLayer = null
+
+func register_resource_node(cell: Vector2i, type_name: String, amount: int = 500) -> void:
+	resource_data[cell] = {
+		"type": type_name,
+		"amount": amount
+	}
+
+func get_resource_at_cell(cell: Vector2i) -> String:
+	if resource_data.has(cell) and resource_data[cell]["amount"] > 0:
+		return resource_data[cell]["type"]
+	return ""
+
+# Consumes 1 unit of ore from the first available cell under the drill
+func consume_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
+	for cell in occupied_cells:
+		if resource_data.has(cell) and resource_data[cell]["amount"] > 0:
+			resource_data[cell]["amount"] -= 1
+			
+			# Deplete node when empty
+			if resource_data[cell]["amount"] <= 0:
+				resource_data.erase(cell)
+				if resource_layer:
+					resource_layer.erase_cell(cell) # Erases ore graphic to reveal sand background
+					
+			return get_resource_at_cell(cell) # Returns remaining type or "" if last unit
+	return ""
 func world_to_grid(world_pos: Vector2) -> Vector2i:
 	var grid_x = floor(world_pos.x / CELL_SIZE.x)
 	var grid_y = floor(world_pos.y / CELL_SIZE.y)
@@ -26,12 +55,6 @@ func grid_to_world(grid_pos: Vector2i) -> Vector2:
 # Tries to place an item at a specific grid coordinate
 # Key: Vector2i(cell), Value: String ("iron_ore" / "copper_ore")
 var natural_resources: Dictionary = {}
-
-func register_resource_node(cell: Vector2i, resource_type: String) -> void:
-	natural_resources[cell] = resource_type
-
-func get_resource_at_cell(cell: Vector2i) -> String:
-	return natural_resources.get(cell, "")
 	
 func is_placement_blocked(cells: Array[Vector2i], item_id: String = "") -> bool:
 	# 1. Check if the physical grid space is blocked

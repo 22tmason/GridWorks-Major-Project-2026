@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bivu1cc65jrhi" path="res://GridWorks Major Project 2026/Scripts/drill.gd" id="1_lm4vy"]
 [ext_resource type="PackedScene" uid="uid://beelhlptqaib6" path="res://GridWorks Major Project 2026/Scenes/iron_ore.tscn" id="2_d5d4j"]
 [ext_resource type="PackedScene" uid="uid://b8mg6txafrem4" path="res://GridWorks Major Project 2026/Scenes/copper_ore.tscn" id="3_rcpfk"]
+[ext_resource type="PackedScene" uid="uid://dgmic6whwlboe" path="res://GridWorks Major Project 2026/Scenes/coal_ore.tscn" id="4_d5d4j"]
 [ext_resource type="Texture2D" uid="uid://ucjoajgqjl5m" path="res://GridWorks Major Project 2026/Assets/drill_mk2_base.png" id="4_lm4vy"]
 [ext_resource type="Texture2D" uid="uid://ccklgagk0dyu3" path="res://GridWorks Major Project 2026/Assets/drill_mk2_base-2.png.png" id="5_lm4vy"]
 [ext_resource type="Script" uid="uid://cxat3bqy5gsau" path="res://GridWorks Major Project 2026/StatusIcon.gd" id="6_4x074"]
@@ -20,6 +21,7 @@ mining_speed = 5.0
 rotation_speed = 72.0
 iron_item_scene = ExtResource("2_d5d4j")
 copper_item_scene = ExtResource("3_rcpfk")
+coal_item_scene = ExtResource("4_d5d4j")
 
 [node name="BottomPart" type="Sprite2D" parent="." unique_id=1754598614]
 position = Vector2(2.3841858e-07, 1.0000114)

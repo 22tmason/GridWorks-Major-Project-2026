@@ -29,29 +29,22 @@ var manufacturer_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/man
 var manufacturer_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/manufacturer_mk2.tscn")
 var manufacturer_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/manufacturer_mk3.tscn")
 
-# Set the default building (Removed @onready)
 var selected_scene: PackedScene = straight_belt_mk1_scene
-
-
-# This will keep track of the unplaced belt currently following your mouse
 var current_preview: Node2D = null
 
 func change_building(new_scene: PackedScene) -> void:
 	selected_scene = new_scene
 	
-	if current_preview != null:
-		# --- BULLETPROOF FIX: Safely check if it has is_placed ---
+	if current_preview != null and is_instance_valid(current_preview):
 		var preview_is_placed = false
 		if "is_placed" in current_preview:
 			preview_is_placed = current_preview.is_placed
 			
-		# Only swap if the preview hasn't been permanently placed yet
 		if not preview_is_placed:
 			var parent = current_preview.get_parent()
 			var current_pos = current_preview.global_position
 			var current_rot = current_preview.rotation_degrees
 			
-			# Safely check for direction
 			var current_dir = null
 			if "current_direction" in current_preview:
 				current_dir = current_preview.current_direction
@@ -62,15 +55,26 @@ func change_building(new_scene: PackedScene) -> void:
 			new_preview.global_position = current_pos
 			new_preview.rotation_degrees = current_rot
 			
-			# Safely apply direction if the new building supports it
 			if current_dir != null and "current_direction" in new_preview:
 				new_preview.current_direction = current_dir
 			
 			parent.add_child(new_preview)
 			current_preview = new_preview
-			# Add this to the very bottom of build_manager.gd
+	else:
+		# If no preview exists, instantiate a new building preview into the scene
+		var main_scene = get_tree().current_scene
+		if main_scene and selected_scene:
+			var new_preview = selected_scene.instantiate()
+			main_scene.add_child(new_preview)
+			current_preview = new_preview
 
 func cancel_preview() -> void:
-	if current_preview != null:
-		current_preview.queue_free()
-		current_preview = null
+	if current_preview != null and is_instance_valid(current_preview):
+		var preview_is_placed = false
+		if "is_placed" in current_preview:
+			preview_is_placed = current_preview.is_placed
+			
+		if not preview_is_placed:
+			current_preview.queue_free()
+			
+	current_preview = null
