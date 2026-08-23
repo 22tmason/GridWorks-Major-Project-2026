@@ -16,6 +16,7 @@ var is_item_ready: bool = false
 @export_group("Resource Output Items")
 @export var iron_item_scene: PackedScene   # Drag Iron Ore Item scene here
 @export var copper_item_scene: PackedScene # Drag Copper Ore Item scene here
+@export var coal_item_scene: PackedScene   # Drag Coal Ore Item scene here
 
 @onready var mining_timer: Timer = $MiningTimer
 @onready var output_marker: Marker2D = $OutputMarker
@@ -25,7 +26,7 @@ var is_item_ready: bool = false
 # --- STATUS ICON REFERENCE ---
 @onready var status_icon: StatusIcon = $StatusIcon # Ensure child node is exactly named "StatusIcon"
 
-# Will store "iron", "copper", or null
+# Will store "iron", "copper", "coal", or null
 var active_resource = null 
 
 func _ready() -> void:
@@ -51,6 +52,8 @@ func _find_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
 				return "iron"
 			if "copper" in raw_res: 
 				return "copper"
+			if "coal" in raw_res:
+				return "coal"
 	return ""
 
 func _process(delta: float) -> void:
@@ -154,18 +157,32 @@ func _try_spawn_item() -> void:
 		scene_to_spawn = iron_item_scene
 	elif active_resource == "copper":
 		scene_to_spawn = copper_item_scene
+	elif active_resource == "coal":
+		scene_to_spawn = coal_item_scene
 		
 	if not scene_to_spawn:
 		return
 
 	if not is_output_blocked():
+		var current_grid_cell = GridManager.world_to_grid(global_position)
+		var claimed_cells = get_occupied_cells(current_grid_cell)
+		
+		# 1. Drain 1 ore unit from the ground
+		GridManager.consume_resource_under_drill(claimed_cells)
+		
+		# 2. Re-check if any valid resource remains under the drill
+		active_resource = _find_resource_under_drill(claimed_cells)
+		
+		# 3. Spawn item
 		var new_item = scene_to_spawn.instantiate()
 		new_item.global_position = output_marker.global_position
 		get_parent().add_child(new_item)
 		
-		# Notify tutorial
 		if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
 			TutorialManager.notify_item_produced(new_item.item_id)
 			
 		is_item_ready = false
-		_start_mining()
+		
+		# Only continue mining if ground still has resources
+		if active_resource != "" and active_resource != null:
+			_start_mining()

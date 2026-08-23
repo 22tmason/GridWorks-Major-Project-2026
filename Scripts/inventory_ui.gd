@@ -24,10 +24,20 @@ func _ready() -> void:
 
 # Listen for the 'E' key press to toggle the UI
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.keycode == KEY_E and event.pressed:
-		visible = not visible
-		if visible:
-			populate_ui_views()
+	if event is InputEventKey and event.pressed:
+		# Press Q to cancel building preview mode
+		if event.keycode == KEY_Q:
+			if BuildManager.current_preview != null:
+				BuildManager.cancel_preview()
+				get_viewport().set_input_as_handled()
+				return
+		
+		# Press E to toggle inventory UI
+		if event.keycode == KEY_E:
+			visible = not visible
+			if visible:
+				populate_ui_views()
+			get_viewport().set_input_as_handled()
 
 func _on_tab_changed(tab_idx: int) -> void:
 	var tab_names = ["logistics", "processing", "manufacturing", "intermediates"]

@@ -1,76 +1,125 @@
 extends Node2D
 
-# --- UPDATED: Renamed to something more generic ---
 @export var default_item_scene: PackedScene
 
+# Dynamic tooltip for hovered resources
+var resource_tooltip: Label
+
+func _ready() -> void:
+	_setup_resource_tooltip()
+
+func _setup_resource_tooltip() -> void:
+	var canvas = CanvasLayer.new()
+	canvas.layer = 100
+	add_child(canvas)
+	
+	resource_tooltip = Label.new()
+	resource_tooltip.visible = false
+	
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.08, 0.08, 0.85)
+	style.border_color = Color(0.4, 0.4, 0.4, 0.8)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(4)
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	
+	resource_tooltip.add_theme_stylebox_override("normal", style)
+	resource_tooltip.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	resource_tooltip.add_theme_font_size_override("font_size", 14)
+	canvas.add_child(resource_tooltip)
+
+func _process(_delta: float) -> void:
+	_update_resource_hover_tooltip()
+
 func _unhandled_input(event: InputEvent) -> void:
-	# 1. Handle single right-click
+	# 1. Left-click ground item pickup (only when not placing buildings)
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if BuildManager.current_preview == null:
+			attempt_item_pickup()
+
+	# 2. Right-click demolition
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		attempt_demolition()
 		
-	# 2. Handle click-and-drag for demolition
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		attempt_demolition()
 
-# Extracted logic for demolishing and refunding
+func attempt_item_pickup() -> void:
+	var mouse_pos = get_global_mouse_position()
+	var space_state = get_world_2d().direct_space_state
+	
+	var query = PhysicsPointQueryParameters2D.new()
+	query.position = mouse_pos
+	query.collide_with_areas = true
+	query.collide_with_bodies = false
+	
+	var hits = space_state.intersect_point(query)
+	for hit in hits:
+		var collider = hit.collider
+		if collider.is_in_group("items"):
+			var item_id = collider.get("item_id")
+			if item_id:
+				if InventoryManager.add_item(item_id, 1):
+					collider.queue_free()
+					return
+
+func _update_resource_hover_tooltip() -> void:
+	# Hide tooltip if building preview is active or inventory is open
+	if BuildManager.current_preview != null or $InventoryUI.visible:
+		resource_tooltip.visible = false
+		return
+
+	var mouse_pos = get_global_mouse_position()
+	var grid_cell = GridManager.world_to_grid(mouse_pos)
+
+	if GridManager.resource_data.has(grid_cell):
+		var res_info = GridManager.resource_data[grid_cell]
+		if res_info["amount"] > 0:
+			var res_type = res_info["type"].replace("_ore", "").replace("_edge", "").capitalize()
+			resource_tooltip.text = "%s Node\nQuantity: %d" % [res_type, res_info["amount"]]
+			resource_tooltip.global_position = get_viewport().get_mouse_position() + Vector2(16, 16)
+			resource_tooltip.visible = true
+			return
+
+	resource_tooltip.visible = false
+
 func attempt_demolition() -> void:
 	var mouse_pos = get_global_mouse_position()
 	var grid_cell = GridManager.world_to_grid(mouse_pos)
 	
-	# 1. Check if there is actually a building in this cell
 	if GridManager.grid_data.has(grid_cell):
-		# Grab the actual building node sitting in the grid
 		var building_node = GridManager.grid_data[grid_cell]
-		
-		# 2. Safely extract its inventory item ID
 		var item_to_refund = ""
 		if "building_item_id" in building_node:
 			item_to_refund = building_node.building_item_id
 			
-		# 3. Demolish the building from the world
 		GridManager.remove_item(grid_cell)
-		
-		# 4. Refund the item to the inventory
 		if item_to_refund != "":
-			var success = InventoryManager.add_item(item_to_refund, 1)
-			if success:
-				print("Refunded 1x ", item_to_refund, " to inventory.")
-			else:
-				print("Inventory full! Could not refund ", item_to_refund)
-				
+			InventoryManager.add_item(item_to_refund, 1)
+
 func spawn_item() -> void:
 	var mouse_pos = get_global_mouse_position()
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
 	var snapped_position = GridManager.grid_to_world(current_grid_cell)
 	
 	if is_tile_clear_for_item(snapped_position):
-		
-		# --- FIX: Make sure the scene actually exists before trying to spawn it! ---
-		if default_item_scene == null:
-			print("Error: No item assigned to Main Level!")
-			return
-			
+		if default_item_scene == null: return
 		var new_item = default_item_scene.instantiate()
 		new_item.global_position = snapped_position
 		add_child(new_item)
-	else:
-		print("Placement blocked: Item already exists at this coordinate.")
 
-
-# --- SPATIAL CHECK HELPER FUNCTION ---
 func is_tile_clear_for_item(target_global_position: Vector2) -> bool:
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsPointQueryParameters2D.new()
-	
 	query.position = target_global_position
 	query.collide_with_areas = true 
 	query.collide_with_bodies = true
 	
 	var results = space_state.intersect_point(query)
-	
 	for hit in results:
-		var collider = hit["collider"]
-		if collider.is_in_group("items"):
+		if hit["collider"].is_in_group("items"):
 			return false 
-			
 	return true
