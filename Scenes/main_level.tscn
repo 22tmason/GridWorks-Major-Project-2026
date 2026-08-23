@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://beelhlptqaib6" path="res://GridWorks Major Project 2026/Scenes/iron_ore.tscn" id="2_xi6xi"]
 [ext_resource type="Script" uid="uid://cvelvvrksgqcf" path="res://GridWorks Major Project 2026/Scripts/inventory_ui.gd" id="3_7ivtk"]
 [ext_resource type="Texture2D" uid="uid://dqpys0qi8ac4u" path="res://GridWorks Major Project 2026/Assets/SandyBackground1.png" id="5_bowd8"]
-[ext_resource type="PackedScene" uid="uid://dumd22i5qussy" path="res://GridWorks Major Project 2026/Scenes/belt.tscn" id="6_bowd8"]
+[ext_resource type="PackedScene" uid="uid://dumd22i5qussy" path="res://GridWorks Major Project 2026/Scenes/belt_mk1.tscn" id="6_bowd8"]
 [ext_resource type="Texture2D" uid="uid://ccwl8gb0to67d" path="res://GridWorks Major Project 2026/Assets/SandyBackground2.png" id="6_ee7x2"]
 [ext_resource type="Script" uid="uid://b6cvxm58vmja5" path="res://GridWorks Major Project 2026/Scripts/map_generator.gd" id="6_xi6xi"]
 [ext_resource type="Texture2D" uid="uid://cr0du6533ud44" path="res://GridWorks Major Project 2026/Assets/SandyBackground3 (1).png" id="7_ewncr"]

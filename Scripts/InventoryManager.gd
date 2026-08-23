@@ -6,7 +6,7 @@ signal hotbar_updated
 
 # 9 Slots total. The first 4 have defaults, the rest are empty!
 var hotbar_items: Array[String] = [
-	"straight_belt", "inserter", "drill_mk1", "furnace_mk1",
+	"straight_belt_mk1", "inserter", "drill_mk1", "furnace_mk1",
 	"", "", "", "", "" 
 ]
 
@@ -23,29 +23,101 @@ var slots: Array = []
 
 var item_database: Dictionary = {
 	# --- LOGISTICS ---
-	"straight_belt": {
-		"name": "Straight Belt",
+	"straight_belt_mk1": {
+		"name": "Straight Belt MK1",
 		"description": "Transports items in a straight line.",
 		"category": "logistics",
-		"subcategory": "Belts",
+		"subcategory": "Belts - Straight",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/YellowBeltIcon.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/belt.tscn"
+		"scene": "res://GridWorks Major Project 2026/Scenes/belt_mk1.tscn"
 	},
-	"corner_belt_right": {
-		"name": "Corner Belt Right",
+	"straight_belt_mk2": {
+		"name": "Straight Belt MK2",
+		"description": "Transports items in a straight line.",
+		"category": "logistics",
+		"subcategory": "Belts - Straight",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/RedBeltIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/belt_mk2.tscn"
+	},
+	"straight_belt_mk3": {
+		"name": "Straight Belt MK3",
+		"description": "Transports items in a straight line.",
+		"category": "logistics",
+		"subcategory": "Belts - Straight",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/BlueBeltIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/belt_mk3.tscn"
+	},
+	"corner_belt_right_mk1": {
+		"name": "Corner Belt Right MK1",
 		"description": "Turns the transport line to the right.",
 		"category": "logistics",
-		"subcategory": "Belts",
-		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltRightIcon.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_right.tscn"
+		"subcategory": "Belts - Turning",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltRightYellowIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_right_mk1.tscn"
 	},
-	"corner_belt_left": {
-		"name": "Corner Belt Left",
+	"corner_belt_right_mk2": {
+		"name": "Corner Belt Right MK2",
+		"description": "Turns the transport line to the right faster.",
+		"category": "logistics",
+		"subcategory": "Belts - Turning",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltRightRedIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_right_mk2.tscn"
+	},
+	"corner_belt_right_mk3": {
+		"name": "Corner Belt Right MK3",
+		"description": "Turns the transport line to the right at maximum speed.",
+		"category": "logistics",
+		"subcategory": "Belts - Turning",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltRightRedIcon (1).png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_right_mk3.tscn"
+	},
+	"corner_belt_left_mk1": {
+		"name": "Corner Belt Left MK1",
 		"description": "Turns the transport line to the left.",
 		"category": "logistics",
-		"subcategory": "Belts",
-		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltLeftIcon.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_left.tscn"
+		"subcategory": "Belts - Turning",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltLeftYellowIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_left_mk1.tscn"
+	},
+	"corner_belt_left_mk2": {
+		"name": "Corner Belt Left MK2",
+		"description": "Turns the transport line to the left faster.",
+		"category": "logistics",
+		"subcategory": "Belts - Turning",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltLeftRedIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_left_mk2.tscn"
+	},
+	"corner_belt_left_mk3": {
+		"name": "Corner Belt Left MK3",
+		"description": "Turns the transport line to the left at maximum speed.",
+		"category": "logistics",
+		"subcategory": "Belts - Turning",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/CornerBeltLeftBlueIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/corner_belt_left_mk3.tscn"
+	},
+	"underground_belt_mk1": {
+		"name": "Belts - Underground",
+		"description": "Transports items underneath other structures.",
+		"category": "logistics",
+		"subcategory": "Belts - Underground",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/UndergroundBeltIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/underground_belt_mk1.tscn"
+	},
+	"underground_belt_mk2": {
+		"name": "Belts - Underground",
+		"description": "Transports items underneath other structures at a faster speed.",
+		"category": "logistics",
+		"subcategory": "Belts - Underground",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/UndergroundBeltRedIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/underground_belt_mk2.tscn"
+	},
+	"underground_belt_mk3": {
+		"name": "Belts - Underground",
+		"description": "Transports items underneath other structures at maximum speed.",
+		"category": "logistics",
+		"subcategory": "Belts - Underground",
+		"texture": "res://GridWorks Major Project 2026/Assets/Icons/UndergroundBeltBlueIcon.png",
+		"scene": "res://GridWorks Major Project 2026/Scenes/underground_belt_mk3.tscn"
 	},
 	"inserter": {
 		"name": "Standard Inserter",
@@ -70,30 +142,6 @@ var item_database: Dictionary = {
 		"subcategory": "Inserters",
 		"texture": "res://GridWorks Major Project 2026/Assets/Icons/LongInserterIcon.png",
 		"scene": "res://GridWorks Major Project 2026/Scenes/long_inserter.tscn"
-	},
-	"splitter": {
-		"name": "Splitter",
-		"description": "Splits a single belt into two paths.",
-		"category": "logistics",
-		"subcategory": "Flow Control",
-		"texture": "res://GridWorks Major Project 2026/Assets/Icons/SpliterIcon.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/splitter.tscn"
-	},
-	"merger": {
-		"name": "Merger",
-		"description": "Merges two belts into one path.",
-		"category": "logistics",
-		"subcategory": "Flow Control",
-		"texture": "res://GridWorks Major Project 2026/Assets/Icons/MergerIcon.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/merger.tscn"
-	},
-	"underground_belt": {
-		"name": "Underground Belt",
-		"description": "Transports items underneath other structures.",
-		"category": "logistics",
-		"subcategory": "Belts",
-		"texture": "res://GridWorks Major Project 2026/Assets/Icons/UndergroundBeltIcon.png",
-		"scene": "res://GridWorks Major Project 2026/Scenes/underground_belt.tscn"
 	},
 
 	# --- RESOURCE PROCESSING ---

@@ -9,7 +9,7 @@ var push_direction: Vector2 = Vector2.DOWN
 @export var lane_offset: float = 16.0 
 
 # --- NEW: Identify what item this building costs ---
-@export var building_item_id: String = "straight_belt" 
+@export var building_item_id: String = "" 
 
 func _ready() -> void:
 	if not is_placed:

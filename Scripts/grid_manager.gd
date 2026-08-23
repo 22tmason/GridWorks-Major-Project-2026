@@ -8,9 +8,9 @@ var grid_data := {}
 var resource_data: Dictionary = {}
 
 # Load your scenes here
-var straight_belt_scene = preload("res://GridWorks Major Project 2026/Scenes/belt.tscn")
-var corner_belt_right_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_right.tscn")
-var corner_belt_left_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_left.tscn")
+var straight_belt_mk1_scene = preload("res://GridWorks Major Project 2026/Scenes/belt_mk1.tscn")
+var corner_belt_right_mk1_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_right_mk1.tscn")
+var corner_belt_left_mk1_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_left_mk1.tscn")
 var inserter_scene = preload("res://GridWorks Major Project 2026/Scenes/inserter.tscn") 
 
 func world_to_grid(world_pos: Vector2) -> Vector2i:

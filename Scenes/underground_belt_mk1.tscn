@@ -249,6 +249,8 @@ animations = [{
 
 [node name="underground_belt" type="Node2D" unique_id=321619144]
 script = ExtResource("1_1lwoq")
+speed = 64.0
+building_item_id = "underground_belt_mk1"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1523746745]
 

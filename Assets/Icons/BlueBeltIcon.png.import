@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dp1jbsy1nf7ho"
-path="res://.godot/imported/SpliterIcon.png-35eba4c130ac49dd945d6d136f3203c5.ctex"
+uid="uid://cht543gduuaxd"
+path="res://.godot/imported/BlueBeltIcon.png-a94a14c5d52ed5dcfc1147a45d5e06b3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Icons/SpliterIcon.png"
-dest_files=["res://.godot/imported/SpliterIcon.png-35eba4c130ac49dd945d6d136f3203c5.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/Icons/BlueBeltIcon.png"
+dest_files=["res://.godot/imported/BlueBeltIcon.png-a94a14c5d52ed5dcfc1147a45d5e06b3.ctex"]
 
 [params]
 

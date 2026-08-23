@@ -5,12 +5,12 @@ enum Direction { UP, RIGHT, DOWN, LEFT }
 @export var current_direction: Direction = Direction.DOWN 
 var is_placed := false
 
-# --- NEW: Identify what item this building costs ---
-@export var building_item_id: String = "corner_belt_left"
+# --- SPEED & ITEM VARIABLES ---
+@export var speed: float = 128.0
+@export var building_item_id: String = "corner_belt_left_mk1"
 
 # --- CORNER BELT VARIABLES ---
 @onready var my_path = $Path2D
-@export var animation_speed: float = 0.5 
 @export var arrow_count: int = 3
 var followers: Array[PathFollow2D] = []
 
@@ -28,14 +28,13 @@ func _ready() -> void:
 	make_perfect_quarter_circle()
 	setup_multiple_arrows()
 
-# --- NEW: 1x1 Building footprint ---
 func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
 	return [center_cell]
 
 func _process(delta: float) -> void:
-	# Animate all arrows constantly
+	# Animate arrows using pixel speed to match straight belts
 	for follower in followers:
-		follower.progress_ratio += animation_speed * delta
+		follower.progress += speed * delta
 		
 	if is_placed: 
 		return
@@ -46,11 +45,10 @@ func _process(delta: float) -> void:
 
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	# GridManager checks if the physical space is clear AND if inventory has stock
 	if GridManager.is_placement_blocked(cells_to_check, building_item_id):
-		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked
+		modulate = Color(1.0, 0.4, 0.4, 0.8)
 	else:
-		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear
+		modulate = Color(1.0, 1.0, 1.0, 0.5)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
@@ -63,20 +61,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		var current_grid_cell = GridManager.world_to_grid(global_position)
 		var cells_to_claim = get_occupied_cells(current_grid_cell)
 		
-		# GridManager now handles checking the inventory AND deducting the item!
 		var success = GridManager.place_item(cells_to_claim, self)
 		
 		if success:
 			is_placed = true
 			modulate = Color(1.0, 1.0, 1.0, 1.0)
 			
-			# --- THE FIX: Activate the child areas so they actually grab items! ---
 			if has_node("EntranceArea"):
 				$EntranceArea.is_placed = true
 			if has_node("ExitArea"):
 				$ExitArea.is_placed = true
 			
-			# Spawn the next preview
 			var next_belt = load(scene_file_path).instantiate()
 			next_belt.current_direction = current_direction
 			next_belt.rotation_degrees = rotation_degrees
@@ -86,36 +81,31 @@ func rotate_belt() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction
 	rotation_degrees += 90
 
-# --- MATH AND ANIMATION ---
 func make_perfect_quarter_circle() -> void:
 	var perfect_curve = Curve2D.new()
 	var radius: float = 32.0 
 	var kappa: float = 0.5522847
 	var handle_length: float = radius * kappa
 	
-	# Point 0: The Entrance (Right side edge, moving left)
 	var start_pos = Vector2(radius, 0)
-	var start_out = Vector2(-handle_length, 0) # Handle points left
+	var start_out = Vector2(-handle_length, 0)
 	perfect_curve.add_point(start_pos, Vector2.ZERO, start_out)
 	
-	# Point 1: The Exit (Bottom edge, moving down)
 	var end_pos = Vector2(0, radius) 
-	var end_in = Vector2(0, -handle_length) # Handle points up to smooth the curve
+	var end_in = Vector2(0, -handle_length)
 	perfect_curve.add_point(end_pos, end_in, Vector2.ZERO)
 	
 	my_path.curve = perfect_curve
 	
 func setup_multiple_arrows() -> void:
 	var original_follower = $Path2D/PathFollow2D
-	original_follower.loop = true # Ensure Godot knows to wrap the math
+	original_follower.loop = true
 	followers.append(original_follower)
 	
-	# Duplicate the follower to create the exact amount of arrows you want
 	for i in range(1, arrow_count):
 		var new_follower = original_follower.duplicate()
 		$Path2D.add_child(new_follower)
 		followers.append(new_follower)
 		
-	# Evenly space them out mathematically along the path
 	for i in range(followers.size()):
 		followers[i].progress_ratio = float(i) / arrow_count

@@ -1,14 +1,20 @@
 extends Node
 
-# Load your scenes here (Make sure these exact paths are correct!)
-var straight_belt_scene = preload("res://GridWorks Major Project 2026/Scenes/belt.tscn")
-var corner_belt_right_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_right.tscn")
-var corner_belt_left_scene = preload("res://GridWorks Major Project 2026/Scenes/corner_belt_left.tscn")
+# Use load() instead of preload() to prevent circular dependency errors!
+var straight_belt_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/belt_mk1.tscn")
+var straight_belt_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/belt_mk2.tscn")
+var straight_belt_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/belt_mk3.tscn")
+var corner_belt_right_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/corner_belt_right_mk1.tscn")
+var corner_belt_right_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/corner_belt_right_mk2.tscn")
+var corner_belt_right_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/corner_belt_right_mk3.tscn")
+var corner_belt_left_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/corner_belt_left_mk1.tscn")
+var corner_belt_left_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/corner_belt_left_mk2.tscn")
+var corner_belt_left_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/corner_belt_left_mk3.tscn")
 var inserter_scene = load("res://GridWorks Major Project 2026/Scenes/inserter.tscn")
 var long_inserter_scene = load("res://GridWorks Major Project 2026/Scenes/long_inserter.tscn")
-var splitter_scene = load("res://GridWorks Major Project 2026/Scenes/splitter.tscn")
-var merger_scene = load("res://GridWorks Major Project 2026/Scenes/merger.tscn")
-var underground_belt_scene = load("res://GridWorks Major Project 2026/Scenes/underground_belt.tscn")
+var underground_belt_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/underground_belt_mk1.tscn")
+var underground_belt_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/underground_belt_mk2.tscn")
+var underground_belt_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/underground_belt_mk3.tscn")
 var drill_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/drill_mk1.tscn")
 var drill_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/drill_mk2.tscn")
 var drill_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/drill_mk3.tscn")
@@ -23,8 +29,9 @@ var manufacturer_mk1_scene = load("res://GridWorks Major Project 2026/Scenes/man
 var manufacturer_mk2_scene = load("res://GridWorks Major Project 2026/Scenes/manufacturer_mk2.tscn")
 var manufacturer_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/manufacturer_mk3.tscn")
 
-# Set the default building
-@onready var selected_scene: PackedScene = straight_belt_scene
+# Set the default building (Removed @onready)
+var selected_scene: PackedScene = straight_belt_mk1_scene
+
 
 # This will keep track of the unplaced belt currently following your mouse
 var current_preview: Node2D = null

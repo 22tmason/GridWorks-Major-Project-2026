@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bamltv2c1w2vr"
-path="res://.godot/imported/Yellow Belt Corner - Animated.png-cd797632969ca70485497c47aade4b03.ctex"
+uid="uid://dxd87cgrnoy21"
+path="res://.godot/imported/Underground Belt Exit (1).png-3b79d3766a360fa5e9778ac3f1bb5cfd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Yellow Belt Corner - Animated.png"
-dest_files=["res://.godot/imported/Yellow Belt Corner - Animated.png-cd797632969ca70485497c47aade4b03.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/Underground Belt Exit (1).png"
+dest_files=["res://.godot/imported/Underground Belt Exit (1).png-3b79d3766a360fa5e9778ac3f1bb5cfd.ctex"]
 
 [params]
 

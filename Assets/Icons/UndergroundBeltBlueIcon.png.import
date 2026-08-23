@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bray2bwguns0g"
-path="res://.godot/imported/Spliter.png-cc4f9e5fc92f0f6770897d2b2c3f5201.ctex"
+uid="uid://b4ju1ya5hhrfj"
+path="res://.godot/imported/UndergroundBeltBlueIcon.png-30d361aa94b2fcda28dd31f7d1c68888.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Spliter.png"
-dest_files=["res://.godot/imported/Spliter.png-cc4f9e5fc92f0f6770897d2b2c3f5201.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/Icons/UndergroundBeltBlueIcon.png"
+dest_files=["res://.godot/imported/UndergroundBeltBlueIcon.png-30d361aa94b2fcda28dd31f7d1c68888.ctex"]
 
 [params]
 

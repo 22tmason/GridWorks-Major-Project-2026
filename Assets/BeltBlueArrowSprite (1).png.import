@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://seo0mgd368le"
-path="res://.godot/imported/MergerIcon.png-49c7076dfa27c95ff822b6282c874e1c.ctex"
+uid="uid://cafarl5aek7p7"
+path="res://.godot/imported/BeltBlueArrowSprite (1).png-48e9f05d461f6b460c337232a006cea2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Icons/MergerIcon.png"
-dest_files=["res://.godot/imported/MergerIcon.png-49c7076dfa27c95ff822b6282c874e1c.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/BeltBlueArrowSprite (1).png"
+dest_files=["res://.godot/imported/BeltBlueArrowSprite (1).png-48e9f05d461f6b460c337232a006cea2.ctex"]
 
 [params]
 

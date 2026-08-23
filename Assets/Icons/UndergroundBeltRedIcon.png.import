@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnex1saagdpt5"
-path="res://.godot/imported/Merger.png-315c0ab77471da7f6db00cdd111699a9.ctex"
+uid="uid://cgr2i38pi2ja4"
+path="res://.godot/imported/UndergroundBeltRedIcon.png-92b2dd0e729e4027459979f1d3bed0b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://GridWorks Major Project 2026/Assets/Merger.png"
-dest_files=["res://.godot/imported/Merger.png-315c0ab77471da7f6db00cdd111699a9.ctex"]
+source_file="res://GridWorks Major Project 2026/Assets/Icons/UndergroundBeltRedIcon.png"
+dest_files=["res://.godot/imported/UndergroundBeltRedIcon.png-92b2dd0e729e4027459979f1d3bed0b9.ctex"]
 
 [params]
 
