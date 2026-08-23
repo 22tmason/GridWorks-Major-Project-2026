@@ -5,17 +5,114 @@
 [node name="MachineUi" type="CanvasLayer" unique_id=2059220643 groups=["machine_ui"]]
 script = ExtResource("1_dy66g")
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=320007130]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="ProcessorPanel" type="PanelContainer" parent="." unique_id=320007130]
+custom_minimum_size = Vector2(800, 700)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -250.0
+offset_right = 200.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=663064521]
+[node name="HBoxContainer" type="HBoxContainer" parent="ProcessorPanel" unique_id=1752189706]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/VBoxContainer" unique_id=1480763385]
+[node name="LeftPanel" type="VBoxContainer" parent="ProcessorPanel/HBoxContainer" unique_id=663064521]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TitleLabel" type="Label" parent="ProcessorPanel/HBoxContainer/LeftPanel" unique_id=1480763385]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9019608, 0.9019608, 0.9019608, 1)
+theme_override_font_sizes/font_size = 20
 text = "Select Recipe"
 horizontal_alignment = 1
 
-[node name="RecipeGrid" type="GridContainer" parent="PanelContainer/VBoxContainer" unique_id=1925949968]
+[node name="ScrollContainer" type="ScrollContainer" parent="ProcessorPanel/HBoxContainer/LeftPanel" unique_id=230861071]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="CategoryContainer" type="VBoxContainer" parent="ProcessorPanel/HBoxContainer/LeftPanel/ScrollContainer" unique_id=1185749556]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="ProcessorPanel/HBoxContainer" unique_id=1880875071]
+layout_mode = 2
+
+[node name="RightPanel" type="VBoxContainer" parent="ProcessorPanel/HBoxContainer" unique_id=2105053916]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DetailsVBox" type="VBoxContainer" parent="ProcessorPanel/HBoxContainer/RightPanel" unique_id=1917736355]
+layout_mode = 2
+
+[node name="HeaderHBox" type="HBoxContainer" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox" unique_id=544663860]
+layout_mode = 2
+alignment = 1
+
+[node name="DetailIcon" type="TextureRect" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox/HeaderHBox" unique_id=558916105]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+expand_mode = 1
+
+[node name="DetailName" type="Label" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox/HeaderHBox" unique_id=1472071358]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9019608, 0.9019608, 0.9019608, 1)
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+
+[node name="DetailDescription" type="Label" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox" unique_id=548773715]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="DetailTimeLabel" type="Label" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox" unique_id=216646206]
+layout_mode = 2
+
+[node name="InputsLabel" type="Label" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox" unique_id=2132063843]
+layout_mode = 2
+text = "INPUTS"
+
+[node name="InputsHBox" type="HBoxContainer" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox" unique_id=1861131999]
+layout_mode = 2
+
+[node name="OutputsLabel" type="Label" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox" unique_id=249668534]
+layout_mode = 2
+text = "OUTPUT"
+
+[node name="OutputsHBox" type="HBoxContainer" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox" unique_id=313919757]
+layout_mode = 2
+
+[node name="ConfirmButton" type="Button" parent="ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox" unique_id=1467985564]
+layout_mode = 2
+text = "Set Active Recipe"
+
+[node name="ElevatorPanel" type="PanelContainer" parent="." unique_id=118844759]
+custom_minimum_size = Vector2(550, 400)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -275.0
+offset_top = -200.0
+offset_right = 275.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ElevatorPanel" unique_id=132049532]
+layout_mode = 2
+
+[node name="PhaseTitleLabel" type="Label" parent="ElevatorPanel/VBoxContainer" unique_id=1527917937]
+layout_mode = 2
+
+[node name="ItemContainer" type="VBoxContainer" parent="ElevatorPanel/VBoxContainer" unique_id=909137480]
+layout_mode = 2
+
+[node name="SealButton" type="Button" parent="ElevatorPanel/VBoxContainer" unique_id=236028712]
 layout_mode = 2

@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bv2qfo1drk24y"]
+
+[ext_resource type="Script" uid="uid://dmea7ddvtc14k" path="res://GridWorks Major Project 2026/Scripts/space_elevator_ui.gd" id="1_hdxkh"]
+
+[node name="SpaceElevatorUi" type="Control" unique_id=1907828554]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_hdxkh")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=67819441]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=836464702]
+layout_mode = 2
+
+[node name="PhaseTitleContainer" type="Label" parent="Panel/VBoxContainer" unique_id=268788691]
+layout_mode = 2
+
+[node name="ItemContainer" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=643241639]
+layout_mode = 2
+
+[node name="SealButton" type="Button" parent="Panel/VBoxContainer" unique_id=790607297]
+layout_mode = 2

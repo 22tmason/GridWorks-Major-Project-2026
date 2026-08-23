@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bl046ghhbc0vi" path="res://GridWorks Major Project 2026/Scenes/OnboardingUI.tscn" id="17_hgqtv"]
 [ext_resource type="PackedScene" uid="uid://blj0ll3d7y2vs" path="res://GridWorks Major Project 2026/Scenes/HotBarUI.tscn" id="18_e570s"]
 [ext_resource type="PackedScene" uid="uid://bv3e4d6kyfyjq" path="res://GridWorks Major Project 2026/Scenes/machineUI.tscn" id="19_hgbet"]
+[ext_resource type="PackedScene" uid="uid://btbltisdh3c0v" path="res://GridWorks Major Project 2026/Scenes/space_elevator.tscn" id="20_easix"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ivtk"]
 content_margin_left = 12.0
@@ -206,3 +207,6 @@ tile_set = SubResource("TileSet_ewncr")
 [node name="HotbarUi" parent="." unique_id=764615766 instance=ExtResource("18_e570s")]
 
 [node name="MachineUi" parent="." unique_id=2059220643 instance=ExtResource("19_hgbet")]
+
+[node name="SpaceElevator" parent="." unique_id=1279014804 instance=ExtResource("20_easix")]
+position = Vector2(352, 612)

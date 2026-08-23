@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://btbltisdh3c0v"]
+
+[ext_resource type="Texture2D" uid="uid://r60n6kf0oqqr" path="res://GridWorks Major Project 2026/Assets/space_elevator (1).png" id="1_2yjfu"]
+[ext_resource type="Script" uid="uid://d0q7qsmtnxxxt" path="res://GridWorks Major Project 2026/Scripts/space_elevator.gd" id="1_lnstg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lnstg"]
+size = Vector2(314, 314)
+
+[node name="SpaceElevator" type="Node2D" unique_id=1279014804 groups=["machine_ui"]]
+script = ExtResource("1_lnstg")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1655488781]
+texture = ExtResource("1_2yjfu")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=284624840]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=565292455]
+shape = SubResource("RectangleShape2D_lnstg")
