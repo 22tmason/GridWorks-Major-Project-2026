@@ -57,41 +57,47 @@ func setup_crafting_slot(item_id: String) -> void:
 	
 	var data = InventoryManager.item_database[item_id]
 	icon_rect.texture = load(data["texture"])
-	count_label.text = "" # Free crafting uses no numeric counter text
-	tooltip_text = data["name"] + "\n" + data["description"]
+	count_label.text = ""
+	
+	var is_unlocked: bool = ProgressionManager.is_unlocked(item_id)
+	disabled = not is_unlocked
+	
+	if is_unlocked:
+		modulate = Color(1, 1, 1, 1)
+		tooltip_text = data["name"] + "\n" + data["description"]
+	else:
+		modulate = Color(0.25, 0.25, 0.25, 0.6)
+		tooltip_text = data["name"] + " [LOCKED]\nRequires Space Elevator Phase " + str(_get_required_phase(item_id))
+
+func _get_required_phase(item_id: String) -> int:
+	for phase in ProgressionManager.phase_unlocks:
+		if item_id in ProgressionManager.phase_unlocks[phase]:
+			return phase
+	return 0
 
 func _gui_input(event: InputEvent) -> void:
-	if is_display_only:
-		return # Let the normal Button pressed signal handle this!
-	# Check if the event is a mouse click and if the button was just pressed down
-	if event is InputEventMouseButton and event.pressed:
+	if is_display_only or not ProgressionManager.is_unlocked(current_item_id):
+		return
 		
-		# Early exit if the slot is empty
+	if event is InputEventMouseButton and event.pressed:
 		if current_item_id == "":
 			return
 			
 		if is_crafting_button:
 			var craft_amount = 0
-			
-			# Determine the amount based on which mouse button was clicked
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				craft_amount = 1
 			elif event.button_index == MOUSE_BUTTON_RIGHT:
 				craft_amount = 5
 				
-			# If a valid button was clicked, add the items!
 			if craft_amount > 0:
 				InventoryManager.add_item(current_item_id, craft_amount)
-				
-				# Safely notify the tutorial manager
 				if get_node_or_null("/root/TutorialManager") != null:
 					for i in range(craft_amount):
 						TutorialManager.notify_item_crafted(current_item_id)
 		else:
-			# --- THE RESTORED LOGIC ---
-			# If this is a normal inventory slot, left-clicking it equips the building
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				var data = InventoryManager.item_database[current_item_id]
 				if data.has("scene"):
 					var building_scene = load(data["scene"])
-					BuildManager.change_building(building_scene)
+					BuildManager.change_building(building_scene, current_item_id)

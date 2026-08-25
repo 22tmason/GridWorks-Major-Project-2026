@@ -100,6 +100,7 @@ func place_item(cells: Array[Vector2i], item_node: Node) -> bool:
 	
 
 # --- UPDATED DEMOLISH FUNCTION ---
+# --- UPDATED DEMOLISH FUNCTION ---
 func remove_item(grid_pos: Vector2i) -> void:
 	if grid_data.has(grid_pos):
 		var item_to_remove = grid_data[grid_pos]
@@ -109,6 +110,25 @@ func remove_item(grid_pos: Vector2i) -> void:
 		for cell in grid_data:
 			if grid_data[cell] == item_to_remove:
 				cells_to_clear.append(cell)
+				
+		# --- NEW: Sweep for loose items sitting on these tiles ---
+		var all_loose_items = get_tree().get_nodes_in_group("items")
+		for item in all_loose_items:
+			var item_cell = world_to_grid(item.global_position)
+			if item_cell in cells_to_clear:
+				if "item_id" in item:
+					# Try to add to inventory; if successful, delete the item from the belt
+					if InventoryManager.add_item(item.item_id, 1):
+						item.queue_free()
+
+		# --- NEW: Recover items trapped in machine input buffers ---
+		if "input_buffer" in item_to_remove and item_to_remove.input_buffer is Array:
+			for buffered_item in item_to_remove.input_buffer:
+				InventoryManager.add_item(buffered_item, 1)
+				
+		elif "input_inventory" in item_to_remove and item_to_remove.input_inventory is Dictionary:
+			for buffered_item in item_to_remove.input_inventory.keys():
+				InventoryManager.add_item(buffered_item, item_to_remove.input_inventory[buffered_item])
 				
 		# 2. Erase all of those cells so the space is empty again!
 		for cell in cells_to_clear:

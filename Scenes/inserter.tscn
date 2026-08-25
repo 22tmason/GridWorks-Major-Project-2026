@@ -86,4 +86,4 @@ sprite_frames = SubResource("SpriteFrames_8luwq")
 position = Vector2(65, 0)
 
 [node name="DropArea" type="Marker2D" parent="." unique_id=1270509927]
-position = Vector2(-65, 0)
+position = Vector2(-80, 0)

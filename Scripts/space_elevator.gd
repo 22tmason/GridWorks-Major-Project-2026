@@ -8,9 +8,12 @@ var current_phase: int = 0
 
 # Dictionary array mapping each phase to required item counts
 @export var phase_requirements: Array[Dictionary] = [
-	{"iron_plate": 100, "copper_plate": 100},         # Phase 1
-	{"processor_mk1": 250, "reinforced_plate": 150},   # Phase 2
-	{"quantum_core": 500}                             # Phase 3
+	{"iron_plate": 100, "copper_plate": 100}, # Phase 0
+	{"iron_gear": 200, "copper_wire": 200, "iron_rod": 100}, # Phase 1
+	{"electronic_circuit": 200, "engine": 100, "steel_plate": 50}, # Phase 2
+	{"plastic_bar": 150, "advanced_circuit": 100, "low_density_structure": 100}, # Phase 3
+	{"processing_circuit": 100, "flying_robot_frame": 50, "low_density_structure": 50}, # Phase 4
+	{"rocket_control_unit": 100, "low_density_structure": 150, "flying_robot_frame": 75}, # Phase 5
 ]
 
 # Tracks items collected for the active phase: { "item_id": count }
@@ -107,6 +110,7 @@ func seal_phase() -> void:
 		
 	phase_completed.emit(current_phase)
 	current_phase += 1
+	ProgressionManager.advance_phase()
 	_init_phase_tracker()
 
 # --- UI HOOK ---

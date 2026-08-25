@@ -47,6 +47,8 @@ func _process(_delta: float) -> void:
 		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked or out of stock
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) # Semi-transparent preview
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attempt_placement()
 
 func _physics_process(_delta: float) -> void:
 	if held_item:
@@ -73,6 +75,11 @@ func rotate_inserter() -> void:
 	rotation_degrees += 90
 
 func attempt_placement() -> void:
+	var inv_ui = get_tree().current_scene.get_node_or_null("InventoryUI")
+	var machine_ui = get_tree().get_first_node_in_group("machine_ui")
+	
+	if (inv_ui and inv_ui.visible) or (machine_ui and machine_ui.visible):
+		return
 	if InventoryManager.get_item_count(building_item_id) <= 0:
 		return
 		
@@ -114,8 +121,12 @@ func grab_item(item: Node2D) -> void:
 	held_item.position = Vector2.ZERO
 	held_item.set_physics_process(false)
 	
-	held_item.set_deferred("monitorable", false)
-	held_item.set_deferred("monitoring", false)
+	# Fully disable monitoring and collision shapes while held
+	held_item.monitorable = false
+	held_item.monitoring = false
+	for child in held_item.get_children():
+		if child is CollisionShape2D or child is CollisionPolygon2D:
+			child.set_deferred("disabled", true)
 	
 	swing_arm_to_drop()
 
@@ -125,25 +136,56 @@ func swing_arm_to_drop() -> void:
 	tween.tween_property(arm_sprite, "rotation_degrees", 180.0, swing_time)
 	tween.finished.connect(try_drop_item)
 
+func get_target_drop_position(drop_center: Vector2) -> Vector2:
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsShapeQueryParameters2D.new()
+	var shape = RectangleShape2D.new()
+	shape.size = Vector2(16, 16)
+	query.shape = shape
+	query.transform = Transform2D(0, drop_center)
+	query.collide_with_areas = true
+	
+	var hits = space_state.intersect_shape(query)
+	for hit in hits:
+		var col = hit.collider
+		var building = col if "is_placed" in col else col.get_parent()
+		if building and "push_direction" in building:
+			var p_dir: Vector2 = building.push_direction
+			var world_dir = p_dir.rotated(building.global_rotation).round()
+			var lane_offset: float = building.lane_offset if "lane_offset" in building else 16.0
+			
+			if world_dir.x != 0:
+				return drop_center + Vector2(0, lane_offset)
+			elif world_dir.y != 0:
+				return drop_center + Vector2(lane_offset, 0)
+				
+	return drop_center
+
 func try_drop_item() -> void:
 	if not held_item:
 		return
+		
+	var drop_cell = GridManager.world_to_grid(drop_area.global_position)
+	var drop_center = GridManager.grid_to_world(drop_cell)
+	var target_drop_pos = get_target_drop_position(drop_center)
 		
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
 	var shape = RectangleShape2D.new()
 	
-	var drop_pos = drop_area.global_position
 	shape.size = Vector2(26, 26)
 	query.shape = shape
-	query.transform = Transform2D(0, drop_pos)
+	query.transform = Transform2D(0, target_drop_pos)
 	query.collide_with_areas = true
+	query.collide_with_bodies = false
+	query.collision_mask = 0xFFFFFFFF
 	
 	var hits = space_state.intersect_shape(query)
 	var blocked = false
 	
 	for hit in hits:
-		if hit.collider.is_in_group("items") and hit.collider != held_item:
+		var col = hit.collider
+		if col != held_item and col.is_in_group("items"):
 			blocked = true
 			break
 			
@@ -151,11 +193,23 @@ func try_drop_item() -> void:
 		is_waiting_to_drop = false
 		var main_level = get_tree().current_scene
 		held_item.reparent(main_level)
-		held_item.global_position = drop_pos
+		held_item.global_position = target_drop_pos
+		held_item.global_rotation = 0.0
+		
+		if "is_waiting_for_gap" in held_item:
+			held_item.is_waiting_for_gap = false
+			
 		held_item.add_to_group("items")
+		
+		# Re-enable collision shapes ONLY when placed on belt
+		for child in held_item.get_children():
+			if child is CollisionShape2D or child is CollisionPolygon2D:
+				child.disabled = false
+				
+		held_item.monitorable = true
+		held_item.monitoring = true
 		held_item.set_physics_process(true)
-		held_item.set_deferred("monitorable", true)
-		held_item.set_deferred("monitoring", true)
+		
 		held_item = null
 		swing_arm_back()
 	else:

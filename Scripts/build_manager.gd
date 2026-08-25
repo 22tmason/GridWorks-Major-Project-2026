@@ -32,7 +32,10 @@ var manufacturer_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/man
 var selected_scene: PackedScene = straight_belt_mk1_scene
 var current_preview: Node2D = null
 
-func change_building(new_scene: PackedScene) -> void:
+func change_building(new_scene: PackedScene, item_id: String = "") -> void:
+	if item_id != "" and not ProgressionManager.is_unlocked(item_id):
+		return
+
 	selected_scene = new_scene
 	
 	if current_preview != null and is_instance_valid(current_preview):
@@ -61,7 +64,6 @@ func change_building(new_scene: PackedScene) -> void:
 			parent.add_child(new_preview)
 			current_preview = new_preview
 	else:
-		# If no preview exists, instantiate a new building preview into the scene
 		var main_scene = get_tree().current_scene
 		if main_scene and selected_scene:
 			var new_preview = selected_scene.instantiate()

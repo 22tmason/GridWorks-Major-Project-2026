@@ -57,6 +57,9 @@ func _process(_delta: float) -> void:
 		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked or out of stock
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear and in stock
+	# Continuous placement check (Supports holding left-click while moving with WASD)
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attempt_placement()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
@@ -76,6 +79,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # Extracted logic so both clicking and dragging can use it
 func attempt_placement() -> void:
+	var inv_ui = get_tree().current_scene.get_node_or_null("InventoryUI")
+	var machine_ui = get_tree().get_first_node_in_group("machine_ui")
+	
+	if (inv_ui and inv_ui.visible) or (machine_ui and machine_ui.visible):
+		return
+
 	# Block placement if we don't have the item
 	if InventoryManager.get_item_count(building_item_id) <= 0:
 		return 

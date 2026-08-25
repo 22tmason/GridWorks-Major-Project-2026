@@ -43,7 +43,7 @@ func _update_visuals() -> void:
 func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
 	return [center_cell]
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if is_placed:
 		return
 		
@@ -51,7 +51,7 @@ func _process(_delta: float) -> void:
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)
 	var snapped_position = GridManager.grid_to_world(current_grid_cell)
 	
-	# --- THE FIX: Axis Locking, Forward Forcing, AND Max Distance ---
+	# --- Axis Locking, Forward Forcing, AND Max Distance ---
 	if is_instance_valid(linked_partner):
 		var anchor_pos = linked_partner.global_position
 		var min_dist = 64.0
@@ -64,12 +64,10 @@ func _process(_delta: float) -> void:
 				axis_diff = snapped_position.x - anchor_pos.x
 				if axis_diff <= 0: 
 					snapped_position.x = clamp(snapped_position.x, anchor_pos.x - max_dist, anchor_pos.x - min_dist)
-					# --- INVERTED ---
 					is_entrance = false
 					linked_partner.is_entrance = true
 				else: 
 					snapped_position.x = clamp(snapped_position.x, anchor_pos.x + min_dist, anchor_pos.x + max_dist)
-					# --- INVERTED ---
 					is_entrance = true
 					linked_partner.is_entrance = false
 					
@@ -78,12 +76,10 @@ func _process(_delta: float) -> void:
 				axis_diff = snapped_position.x - anchor_pos.x
 				if axis_diff >= 0: 
 					snapped_position.x = clamp(snapped_position.x, anchor_pos.x + min_dist, anchor_pos.x + max_dist)
-					# --- INVERTED ---
 					is_entrance = false
 					linked_partner.is_entrance = true
 				else: 
 					snapped_position.x = clamp(snapped_position.x, anchor_pos.x - max_dist, anchor_pos.x - min_dist)
-					# --- INVERTED ---
 					is_entrance = true
 					linked_partner.is_entrance = false
 					
@@ -92,12 +88,10 @@ func _process(_delta: float) -> void:
 				axis_diff = snapped_position.y - anchor_pos.y
 				if axis_diff <= 0: 
 					snapped_position.y = clamp(snapped_position.y, anchor_pos.y - max_dist, anchor_pos.y - min_dist)
-					# --- INVERTED ---
 					is_entrance = true
 					linked_partner.is_entrance = false
 				else: 
 					snapped_position.y = clamp(snapped_position.y, anchor_pos.y + min_dist, anchor_pos.y + max_dist)
-					# --- INVERTED ---
 					is_entrance = false
 					linked_partner.is_entrance = true
 					
@@ -106,12 +100,10 @@ func _process(_delta: float) -> void:
 				axis_diff = snapped_position.y - anchor_pos.y
 				if axis_diff >= 0: 
 					snapped_position.y = clamp(snapped_position.y, anchor_pos.y + min_dist, anchor_pos.y + max_dist)
-					# --- INVERTED ---
 					is_entrance = true
 					linked_partner.is_entrance = false
 				else: 
 					snapped_position.y = clamp(snapped_position.y, anchor_pos.y - max_dist, anchor_pos.y - min_dist)
-					# --- INVERTED ---
 					is_entrance = false
 					linked_partner.is_entrance = true
 					
@@ -124,39 +116,57 @@ func _process(_delta: float) -> void:
 		modulate = Color(1.0, 0.4, 0.4, 0.8) 
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) 
+		
+	# REMOVED: The Continuous WASD check block was deleted from here!
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed: return
 		
 	if event is InputEventKey and event.keycode == KEY_R and event.pressed:
-		
 		rotate_belt()
 		
+	# ALLOW ONLY: Discrete clicks (so the exit doesn't instantly drop on the same click)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var actual_cell = GridManager.world_to_grid(global_position)
-		var cells_to_claim = get_occupied_cells(actual_cell)
+		attempt_placement()
+
+# --- EXTRACTED PLACEMENT LOGIC ---
+func attempt_placement() -> void:
+	# Prevent building while menus are open
+	var inv_ui = get_tree().current_scene.get_node_or_null("InventoryUI")
+	var machine_ui = get_tree().get_first_node_in_group("machine_ui")
+	if (inv_ui and inv_ui.visible) or (machine_ui and machine_ui.visible):
+		return
+
+	if InventoryManager.get_item_count(building_item_id) <= 0:
+		return
+
+	var actual_cell = GridManager.world_to_grid(global_position)
+	var cells_to_claim = get_occupied_cells(actual_cell)
+	
+	# Block placement if invalid
+	if GridManager.is_placement_blocked(cells_to_claim, building_item_id):
+		return
+
+	if GridManager.place_item(cells_to_claim, self):
+		is_placed = true
+		modulate = Color(1.0, 1.0, 1.0, 1.0) 
+		area.area_entered.connect(_on_area_entered)
 		
-		if GridManager.place_item(cells_to_claim, self):
-			is_placed = true
-			modulate = Color(1.0, 1.0, 1.0, 1.0) 
-			area.area_entered.connect(_on_area_entered)
+		if linked_partner != null:
+			linked_partner.linked_partner = self 
 			
-			if linked_partner != null:
-				linked_partner.linked_partner = self 
-				
-				# Spawn the next pair
-				var next_entrance = load(scene_file_path).instantiate()
-				next_entrance.is_entrance = true
-				next_entrance.current_direction = current_direction
-				next_entrance.rotation_degrees = rotation_degrees
-				get_parent().add_child(next_entrance)
-			else:
-				var exit_preview = load(scene_file_path).instantiate()
-				exit_preview.is_entrance = false 
-				exit_preview.current_direction = current_direction
-				exit_preview.rotation_degrees = rotation_degrees
-				exit_preview.linked_partner = self 
-				get_parent().add_child(exit_preview)
+			var next_entrance = load(scene_file_path).instantiate()
+			next_entrance.is_entrance = true
+			next_entrance.current_direction = current_direction
+			next_entrance.rotation_degrees = rotation_degrees
+			get_parent().add_child(next_entrance)
+		else:
+			var exit_preview = load(scene_file_path).instantiate()
+			exit_preview.is_entrance = false 
+			exit_preview.current_direction = current_direction
+			exit_preview.rotation_degrees = rotation_degrees
+			exit_preview.linked_partner = self 
+			get_parent().add_child(exit_preview)
 
 func rotate_belt() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction
@@ -165,7 +175,7 @@ func rotate_belt() -> void:
 	if not is_placed and is_instance_valid(linked_partner):
 		linked_partner.current_direction = current_direction
 		linked_partner.rotation_degrees = rotation_degrees
-
+		
 # --- ITEM HANDLING ---
 func _on_area_entered(hit_area: Area2D) -> void:
 	if not is_placed or not is_entrance or not is_instance_valid(linked_partner) or not linked_partner.is_placed: 

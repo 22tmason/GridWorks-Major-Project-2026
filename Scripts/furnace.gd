@@ -69,6 +69,8 @@ func _process(_delta: float) -> void:
 		modulate = Color(1.0, 0.4, 0.4, 0.8)
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5)
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attempt_placement()
 	
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -89,6 +91,11 @@ func rotate_building() -> void:
 	rotation_degrees += 90
 
 func attempt_placement() -> void:
+	var inv_ui = get_tree().current_scene.get_node_or_null("InventoryUI")
+	var machine_ui = get_tree().get_first_node_in_group("machine_ui")
+	
+	if (inv_ui and inv_ui.visible) or (machine_ui and machine_ui.visible):
+		return
 	if InventoryManager.get_item_count(building_item_id) <= 0:
 		return
 		

@@ -15,7 +15,7 @@ size = Vector2(120, 119)
 [node name="FurnaceMK1" type="Node2D" unique_id=1905251074]
 script = ExtResource("1_qg34s")
 building_item_id = "furnace_mk1"
-smelting_time = 10.0
+smelting_time = 0.1
 recipes = {
 "copper_ore": ExtResource("2_20nwo"),
 "iron_ore": ExtResource("3_36agx")

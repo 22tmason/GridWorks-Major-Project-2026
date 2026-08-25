@@ -49,6 +49,10 @@ func _process(delta: float) -> void:
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5)
 
+	# --- Continuous WASD Building ---
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attempt_placement()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
 		return
@@ -57,24 +61,40 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_belt()
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var current_grid_cell = GridManager.world_to_grid(global_position)
-		var cells_to_claim = get_occupied_cells(current_grid_cell)
+		attempt_placement()
+
+# --- EXTRACTED PLACEMENT LOGIC ---
+func attempt_placement() -> void:
+	# Prevent building while menus are open
+	var inv_ui = get_tree().current_scene.get_node_or_null("InventoryUI")
+	var machine_ui = get_tree().get_first_node_in_group("machine_ui")
+	if (inv_ui and inv_ui.visible) or (machine_ui and machine_ui.visible):
+		return
+
+	if InventoryManager.get_item_count(building_item_id) <= 0:
+		return
 		
-		var success = GridManager.place_item(cells_to_claim, self)
+	var current_grid_cell = GridManager.world_to_grid(global_position)
+	var cells_to_claim = get_occupied_cells(current_grid_cell)
+	
+	# Block placement if invalid
+	if GridManager.is_placement_blocked(cells_to_claim, building_item_id):
+		return
 		
-		if success:
-			is_placed = true
-			modulate = Color(1.0, 1.0, 1.0, 1.0)
-			
-			if has_node("EntranceArea"):
-				$EntranceArea.is_placed = true
-			if has_node("ExitArea"):
-				$ExitArea.is_placed = true
-			
-			var next_belt = load(scene_file_path).instantiate()
-			next_belt.current_direction = current_direction
-			next_belt.rotation_degrees = rotation_degrees
-			get_parent().add_child(next_belt)
+	var success = GridManager.place_item(cells_to_claim, self)
+	if success:
+		is_placed = true
+		modulate = Color(1.0, 1.0, 1.0, 1.0)
+		
+		if has_node("EntranceArea"):
+			$EntranceArea.is_placed = true
+		if has_node("ExitArea"):
+			$ExitArea.is_placed = true
+		
+		var next_belt = load(scene_file_path).instantiate()
+		next_belt.current_direction = current_direction
+		next_belt.rotation_degrees = rotation_degrees
+		get_parent().add_child(next_belt)
 
 func rotate_belt() -> void:
 	current_direction = (current_direction + 1) % 4 as Direction

@@ -76,6 +76,8 @@ func _process(_delta: float) -> void:
 		modulate = Color(1.0, 0.4, 0.4, 0.8)
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5)
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attempt_placement()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
@@ -95,6 +97,11 @@ func rotate_building() -> void:
 	rotation_degrees += 90
 
 func attempt_placement() -> void:
+	var inv_ui = get_tree().current_scene.get_node_or_null("InventoryUI")
+	var machine_ui = get_tree().get_first_node_in_group("machine_ui")
+	
+	if (inv_ui and inv_ui.visible) or (machine_ui and machine_ui.visible):
+		return
 	if InventoryManager.get_item_count(building_item_id) <= 0:
 		return
 		
@@ -131,18 +138,48 @@ func is_output_blocked() -> bool:
 			return true 
 	return false
 
-# --- RECIPE UI SELECTION ---
+# --- RECIPE UI SELECTION & COPY/PASTE ---
 func _on_machine_clicked(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if is_placed and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var ui = get_tree().get_first_node_in_group("machine_ui")
-		if ui:
-			ui.open_ui(self)
+	# GOAL 1: Prevent the UI from opening if the player is currently placing buildings
+	if not is_placed or BuildManager.current_preview != null:
+		return
+		
+	if event is InputEventMouseButton and event.pressed:
+		
+		# GOAL 3: Shift + Click to Copy/Paste Recipes
+		if Input.is_key_pressed(KEY_SHIFT):
+			if event.button_index == MOUSE_BUTTON_RIGHT:
+				# Copy Recipe
+				if selected_recipe != "":
+					BuildManager.set_meta("copied_recipe", selected_recipe)
+			elif event.button_index == MOUSE_BUTTON_LEFT:
+				# Paste Recipe
+				var copied = BuildManager.get_meta("copied_recipe") if BuildManager.has_meta("copied_recipe") else ""
+				if copied != "" and recipes.has(copied):
+					set_active_recipe(copied)
+			return # Exit early so the UI doesn't open
+			
+		# Normal Left Click -> Open UI
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			var ui = get_tree().get_first_node_in_group("machine_ui")
+			if ui:
+				ui.open_ui(self)
 
 func set_active_recipe(recipe_id: String) -> void:
 	selected_recipe = recipe_id
 	input_buffer.clear()
 	output_buffer.clear()
 	is_processing = false
+	
+	# GOAL 2: Display the tiny product icon on the machine sprite
+	var recipe_icon = get_node_or_null("RecipeIcon")
+	if recipe_icon:
+		if recipe_id != "" and InventoryManager.item_database.has(recipe_id):
+			var texture_path = InventoryManager.item_database[recipe_id]["texture"]
+			recipe_icon.texture = load(texture_path)
+			recipe_icon.visible = true
+		else:
+			recipe_icon.visible = false
 
 # --- ITEM INPUT FILTERING ---
 func _is_item_valid_for_recipe(item_id: String) -> bool:

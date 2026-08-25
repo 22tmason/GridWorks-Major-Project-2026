@@ -113,3 +113,6 @@ shape = SubResource("RectangleShape2D_20nwo")
 
 [node name="GlowSprite" type="Sprite2D" parent="." unique_id=1321602352]
 texture = ExtResource("12_7kohr")
+
+[node name="RecipeIcon" type="Sprite2D" parent="." unique_id=249658470]
+position = Vector2(64, 64)

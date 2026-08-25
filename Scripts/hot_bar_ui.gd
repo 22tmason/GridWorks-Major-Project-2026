@@ -56,6 +56,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 func _select_hotbar_item(item_id: String) -> void:
+	if not ProgressionManager.is_unlocked(item_id):
+		return
+		
 	var item_data = InventoryManager.item_database.get(item_id)
 	if not item_data or not item_data.has("scene"):
 		return
