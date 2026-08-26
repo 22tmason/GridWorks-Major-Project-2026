@@ -4,6 +4,12 @@ signal start_tutorial_selected
 signal skip_tutorial_selected
 
 func _ready() -> void:
+	# FIX 1: If we are loading a saved game, destroy the tutorial IMMEDIATELY 
+	# so it doesn't accidentally pause the game in the background!
+	if SaveManager.pending_load:
+		queue_free()
+		return
+
 	# 1. CRITICAL: Allow UI input processing while the world is paused
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().paused = true
@@ -16,12 +22,16 @@ func _apply_ui_styling() -> void:
 	# Set a dark overlay background
 	var overlay = get_node_or_null("Overlay")
 	if overlay and overlay is ColorRect:
-		overlay.color = Color(0, 0, 0, 0.75) # Semi-transparent black tint
+		overlay.color = Color(0, 0, 0, 0.75) 
+		# FIX 2: Ensure the dark background doesn't act as an invisible shield blocking clicks
+		overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE 
 	
 	# Give the main popup panel a solid minimum size
 	var panel = _find_child_by_type(self, "PanelContainer")
 	if panel:
 		panel.custom_minimum_size = Vector2(620, 380)
+		# FIX 3: Force the actual UI panel (and its buttons) to bypass the pause state!
+		panel.process_mode = Node.PROCESS_MODE_ALWAYS 
 	
 	# Configure Title Label
 	var title = _find_child_by_name(self, "TitleLabel") as Label

@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dgmic6whwlboe" path="res://GridWorks Major Project 2026/Scenes/coal_ore.tscn" id="4_d5d4j"]
 [ext_resource type="Texture2D" uid="uid://ucjoajgqjl5m" path="res://GridWorks Major Project 2026/Assets/drill_mk2_base.png" id="4_lm4vy"]
 [ext_resource type="Texture2D" uid="uid://ccklgagk0dyu3" path="res://GridWorks Major Project 2026/Assets/drill_mk2_base-2.png.png" id="5_lm4vy"]
-[ext_resource type="Script" uid="uid://cxat3bqy5gsau" path="res://GridWorks Major Project 2026/StatusIcon.gd" id="6_4x074"]
+[ext_resource type="Script" uid="uid://cxat3bqy5gsau" path="res://GridWorks Major Project 2026/Scripts/StatusIcon.gd" id="6_4x074"]
 [ext_resource type="PackedScene" uid="uid://db1ogiqissscn" path="res://GridWorks Major Project 2026/Scenes/StatusIcon.tscn" id="7_doey0"]
 [ext_resource type="Texture2D" uid="uid://bminhr48vax8v" path="res://GridWorks Major Project 2026/Assets/Icons/Icon No Input.png" id="8_8w0xs"]
 [ext_resource type="Texture2D" uid="uid://cyexb4508yowg" path="res://GridWorks Major Project 2026/Assets/Icons/Icon Output Full.png" id="9_8fx4a"]

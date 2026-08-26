@@ -35,6 +35,11 @@ func _ready() -> void:
 		BuildManager.current_preview = self
 		modulate.a = 0.5
 	else:
+		# FIX: When reloading from a save, the drill must re-check the ground beneath it!
+		if active_resource == null:
+			var current_grid_cell = GridManager.world_to_grid(global_position)
+			active_resource = _find_resource_under_drill(get_occupied_cells(current_grid_cell))
+			
 		_start_mining()
 
 func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:

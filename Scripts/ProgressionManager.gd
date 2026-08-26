@@ -7,23 +7,29 @@ var current_phase: int = 0
 # Maps Space Elevator phases to item/building IDs unlocked at each milestone
 var phase_unlocks: Dictionary = {
 	0: [
-		"straight_belt_mk1", "corner_belt_right_mk1", "corner_belt_left_mk1", "underground_belt_mk1", "process_mk1", "manufacturer_mk1",
+		"straight_belt_mk1", "corner_belt_right_mk1", "corner_belt_left_mk1", "underground_belt_mk1",
 		"inserter", "drill_mk1", "furnace_mk1",
-		"coal_ore", "iron_ore", "copper_ore", "iron_plate"
+		"coal_ore", "iron_ore", "copper_ore", "iron_plate", "copper_plate", "steel_plate",
+		"iron_gear", "copper_wire", "iron_rod", "plastic_bar", "electronic_circuit",
+		"engine", "advanced_circuit", "low_density_structure", "battery",
+		"electric_motor", "processing_circuit", "flying_robot_frame", "rocket_control_unit"
 	],
 	1: [
-		"processor_mk1",
-		"copper_wire", "iron_gear", "iron_rod"
+		"processor_mk1"
 	],
 	2: [
-		"manufacturer_mk1", "long_inserter",
-		"electronic_circuit", "engine",
+		"manufacturer_mk1", "long_inserter"
 	],
 	3: [
+		"straight_belt_mk2", "corner_belt_right_mk2", "corner_belt_left_mk2", "underground_belt_mk2",
+		"fast_inserter", "drill_mk2", "furnace_mk2"
+	],
+	4: [
+		"processor_mk2", "manufacturer_mk2"
+	],
+	5: [
 		"straight_belt_mk3", "corner_belt_right_mk3", "corner_belt_left_mk3", "underground_belt_mk3",
-		"drill_mk3", "furnace_mk3", "processor_mk3", "manufacturer_mk2", "manufacturer_mk3",
-		"advanced_circuit", "processing_circuit", "battery", "electric_motor", 
-		"low_density_structure", "flying_robot_frame", "rocket_control_unit"
+		"inserter_mk3", "drill_mk3", "furnace_mk3", "processor_mk3", "manufacturer_mk3"
 	]
 }
 

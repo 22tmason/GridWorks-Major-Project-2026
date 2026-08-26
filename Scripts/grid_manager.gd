@@ -17,30 +17,41 @@ var inserter_scene = preload("res://GridWorks Major Project 2026/Scenes/inserter
 # Tracks cell quantities: { Vector2i(x,y): {"type": "iron_ore", "amount": 500} }
 var resource_layer: TileMapLayer = null
 
-func register_resource_node(cell: Vector2i, type_name: String, amount: int = 500) -> void:
-	resource_data[cell] = {
-		"type": type_name,
-		"amount": amount
-	}
 
 func get_resource_at_cell(cell: Vector2i) -> String:
 	if resource_data.has(cell) and resource_data[cell]["amount"] > 0:
 		return resource_data[cell]["type"]
 	return ""
 
-# Consumes 1 unit of ore from the first available cell under the drill
+# Add this near your other variables at the top of grid_manager.gd
+var depleted_resources: Dictionary = {}
+
+func register_resource_node(cell: Vector2i, type_name: String, amount: int = 500) -> void:
+	# 1. Don't spawn it if the player already mined it completely
+	if depleted_resources.has(cell): 
+		return
+	# 2. Don't overwrite the amount if we just loaded partial amounts from a save file
+	if resource_data.has(cell): 
+		return 
+
+	resource_data[cell] = {
+		"type": type_name,
+		"amount": amount
+	}
+
 func consume_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
 	for cell in occupied_cells:
 		if resource_data.has(cell) and resource_data[cell]["amount"] > 0:
 			resource_data[cell]["amount"] -= 1
 			
-			# Deplete node when empty
 			if resource_data[cell]["amount"] <= 0:
 				resource_data.erase(cell)
+				# NEW: Track that this cell is permanently dead
+				depleted_resources[cell] = true 
 				if resource_layer:
-					resource_layer.erase_cell(cell) # Erases ore graphic to reveal sand background
+					resource_layer.erase_cell(cell) 
 					
-			return get_resource_at_cell(cell) # Returns remaining type or "" if last unit
+			return get_resource_at_cell(cell) 
 	return ""
 func world_to_grid(world_pos: Vector2) -> Vector2i:
 	var grid_x = floor(world_pos.x / CELL_SIZE.x)

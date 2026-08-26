@@ -7,6 +7,10 @@ var resource_tooltip: Label
 
 func _ready() -> void:
 	_setup_resource_tooltip()
+	
+	if SaveManager.pending_load:
+		SaveManager.pending_load = false
+		SaveManager.call_deferred("load_game")
 
 func _setup_resource_tooltip() -> void:
 	var canvas = CanvasLayer.new()
@@ -42,7 +46,6 @@ func _process(_delta: float) -> void:
 		if BuildManager.current_preview == null:
 			attempt_item_pickup()
 
-	# --- FIX: Don't continuously demolish if holding SHIFT ---
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) and not Input.is_key_pressed(KEY_SHIFT):
 		attempt_demolition()
 
@@ -56,7 +59,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			attempt_item_pickup()
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		# --- FIX: Don't click-demolish if holding SHIFT ---
 		if not Input.is_key_pressed(KEY_SHIFT):
 			attempt_demolition()
 		
@@ -85,7 +87,6 @@ func attempt_item_pickup() -> void:
 					return
 
 func _update_resource_hover_tooltip() -> void:
-	# Hide tooltip if building preview is active or inventory is open
 	if BuildManager.current_preview != null or $InventoryUI.visible:
 		resource_tooltip.visible = false
 		return
@@ -110,22 +111,24 @@ func attempt_demolition() -> void:
 	
 	if GridManager.grid_data.has(grid_cell):
 		var building_node = GridManager.grid_data[grid_cell]
+		
+		# --- THE FIX: Make the Space Elevator indestructible! ---
+		if "phase_requirements" in building_node:
+			return
+			
 		var item_to_refund = ""
 		if "building_item_id" in building_node:
 			item_to_refund = building_node.building_item_id
 			
-		# --- 1. Sweep for loose items sitting on this building's tiles ---
 		var all_loose_items = get_tree().get_nodes_in_group("items")
 		for item in all_loose_items:
 			var item_cell = GridManager.world_to_grid(item.global_position)
 			
-			# Check if the item is in a cell occupied by this specific building
 			if GridManager.grid_data.has(item_cell) and GridManager.grid_data[item_cell] == building_node:
 				if "item_id" in item:
 					if InventoryManager.add_item(item.item_id, 1):
 						item.queue_free()
 			
-		# --- 2. Recover items trapped inside machine input buffers ---
 		if "input_buffer" in building_node and building_node.input_buffer is Array:
 			for buffered_item in building_node.input_buffer:
 				InventoryManager.add_item(buffered_item, 1)
@@ -134,10 +137,10 @@ func attempt_demolition() -> void:
 			for buffered_item in building_node.input_inventory.keys():
 				InventoryManager.add_item(buffered_item, building_node.input_inventory[buffered_item])
 
-		# --- 3. Finalize Demolition ---
 		GridManager.remove_item(grid_cell)
 		if item_to_refund != "":
 			InventoryManager.add_item(item_to_refund, 1)
+
 func spawn_item() -> void:
 	var mouse_pos = get_global_mouse_position()
 	var current_grid_cell = GridManager.world_to_grid(mouse_pos)

@@ -32,16 +32,16 @@ func _ready() -> void:
 	call_deferred("_register_fixed_footprint")
 
 func _register_fixed_footprint() -> void:
-	var top_left_cell = GridManager.world_to_grid(global_position)
-	var occupied_cells = get_occupied_cells(top_left_cell)
+	var center_cell = GridManager.world_to_grid(global_position)
+	var occupied_cells = get_occupied_cells(center_cell)
 	GridManager.place_item(occupied_cells, self)
 
-# --- 5x5 MULTI-TILE GRID CALCULATION ---
-func get_occupied_cells(top_left_cell: Vector2i) -> Array[Vector2i]:
+# --- 5x5 MULTI-TILE GRID CALCULATION (PERFECTLY CENTERED) ---
+func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
-	for x in range(5):
-		for y in range(5):
-			cells.append(top_left_cell + Vector2i(x, y))
+	for x in range(-2, 3):
+		for y in range(-2, 3):
+			cells.append(center_cell + Vector2i(x, y))
 	return cells
 
 func _init_phase_tracker() -> void:

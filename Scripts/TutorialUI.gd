@@ -13,6 +13,15 @@ func _ready() -> void:
 	if get_node_or_null("/root/TutorialManager"):
 		TutorialManager.step_changed.connect(_on_step_changed)
 		TutorialManager.tutorial_finished.connect(_on_tutorial_finished)
+	if SaveManager.pending_load:
+		# FIX: Hide the tutorial instantly if we are loading a save!
+		# (Change "$TutorialUI" to exactly match what your tutorial node is named)
+		var tutorial = get_node_or_null("TutorialUI") 
+		if tutorial:
+			tutorial.visible = false
+			
+		SaveManager.pending_load = false
+		SaveManager.call_deferred("load_game")
 
 func _build_ui() -> void:
 	# 1. INCREASED WIDTTH AND HEIGHT OF THE BOX

@@ -125,6 +125,11 @@ func spawn_base_terrain(cell: Vector2i) -> void:
 	ground_layer.set_cell(cell, chosen_source_id, Vector2i(0, 0))
 
 func spawn_resource_node(cell: Vector2i, resource_type: String) -> void:
+	# FIX: Do not visually spawn the ore block if the player already mined it all!
+	if GridManager.depleted_resources.has(cell):
+		spawn_base_terrain(cell)
+		return
+		
 	var pseudo_random_index = abs(hash(cell)) % ground_sources.size()
 	var chosen_ground_id = ground_sources[pseudo_random_index]
 	ground_layer.set_cell(cell, chosen_ground_id, Vector2i(0, 0)) 

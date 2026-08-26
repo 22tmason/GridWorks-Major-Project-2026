@@ -20,6 +20,7 @@ func _ready() -> void:
 	sync_animation_with_existing_belts()
 
 # Scans the grid for an existing belt and copies its animation frame
+# Scans the grid for an existing belt and copies its animation frame
 func sync_animation_with_existing_belts() -> void:
 	var my_sprite = get_node_or_null("AnimatedSprite2D")
 	if my_sprite == null:
@@ -29,16 +30,17 @@ func sync_animation_with_existing_belts() -> void:
 	for cell in GridManager.grid_data:
 		var building = GridManager.grid_data[cell]
 		
-		# Check if the building we found is also a belt
-		if "building_item_id" in building and building.building_item_id == building_item_id:
-			var other_sprite = building.get_node_or_null("AnimatedSprite2D")
-			
-			if other_sprite != null:
-				# Copy the exact frame and progress of the older belt
-				my_sprite.set_frame_and_progress(other_sprite.frame, other_sprite.frame_progress)
+		# THE FIX: Ensure the building is actually alive and not in the process of being deleted!
+		if is_instance_valid(building) and not building.is_queued_for_deletion():
+			if "building_item_id" in building and building.building_item_id == building_item_id:
+				var other_sprite = building.get_node_or_null("AnimatedSprite2D")
 				
-				# We only need to sync with ONE belt, so we can stop looking!
-				return
+				if other_sprite != null:
+					# Copy the exact frame and progress of the older belt
+					my_sprite.set_frame_and_progress(other_sprite.frame, other_sprite.frame_progress)
+					
+					# We only need to sync with ONE belt, so we can stop looking!
+					return
 
 func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
 	return [center_cell]

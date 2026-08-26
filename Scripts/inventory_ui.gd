@@ -84,10 +84,10 @@ func _build_tab_ui(tab_node: Control, subcategories: Dictionary) -> void:
 		var header_label = Label.new()
 		header_label.text = "  " + subcat.to_upper() + "  "
 		header_label.add_theme_font_size_override("font_size", 18) 
-		header_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+		header_label.add_theme_color_override("font_color", Color("b3b3b3ff"))
 		
 		var style = StyleBoxFlat.new()
-		style.bg_color = Color(0.15, 0.15, 0.15, 1)
+		style.bg_color = Color("262626ff")
 		header_label.add_theme_stylebox_override("normal", style)
 		
 		header_container.add_child(header_label)
