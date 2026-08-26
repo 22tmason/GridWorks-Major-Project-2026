@@ -17,7 +17,6 @@ var inserter_scene = preload("res://GridWorks Major Project 2026/Scenes/inserter
 # Tracks cell quantities: { Vector2i(x,y): {"type": "iron_ore", "amount": 500} }
 var resource_layer: TileMapLayer = null
 
-
 func get_resource_at_cell(cell: Vector2i) -> String:
 	if resource_data.has(cell) and resource_data[cell]["amount"] > 0:
 		return resource_data[cell]["type"]
@@ -39,6 +38,7 @@ func register_resource_node(cell: Vector2i, type_name: String, amount: int = 500
 		"amount": amount
 	}
 
+# Consumes 1 unit of ore from the first available cell under the drill
 func consume_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
 	for cell in occupied_cells:
 		if resource_data.has(cell) and resource_data[cell]["amount"] > 0:
@@ -52,6 +52,13 @@ func consume_resource_under_drill(occupied_cells: Array[Vector2i]) -> String:
 					resource_layer.erase_cell(cell) 
 					
 			return get_resource_at_cell(cell) 
+			# Deplete node when empty
+			if resource_data[cell]["amount"] <= 0:
+				resource_data.erase(cell)
+				if resource_layer:
+					resource_layer.erase_cell(cell) # Erases ore graphic to reveal sand background
+					
+			return get_resource_at_cell(cell) # Returns remaining type or "" if last unit
 	return ""
 func world_to_grid(world_pos: Vector2) -> Vector2i:
 	var grid_x = floor(world_pos.x / CELL_SIZE.x)
