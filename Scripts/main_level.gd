@@ -87,7 +87,6 @@ func attempt_item_pickup() -> void:
 					return
 
 func _update_resource_hover_tooltip() -> void:
-	# Hide tooltip if building preview is active or inventory is open
 	if BuildManager.current_preview != null or $InventoryUI.visible:
 		resource_tooltip.visible = false
 		return

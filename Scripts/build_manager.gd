@@ -64,7 +64,6 @@ func change_building(new_scene: PackedScene, item_id: String = "") -> void:
 			parent.add_child(new_preview)
 			current_preview = new_preview
 	else:
-		# If no preview exists, instantiate a new building preview into the scene
 		var main_scene = get_tree().current_scene
 		if main_scene and selected_scene:
 			var new_preview = selected_scene.instantiate()

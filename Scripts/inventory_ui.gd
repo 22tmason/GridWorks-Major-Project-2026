@@ -23,14 +23,12 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
-		# Press Q to cancel building preview mode
 		if event.keycode == KEY_Q:
 			if BuildManager.current_preview != null:
 				BuildManager.cancel_preview()
 				get_viewport().set_input_as_handled()
 				return
 		
-		# Press E to toggle inventory UI
 		if event.keycode == KEY_E:
 			visible = not visible
 			if visible:
