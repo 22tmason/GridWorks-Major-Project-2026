@@ -31,12 +31,14 @@ var manufacturer_mk3_scene = load("res://GridWorks Major Project 2026/Scenes/man
 
 var selected_scene: PackedScene = straight_belt_mk1_scene
 var current_preview: Node2D = null
+var current_item_id: String = "" # --- NEW: Track what is in the player's hand ---
 
 func change_building(new_scene: PackedScene, item_id: String = "") -> void:
 	if item_id != "" and not ProgressionManager.is_unlocked(item_id):
 		return
 
 	selected_scene = new_scene
+	current_item_id = item_id # --- NEW: Save the item ID ---
 	
 	if current_preview != null and is_instance_valid(current_preview):
 		var preview_is_placed = false
@@ -80,3 +82,4 @@ func cancel_preview() -> void:
 			current_preview.queue_free()
 			
 	current_preview = null
+	current_item_id = "" # --- NEW: Clear the ID when cancelled ---

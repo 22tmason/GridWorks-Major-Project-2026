@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dvuuenn74mnx0"]
+
+[ext_resource type="Script" uid="uid://lrwm0t0ih2le" path="res://GridWorks Major Project 2026/Scripts/waypoint_ui.gd" id="1_e1hiu"]
+
+[node name="WaypointUi" type="CanvasLayer" unique_id=1132716818]
+layer = 5
+script = ExtResource("1_e1hiu")
+
+[node name="Arrow" type="Polygon2D" parent="." unique_id=1054088790]
+color = Color(0.9019608, 0.49411765, 0.13333334, 1)
+polygon = PackedVector2Array(20, 0, -15, -15, -5, 0, -15, 15)

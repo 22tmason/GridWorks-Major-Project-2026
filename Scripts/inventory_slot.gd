@@ -85,10 +85,14 @@ func _gui_input(event: InputEvent) -> void:
 			
 		if is_crafting_button:
 			var craft_amount = 0
+			
+			# --- NEW: Multiply the clicks by the global slider value! ---
+			var base_batch = InventoryManager.craft_multiplier
+			
 			if event.button_index == MOUSE_BUTTON_LEFT:
-				craft_amount = 1
+				craft_amount = base_batch # Left click crafts exact slider amount
 			elif event.button_index == MOUSE_BUTTON_RIGHT:
-				craft_amount = 5
+				craft_amount = base_batch * 5 # Right click crafts 5x the slider amount for massive bulk
 				
 			if craft_amount > 0:
 				InventoryManager.add_item(current_item_id, craft_amount)

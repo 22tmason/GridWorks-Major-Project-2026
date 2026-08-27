@@ -9,6 +9,11 @@ extends Node2D
 
 @onready var camera: Camera2D = $Camera2D
 
+# --- Tag the player so the compass can securely find it ---
+func _ready() -> void:
+	add_to_group("player")
+
+
 func _process(delta: float) -> void:
 	# 1. Calculate WASD movement vector
 	var direction = Vector2.ZERO

@@ -11,6 +11,9 @@ extends CanvasLayer
 @onready var intermediates_tab: VBoxContainer = $MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer/Intermediates
 @onready var tab_container: TabContainer = $MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/TabContainer
 
+@onready var craft_slider: HSlider = $MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/SliderContainer/CraftSlider
+@onready var slider_label: Label = $MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/SliderContainer/SliderLabel
+
 func _ready() -> void:
 	InventoryManager.inventory_updated.connect(populate_ui_views)
 	build_static_structure()
@@ -19,7 +22,18 @@ func _ready() -> void:
 	if tab_container:
 		tab_container.tab_changed.connect(_on_tab_changed)
 		
+	# --- NEW: Hook up the slider! ---
+	if craft_slider:
+		craft_slider.value_changed.connect(_on_slider_changed)
+		_on_slider_changed(craft_slider.value) # Force an initial update
+		
 	visible = false
+
+# --- NEW: Updates the global value and UI label ---
+func _on_slider_changed(value: float) -> void:
+	InventoryManager.craft_multiplier = int(value)
+	if slider_label:
+		slider_label.text = "Batch Size: " + str(int(value))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
