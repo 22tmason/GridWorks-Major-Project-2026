@@ -87,28 +87,10 @@ func attempt_item_pickup() -> void:
 					return
 
 func _update_resource_hover_tooltip() -> void:
-	# Hide tooltip if inventory is open
-	if $InventoryUI.visible:
+	if BuildManager.current_preview != null or $InventoryUI.visible:
 		resource_tooltip.visible = false
 		return
 
-	# --- NEW: ACTION RECOGNITION (Quantity in Hand) ---
-	if BuildManager.current_preview != null and BuildManager.current_item_id != "":
-		var count = InventoryManager.get_item_count(BuildManager.current_item_id)
-		var item_name = InventoryManager.item_database[BuildManager.current_item_id]["name"]
-		
-		resource_tooltip.text = "Placing: %s\nIn Inventory: %d" % [item_name, count]
-		resource_tooltip.global_position = get_viewport().get_mouse_position() + Vector2(16, 16)
-		resource_tooltip.visible = true
-		
-		# Visual warning if out of stock
-		if count <= 0:
-			resource_tooltip.add_theme_color_override("font_color", Color(1, 0.3, 0.3, 1.0))
-		else:
-			resource_tooltip.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-		return
-
-	# Fallback to normal resource scanning if not holding a building
 	var mouse_pos = get_global_mouse_position()
 	var grid_cell = GridManager.world_to_grid(mouse_pos)
 
@@ -119,7 +101,6 @@ func _update_resource_hover_tooltip() -> void:
 			resource_tooltip.text = "%s Node\nQuantity: %d" % [res_type, res_info["amount"]]
 			resource_tooltip.global_position = get_viewport().get_mouse_position() + Vector2(16, 16)
 			resource_tooltip.visible = true
-			resource_tooltip.add_theme_color_override("font_color", Color(1, 1, 1, 1)) # Reset color
 			return
 
 	resource_tooltip.visible = false

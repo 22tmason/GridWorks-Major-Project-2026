@@ -13,9 +13,6 @@ var hotbar_items: Array[String] = [
 # Tracks what item the player's mouse is currently hovering over
 var hovered_item_id: String = ""
 
-# --- NEW: Tracks the player's custom batch crafting amount ---
-var craft_multiplier: int = 1
-
 # Function to bind a new item to a slot
 func set_hotbar_item(index: int, item_id: String) -> void:
 	if index >= 0 and index < 9:

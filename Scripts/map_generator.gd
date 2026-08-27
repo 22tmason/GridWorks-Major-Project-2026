@@ -7,26 +7,35 @@ extends Node2D
 @onready var ground_layer: TileMapLayer = $GroundLayer
 @onready var resource_layer: TileMapLayer = $ResourceLayer
 
-# --- BIOME SETTINGS ---
-# You will need to change these numbers to match the actual Source IDs in your TileSet!
-var biome_1_sources: Array[int] = [0, 1, 2, 3, 4, 5] # e.g., Sandy Biome variations
-var biome_2_sources: Array[int] = [6, 7, 8]    # e.g., Rocky/Gravel Biome variations
-var biome_3_sources: Array[int] = [9, 10, 11]    # e.g., Dark Dirt Biome variations
+@export_group("Iron Patch Tuning")
+@export var iron_min_threshold: float = 0.55
+@export var iron_core_threshold: float = 0.58
 
-# --- ORE TUNING ---
-@export var iron_threshold: float = 0.55
-@export var copper_threshold: float = -0.55 # Checked as less than this value
-@export var coal_threshold: float = 0.55
+@export_group("Copper Patch Tuning")
+@export var copper_min_threshold: float = 0.55
+@export var copper_core_threshold: float = 0.58
 
-# Change these to match your new transparent ore Source IDs
-var iron_sources: Array[int] = [7, 9, 10] 
-var copper_sources: Array[int] = [4, 5]
-var coal_sources: Array[int] = [0, 1, 2]
+# --- NEW: COAL PATCH TUNING ---
+@export_group("Coal Patch Tuning")
+@export var coal_min_threshold: float = 0.55
+@export var coal_core_threshold: float = 0.58
+
+var ground_sources: Array[int] = [0, 1, 2]
+
+var iron_sources: Array[int] = [3, 4, 5]
+var iron_edge_source: int = 6
+
+var copper_sources: Array[int] = [7, 9]
+var copper_edge_source: int = 10
+
+# --- NEW: COAL SOURCE IDs ---
+var coal_sources: Array[int] = [1, 2, 8]
+var coal_edge_source: int = 0
 
 # --- NOISE SETTINGS ---
 var terrain_noise: FastNoiseLite
 var resource_noise: FastNoiseLite
-var coal_noise: FastNoiseLite
+var coal_noise: FastNoiseLite # Dedicated noise layer for coal patches
 
 var generated_chunks: Dictionary = {}
 
@@ -37,19 +46,17 @@ func _ready() -> void:
 	update_chunks(Vector2.ZERO)
 
 func _setup_noise() -> void:
-	# Controls the sprawling Biome regions
 	terrain_noise = FastNoiseLite.new()
 	terrain_noise.seed = randi()
 	terrain_noise.noise_type = FastNoiseLite.TYPE_PERLIN
-	terrain_noise.frequency = 0.02 # Lowered slightly for larger, more natural biomes
+	terrain_noise.frequency = 0.05
 	
-	# Controls the iron and copper patches
 	resource_noise = FastNoiseLite.new()
 	resource_noise.seed = randi() 
 	resource_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	resource_noise.frequency = 0.005
 
-	# Controls the coal patches with a distinct seed
+	# Setup coal noise with a distinct seed
 	coal_noise = FastNoiseLite.new()
 	coal_noise.seed = randi() + 999
 	coal_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
@@ -84,61 +91,74 @@ func generate_chunk(chunk_pos: Vector2i) -> void:
 	for x in range(chunk_size):
 		for y in range(chunk_size):
 			var current_cell = Vector2i(start_x + x, start_y + y)
-			
 			var r_val = resource_noise.get_noise_2d(current_cell.x, current_cell.y)
 			var c_val = coal_noise.get_noise_2d(current_cell.x, current_cell.y)
 			
-			if r_val > iron_threshold:
-				spawn_resource_node(current_cell, "iron_ore")
-			elif r_val < copper_threshold:
-				spawn_resource_node(current_cell, "copper_ore")
-			elif c_val > coal_threshold:
-				spawn_resource_node(current_cell, "coal_ore")
+			# --- IRON PATCHES ---
+			if r_val > iron_min_threshold:
+				if r_val < iron_core_threshold:
+					spawn_resource_node(current_cell, "iron_ore_edge")
+				else:
+					spawn_resource_node(current_cell, "iron_ore")
+					
+			# --- COPPER PATCHES ---
+			elif r_val < -copper_min_threshold:
+				if r_val > -copper_core_threshold:
+					spawn_resource_node(current_cell, "copper_ore_edge")
+				else:
+					spawn_resource_node(current_cell, "copper_ore")
+					
+			# --- COAL PATCHES ---
+			elif c_val > coal_min_threshold:
+				if c_val < coal_core_threshold:
+					spawn_resource_node(current_cell, "coal_ore_edge")
+				else:
+					spawn_resource_node(current_cell, "coal_ore")
+					
+			# --- DESERT BACKGROUND ---
 			else:
 				spawn_base_terrain(current_cell)
 
 func spawn_base_terrain(cell: Vector2i) -> void:
-	# 1. Use the terrain noise to determine the biome region
-	var t_val = terrain_noise.get_noise_2d(cell.x, cell.y)
-	var chosen_source_id: int
-	
-	if t_val < -0.15:
-		# Biome 1
-		var idx = abs(hash(cell)) % biome_1_sources.size()
-		chosen_source_id = biome_1_sources[idx]
-	elif t_val > 0.15:
-		# Biome 3
-		var idx = abs(hash(cell)) % biome_3_sources.size()
-		chosen_source_id = biome_3_sources[idx]
-	else:
-		# Biome 2 (The transition space in the middle)
-		var idx = abs(hash(cell)) % biome_2_sources.size()
-		chosen_source_id = biome_2_sources[idx]
-		
-	# 2. Draw the background tile
+	var pseudo_random_index = abs(hash(cell)) % ground_sources.size()
+	var chosen_source_id = ground_sources[pseudo_random_index]
 	ground_layer.set_cell(cell, chosen_source_id, Vector2i(0, 0))
 
 func spawn_resource_node(cell: Vector2i, resource_type: String) -> void:
+	# FIX: Do not visually spawn the ore block if the player already mined it all!
 	if GridManager.depleted_resources.has(cell):
 		spawn_base_terrain(cell)
 		return
 		
-	# --- THE FIX: Always draw the biome ground underneath the transparent ore! ---
-	spawn_base_terrain(cell)
+	var pseudo_random_index = abs(hash(cell)) % ground_sources.size()
+	var chosen_ground_id = ground_sources[pseudo_random_index]
+	ground_layer.set_cell(cell, chosen_ground_id, Vector2i(0, 0)) 
 	
-	var initial_amount = randi_range(120, 180)
+	var initial_amount = 50 # Default edge amount
 	
 	match resource_type:
 		"iron_ore":
+			initial_amount = randi_range(120, 180)# Core density
 			var iron_index = abs(hash(cell) + 7) % iron_sources.size()
 			resource_layer.set_cell(cell, iron_sources[iron_index], Vector2i(0, 0))
+		"iron_ore_edge":
+			initial_amount = randi_range(40, 60)
+			resource_layer.set_cell(cell, iron_edge_source, Vector2i(0, 0))
 			
 		"copper_ore":
+			initial_amount = randi_range(120, 180)
 			var copper_index = abs(hash(cell) + 13) % copper_sources.size()
 			resource_layer.set_cell(cell, copper_sources[copper_index], Vector2i(0, 0))
+		"copper_ore_edge":
+			initial_amount = randi_range(40, 60)
+			resource_layer.set_cell(cell, copper_edge_source, Vector2i(0, 0))
 
 		"coal_ore":
+			initial_amount = randi_range(120, 180)
 			var coal_index = abs(hash(cell) + 21) % coal_sources.size()
 			resource_layer.set_cell(cell, coal_sources[coal_index], Vector2i(0, 0))
+		"coal_ore_edge":
+			initial_amount = randi_range(40, 60)
+			resource_layer.set_cell(cell, coal_edge_source, Vector2i(0, 0))
 
 	GridManager.register_resource_node(cell, resource_type, initial_amount)

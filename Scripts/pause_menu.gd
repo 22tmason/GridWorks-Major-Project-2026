@@ -7,10 +7,8 @@ extends CanvasLayer
 @onready var save_button: Button = $ColorRect/PanelContainer/VBoxContainer/SaveButton 
 @onready var menu_button: Button = $ColorRect/PanelContainer/VBoxContainer/MenuButton
 
-# --- NEW: Notification Label ---
-var save_notification: Label
-
 func _ready() -> void:
+	# This hides the invisible blocking rectangle!
 	visible = false
 	
 	_apply_factorio_theme()
@@ -18,15 +16,6 @@ func _ready() -> void:
 	resume_button.pressed.connect(_on_resume_pressed)
 	save_button.pressed.connect(_on_save_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
-	
-	# --- NEW: Build the notification label dynamically ---
-	save_notification = Label.new()
-	save_notification.text = "Game Saved!"
-	save_notification.add_theme_font_size_override("font_size", 16)
-	save_notification.add_theme_color_override("font_color", Color(0.45, 0.75, 0.45, 1.0))
-	save_notification.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	save_notification.modulate.a = 0.0 # Start invisible
-	vbox.add_child(save_notification)
 
 func _apply_factorio_theme() -> void:
 	var panel_style = StyleBoxFlat.new()
@@ -89,9 +78,6 @@ func toggle_pause() -> void:
 	visible = new_pause_state
 	
 	if new_pause_state:
-		# Hide the notification if it was left visible
-		save_notification.modulate.a = 0.0
-		
 		var inv_ui = get_tree().current_scene.get_node_or_null("InventoryUI")
 		if inv_ui: inv_ui.visible = false
 		
@@ -103,11 +89,6 @@ func _on_resume_pressed() -> void:
 	
 func _on_save_pressed() -> void:
 	SaveManager.save_game()
-	
-	# --- NEW: Play a fade-out animation for action recognition! ---
-	save_notification.modulate.a = 1.0
-	var tween = create_tween()
-	tween.tween_property(save_notification, "modulate:a", 0.0, 1.5).set_delay(0.5)
 
 func _on_menu_pressed() -> void:
 	get_tree().paused = false 
