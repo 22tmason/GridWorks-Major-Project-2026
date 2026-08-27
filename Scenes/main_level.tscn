@@ -2,28 +2,35 @@
 
 [ext_resource type="Script" uid="uid://bt8foho3wrtv0" path="res://GridWorks Major Project 2026/Scripts/main_level.gd" id="1_7vhcm"]
 [ext_resource type="Script" uid="uid://cvelvvrksgqcf" path="res://GridWorks Major Project 2026/Scripts/inventory_ui.gd" id="3_7ivtk"]
-[ext_resource type="Texture2D" uid="uid://dqpys0qi8ac4u" path="res://GridWorks Major Project 2026/Assets/SandyBackground1.png" id="5_bowd8"]
+[ext_resource type="Texture2D" uid="uid://d3svew8rlldg0" path="res://GridWorks Major Project 2026/Scripts/background_biege_tile_1.png" id="4_easix"]
+[ext_resource type="Texture2D" uid="uid://bem15tatu1c7x" path="res://GridWorks Major Project 2026/Scripts/background_biege_tile_2.png" id="5_grygw"]
 [ext_resource type="PackedScene" uid="uid://dumd22i5qussy" path="res://GridWorks Major Project 2026/Scenes/belt_mk1.tscn" id="6_bowd8"]
-[ext_resource type="Texture2D" uid="uid://ccwl8gb0to67d" path="res://GridWorks Major Project 2026/Assets/SandyBackground2.png" id="6_ee7x2"]
+[ext_resource type="Texture2D" uid="uid://cfjmg4j4bvfo5" path="res://GridWorks Major Project 2026/Scripts/background_black_tile_2.png" id="6_kfqtr"]
+[ext_resource type="Texture2D" uid="uid://ckm5t1ybty4st" path="res://GridWorks Major Project 2026/Scripts/background_biege_tile_3.png" id="6_r4u2r"]
 [ext_resource type="Script" uid="uid://b6cvxm58vmja5" path="res://GridWorks Major Project 2026/Scripts/map_generator.gd" id="6_xi6xi"]
-[ext_resource type="Texture2D" uid="uid://cr0du6533ud44" path="res://GridWorks Major Project 2026/Assets/SandyBackground3 (1).png" id="7_ewncr"]
-[ext_resource type="Texture2D" uid="uid://bq4jllfhta41a" path="res://GridWorks Major Project 2026/Assets/CopperNode3.png" id="8_hgqtv"]
-[ext_resource type="Texture2D" uid="uid://bh53fo1fwvajk" path="res://GridWorks Major Project 2026/Assets/CopperNodeBorder.png" id="8_ko61b"]
-[ext_resource type="Texture2D" uid="uid://bktgdrt5c4sgn" path="res://GridWorks Major Project 2026/Assets/CoalNodeBorder.png" id="8_r5041"]
-[ext_resource type="Texture2D" uid="uid://ddxal2eeot4ka" path="res://GridWorks Major Project 2026/Assets/IronNode3.png" id="8_rqca6"]
-[ext_resource type="Texture2D" uid="uid://bcvwvq1ablsk0" path="res://GridWorks Major Project 2026/Assets/IronNode2.png" id="9_geysq"]
-[ext_resource type="Texture2D" uid="uid://ceo37bei78qqu" path="res://GridWorks Major Project 2026/Assets/CoalNode1.png" id="9_grygw"]
-[ext_resource type="Texture2D" uid="uid://cdy4njvxvawjl" path="res://GridWorks Major Project 2026/Assets/IronNode1.png" id="10_rqca6"]
-[ext_resource type="Texture2D" uid="uid://d3jl22bhie7sa" path="res://GridWorks Major Project 2026/Assets/CoalNode2.png" id="11_r4u2r"]
-[ext_resource type="Texture2D" uid="uid://cawug1xpeb50f" path="res://GridWorks Major Project 2026/Assets/IronNodeBorder.png" id="11_rqca6"]
+[ext_resource type="Texture2D" uid="uid://drnuxcf64ytrr" path="res://GridWorks Major Project 2026/Scripts/coal_tile_1.png" id="7_1m6df"]
+[ext_resource type="Texture2D" uid="uid://dy3vk55f6gtn3" path="res://GridWorks Major Project 2026/Scripts/background_black_tile_3.png" id="7_1usig"]
+[ext_resource type="Texture2D" uid="uid://dbfneutya74be" path="res://GridWorks Major Project 2026/Scripts/background_biege_tile_4.png" id="7_u2v06"]
+[ext_resource type="Texture2D" uid="uid://nmxv2jgnr68p" path="res://GridWorks Major Project 2026/Scripts/coal_tile_2.png" id="8_m60s1"]
+[ext_resource type="Texture2D" uid="uid://clgxb3whwpije" path="res://GridWorks Major Project 2026/Scripts/background_biege_tile_5.png" id="8_o51cb"]
+[ext_resource type="Texture2D" uid="uid://csch8pv4nww7o" path="res://GridWorks Major Project 2026/Scripts/background_biege_tile_6.png" id="9_2yier"]
+[ext_resource type="Texture2D" uid="uid://cj6tgn7axsoxu" path="res://GridWorks Major Project 2026/Scripts/copper_ore_tile_3.png" id="9_r5041"]
+[ext_resource type="Texture2D" uid="uid://dyvsl61tup6m5" path="res://GridWorks Major Project 2026/Scripts/coal_tile_3.png" id="10_grygw"]
+[ext_resource type="Texture2D" uid="uid://bd18xwo8yhlo3" path="res://GridWorks Major Project 2026/Scripts/iron_ore_tile_1.png" id="11_r4u2r"]
+[ext_resource type="Texture2D" uid="uid://0cv56860e17m" path="res://GridWorks Major Project 2026/Scripts/background_grey_tile_1.png" id="12_7x6ql"]
 [ext_resource type="PackedScene" uid="uid://dqmsyuk4rqllk" path="res://GridWorks Major Project 2026/Scenes/player.tscn" id="12_geysq"]
-[ext_resource type="Texture2D" uid="uid://dcgqe14pcrftw" path="res://GridWorks Major Project 2026/Assets/CopperNode2.png" id="15_hgbet"]
+[ext_resource type="Texture2D" uid="uid://3dt7piptbffm" path="res://GridWorks Major Project 2026/Scripts/iron_ore_tile_2.png" id="12_u2v06"]
+[ext_resource type="Texture2D" uid="uid://bhtl0errcpq5w" path="res://GridWorks Major Project 2026/Scripts/background_grey_tile_2.png" id="13_j1g7e"]
+[ext_resource type="Texture2D" uid="uid://dadjevmmcxfak" path="res://GridWorks Major Project 2026/Scripts/copper_ore_tile_1.png" id="13_o51cb"]
+[ext_resource type="Texture2D" uid="uid://dokx8v3oiruwg" path="res://GridWorks Major Project 2026/Scripts/copper_ore_tile_2.png" id="14_2yier"]
+[ext_resource type="Texture2D" uid="uid://bp6pvp7h04wbj" path="res://GridWorks Major Project 2026/Scripts/background_grey_tile_3.png" id="14_w2nh7"]
+[ext_resource type="Texture2D" uid="uid://sqtifsmkeot7" path="res://GridWorks Major Project 2026/Scripts/background_black_tile_1.png" id="15_mkh2g"]
 [ext_resource type="PackedScene" uid="uid://bl046ghhbc0vi" path="res://GridWorks Major Project 2026/Scenes/OnboardingUI.tscn" id="17_hgqtv"]
-[ext_resource type="Texture2D" uid="uid://px1up2fgsyq1" path="res://GridWorks Major Project 2026/Assets/CoalNode3.png" id="17_u2v06"]
 [ext_resource type="PackedScene" uid="uid://blj0ll3d7y2vs" path="res://GridWorks Major Project 2026/Scenes/HotBarUI.tscn" id="18_e570s"]
 [ext_resource type="PackedScene" uid="uid://bv3e4d6kyfyjq" path="res://GridWorks Major Project 2026/Scenes/machineUI.tscn" id="19_hgbet"]
 [ext_resource type="PackedScene" uid="uid://btbltisdh3c0v" path="res://GridWorks Major Project 2026/Scenes/space_elevator.tscn" id="20_easix"]
 [ext_resource type="PackedScene" uid="uid://1ado7lxiux0w" path="res://GridWorks Major Project 2026/Scenes/pause_menu.tscn" id="24_r5041"]
+[ext_resource type="PackedScene" uid="uid://dvuuenn74mnx0" path="res://GridWorks Major Project 2026/Scenes/WaypointUI.tscn" id="25_grygw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ivtk"]
 content_margin_left = 12.0
@@ -46,94 +53,130 @@ border_width_bottom = 8
 border_color = Color(0.33333334, 0.33333334, 0.33333334, 1)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g0vbp"]
-texture = ExtResource("5_bowd8")
+texture = ExtResource("4_easix")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yv83i"]
-texture = ExtResource("6_ee7x2")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kfqtr"]
+texture = ExtResource("5_grygw")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rqca6"]
-texture = ExtResource("7_ewncr")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vxom4"]
+texture = ExtResource("6_kfqtr")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vbmov"]
+texture = ExtResource("7_1usig")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1usig"]
+texture = ExtResource("6_r4u2r")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7x6ql"]
+texture = ExtResource("7_u2v06")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j1g7e"]
+texture = ExtResource("8_o51cb")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w2nh7"]
+texture = ExtResource("9_2yier")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q60e8"]
+texture = ExtResource("12_7x6ql")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fp606"]
+texture = ExtResource("13_j1g7e")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1bvrk"]
+texture = ExtResource("14_w2nh7")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wvryt"]
+texture = ExtResource("15_mkh2g")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_jixft"]
 tile_size = Vector2i(64, 64)
 sources/0 = SubResource("TileSetAtlasSource_g0vbp")
-sources/1 = SubResource("TileSetAtlasSource_yv83i")
-sources/2 = SubResource("TileSetAtlasSource_rqca6")
+sources/1 = SubResource("TileSetAtlasSource_kfqtr")
+sources/2 = SubResource("TileSetAtlasSource_1usig")
+sources/3 = SubResource("TileSetAtlasSource_7x6ql")
+sources/4 = SubResource("TileSetAtlasSource_j1g7e")
+sources/5 = SubResource("TileSetAtlasSource_w2nh7")
+sources/6 = SubResource("TileSetAtlasSource_q60e8")
+sources/7 = SubResource("TileSetAtlasSource_fp606")
+sources/8 = SubResource("TileSetAtlasSource_1bvrk")
+sources/9 = SubResource("TileSetAtlasSource_wvryt")
+sources/10 = SubResource("TileSetAtlasSource_vxom4")
+sources/11 = SubResource("TileSetAtlasSource_vbmov")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o51cb"]
-texture = ExtResource("8_r5041")
+texture = ExtResource("7_1m6df")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2yier"]
-texture = ExtResource("9_grygw")
+texture = ExtResource("8_m60s1")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e570s"]
-texture = ExtResource("8_ko61b")
+texture = ExtResource("9_r5041")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vh8fa"]
-texture = ExtResource("11_r4u2r")
-texture_region_size = Vector2i(64, 64)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ivtk"]
-texture = ExtResource("8_rqca6")
+texture = ExtResource("10_grygw")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hgqtv"]
-texture = ExtResource("9_geysq")
+texture = ExtResource("11_r4u2r")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ko61b"]
-texture = ExtResource("10_rqca6")
-texture_region_size = Vector2i(64, 64)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u0kvv"]
-texture = ExtResource("11_rqca6")
+texture = ExtResource("12_u2v06")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_easix"]
-texture = ExtResource("8_hgqtv")
-texture_region_size = Vector2i(64, 64)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kfqtr"]
-texture = ExtResource("17_u2v06")
+texture = ExtResource("13_o51cb")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1m6df"]
-texture = ExtResource("15_hgbet")
+texture = ExtResource("14_2yier")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_ewncr"]
 tile_size = Vector2i(64, 64)
-sources/6 = SubResource("TileSetAtlasSource_u0kvv")
 sources/5 = SubResource("TileSetAtlasSource_ko61b")
 sources/4 = SubResource("TileSetAtlasSource_hgqtv")
-sources/3 = SubResource("TileSetAtlasSource_7ivtk")
 sources/9 = SubResource("TileSetAtlasSource_1m6df")
 sources/7 = SubResource("TileSetAtlasSource_easix")
 sources/10 = SubResource("TileSetAtlasSource_e570s")
 sources/0 = SubResource("TileSetAtlasSource_o51cb")
 sources/1 = SubResource("TileSetAtlasSource_2yier")
 sources/2 = SubResource("TileSetAtlasSource_vh8fa")
-sources/8 = SubResource("TileSetAtlasSource_kfqtr")
 
 [node name="MainLevel" type="Node2D" unique_id=1807510388]
 script = ExtResource("1_7vhcm")
@@ -188,6 +231,20 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Crafting Menu"
 
+[node name="SliderContainer" type="HBoxContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer" unique_id=1675051555]
+layout_mode = 2
+
+[node name="SliderLabel" type="Label" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/SliderContainer" unique_id=2134289400]
+layout_mode = 2
+text = "Batch Size: 1"
+
+[node name="CraftSlider" type="HSlider" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer/SliderContainer" unique_id=569604325]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 50.0
+value = 1.0
+
 [node name="TabContainer" type="TabContainer" parent="InventoryUI/MainPanel/HBoxContainer/RightCraftingSection/VBoxContainer" unique_id=1672753752]
 layout_mode = 2
 size_flags_vertical = 3
@@ -238,3 +295,5 @@ tile_set = SubResource("TileSet_ewncr")
 position = Vector2(352, 612)
 
 [node name="PauseMenu" parent="." unique_id=240073865 instance=ExtResource("24_r5041")]
+
+[node name="WaypointUi" parent="." unique_id=1132716818 instance=ExtResource("25_grygw")]

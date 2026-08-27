@@ -35,6 +35,11 @@ func save_game() -> void:
 	var processed_buildings = []
 	for cell in GridManager.grid_data:
 		var building = GridManager.grid_data[cell]
+		
+		# --- NEW: Safely ignore dead "ghost" buildings if they were recently demolished ---
+		if not is_instance_valid(building) or building.is_queued_for_deletion():
+			continue
+			
 		if building in processed_buildings: continue
 		processed_buildings.append(building)
 		

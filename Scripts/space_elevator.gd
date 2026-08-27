@@ -22,6 +22,8 @@ var current_deliveries: Dictionary = {}
 @onready var input_area: Area2D = $Area2D
 
 func _ready() -> void:
+	add_to_group("space_elevator") # --- NEW: Tag the elevator so the compass can find it ---
+	
 	input_area.area_entered.connect(_on_item_entered)
 	input_area.input_pickable = true
 	input_area.input_event.connect(_on_machine_clicked)

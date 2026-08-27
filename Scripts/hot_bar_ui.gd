@@ -63,13 +63,7 @@ func _select_hotbar_item(item_id: String) -> void:
 	if not item_data or not item_data.has("scene"):
 		return
 		
-	if BuildManager.current_preview and is_instance_valid(BuildManager.current_preview):
-		BuildManager.current_preview.queue_free()
-		
+	# --- FIX: Route hotbar selection through BuildManager so it remembers the Item ID! ---
 	var scene_path = item_data["scene"]
-	BuildManager.selected_scene = load(scene_path)
-	
-	var preview_instance = BuildManager.selected_scene.instantiate()
-	var main_level = get_tree().current_scene
-	if main_level:
-		main_level.add_child(preview_instance)
+	var loaded_scene = load(scene_path)
+	BuildManager.change_building(loaded_scene, item_id)
