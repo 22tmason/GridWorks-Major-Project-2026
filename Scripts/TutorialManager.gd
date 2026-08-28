@@ -23,7 +23,7 @@ var tutorial_steps: Array = [
 	{
 		"text": "Craft 5 Straight Belts from the Logistics tab.",
 		"type": "craft",
-		"target_item": "straight_belt",
+		"target_item": "straight_belt_mk1",
 		"required_amount": 5
 	},
 	{
@@ -34,9 +34,9 @@ var tutorial_steps: Array = [
 
 	# --- PHASE 2: BELTS & ROTATION ---
 	{
-		"text": "Place 3 Straight Belts on the ground. (Press 'R' to rotate, and right click to demolish the belt and have it refunded)",
+		"text": "Place 3 Straight Belts on the ground. (Press 'R' to rotate)",
 		"type": "placement",
-		"target_item": "straight_belt",
+		"target_item": "straight_belt_mk1",
 		"required_amount": 3
 	},
 
@@ -52,9 +52,9 @@ var tutorial_steps: Array = [
 		"target_tab": "processing"
 	},
 	{
-		"text": "Craft 1 Mechanical Mining Drill.",
+		"text": "Craft 1 Mining Drill MK1.",
 		"type": "craft",
-		"target_item": "electric_drill",
+		"target_item": "drill_mk1",
 		"required_amount": 1
 	},
 	{
@@ -65,21 +65,21 @@ var tutorial_steps: Array = [
 	{
 		"text": "Use WASD and zoom in/out (scroll) to find an iron ore deposit (greyish blue) and place the Mining Drill.",
 		"type": "placement",
-		"target_item": "electric_drill",
+		"target_item": "drill_mk1",
 		"required_amount": 1
 	},
 
 	# --- PHASE 4: SMELTING (Furnace) ---
 	{
-		"text": "Craft and place 1 Stone Furnace near your drill.",
+		"text": "Craft and place 1 Furnace near your drill.",
 		"type": "placement",
-		"target_item": "stone_furnace",
+		"target_item": "furnace_mk1",
 		"required_amount": 1
 	},
 	{
 		"text": "Place Straight Belts to create a path for the ore from the drill output to the Furnace, leaving a one tile gap between the Furnace. (Press 'R' to rotate)",
 		"type": "placement",
-		"target_item": "straight_belt",
+		"target_item": "straight_belt_mk1",
 		"required_amount": 3
 	},
 
@@ -90,9 +90,9 @@ var tutorial_steps: Array = [
 		"required_amount": 1
 	},
 	{
-		"text": "Smelt raw ore into 1 Iron Ingot using the Stone Furnace.",
+		"text": "Smelt raw ore into 1 Iron Plate using the Furnace MK1.",
 		"type": "production",
-		"target_item": "iron_ingot",
+		"target_item": "iron_plate",
 		"required_amount": 1
 	},
 
@@ -100,7 +100,7 @@ var tutorial_steps: Array = [
 	{
 		"text": "Place a Corner Belt to turn your conveyor line.",
 		"type": "placement",
-		"target_item": "corner_belt_right",
+		"target_item": "corner_belt_right_mk1",
 		"required_amount": 1
 	},
 
@@ -112,7 +112,7 @@ var tutorial_steps: Array = [
 		"required_amount": 1
 	},
 	{
-		"text": "Feed Iron Ingots into the Processor MK1 to produce an Intermediate Part in the same way as the Furnace",
+		"text": "Feed Iron Plates into the Processor MK1 to produce an Intermediate Part in the same way as the Furnace",
 		"type": "production",
 		"target_item": "iron_gear",
 		"required_amount": 1
@@ -126,9 +126,32 @@ var tutorial_steps: Array = [
 		"required_amount": 1
 	},
 	{
-		"text": "Feed both Iron Ingots and Copper Wire into the Manufacturer to produce Electronic Circuits!",
+		"text": "Feed both Iron Plates and Copper Wire into the Manufacturer to produce Electronic Circuits!",
 		"type": "production",
 		"target_item": "electronic_circuit",
+		"required_amount": 1
+	},
+
+	# --- PHASE 8: ADVANCED TOOLS ---
+	{
+		"text": "Press 'P' to view your live Production Statistics.",
+		"type": "stats_toggle",
+		"target_state": true
+	},
+	{
+		"text": "Press 'P' again to close the statistics panel.",
+		"type": "stats_toggle",
+		"target_state": false
+	},
+	{
+		"text": "Use the Batch Size slider in your Crafting Menu ('E') to craft 5 Belts at once.",
+		"type": "craft",
+		"target_item": "straight_belt",
+		"required_amount": 5
+	},
+	{
+		"text": "Right-click any placed building or belt to Demolish it and get a refund.",
+		"type": "demolish",
 		"required_amount": 1
 	}
 ]
@@ -190,3 +213,11 @@ func advance_step() -> void:
 		step_changed.emit(current_step, get_current_objective())
 	else:
 		tutorial_finished.emit()
+
+# Called when Production UI opens/closes
+func notify_stats_toggled(is_open: bool) -> void:
+	_check_step("stats_toggle", func(step): return step["target_state"] == is_open)
+
+# Called when player demolishes a building
+func notify_item_demolished() -> void:
+	_check_step("demolish", func(step): return true)

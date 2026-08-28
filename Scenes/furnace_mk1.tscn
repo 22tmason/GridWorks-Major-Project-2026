@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://4hdkb72pu3ic" path="res://GridWorks Major Project 2026/Scenes/copper_plate.tscn" id="2_20nwo"]
 [ext_resource type="PackedScene" uid="uid://cq718say7ed1s" path="res://GridWorks Major Project 2026/Scenes/iron_plate.tscn" id="3_36agx"]
 [ext_resource type="Texture2D" uid="uid://cq0mcri6pvqoh" path="res://GridWorks Major Project 2026/Assets/Stone Smelter On.png" id="4_20nwo"]
+[ext_resource type="PackedScene" uid="uid://22refqq4iigj" path="res://GridWorks Major Project 2026/Scenes/steel_plate.tscn" id="4_mtbee"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_36agx"]
 size = Vector2(129, 128)
@@ -15,10 +16,11 @@ size = Vector2(120, 119)
 [node name="FurnaceMK1" type="Node2D" unique_id=1905251074]
 script = ExtResource("1_qg34s")
 building_item_id = "furnace_mk1"
-smelting_time = 0.1
+smelting_time = 10.0
 recipes = {
 "copper_ore": ExtResource("2_20nwo"),
-"iron_ore": ExtResource("3_36agx")
+"iron_ore": ExtResource("3_36agx"),
+"iron_plate": ExtResource("4_mtbee")
 }
 
 [node name="FurnaceOff" type="Sprite2D" parent="." unique_id=2067550932]

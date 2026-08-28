@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://24r3ehudus0r"]
+
+[ext_resource type="Script" uid="uid://djs77c4v5dpt6" path="res://GridWorks Major Project 2026/Scripts/production_ui.gd" id="1_5vwi0"]
+[ext_resource type="Script" uid="uid://cslobfy3dtul5" path="res://GridWorks Major Project 2026/Scripts/production_graph.gd" id="2_f5037"]
+
+[node name="ProductionUi" type="CanvasLayer" unique_id=196198903]
+layer = 100
+script = ExtResource("1_5vwi0")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=437591897]
+custom_minimum_size = Vector2(650, 550)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -250.0
+offset_right = 200.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1225245365]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=1156957549]
+layout_mode = 2
+text = "Production Statistics"
+
+[node name="TimeTabs" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=2104850031]
+layout_mode = 2
+
+[node name="GraphRect" type="ColorRect" parent="PanelContainer/VBoxContainer" unique_id=511359615]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+script = ExtResource("2_f5037")
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer" unique_id=1839105255]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer" unique_id=750232031]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemList" type="GridContainer" parent="PanelContainer/VBoxContainer/ScrollContainer" unique_id=462252292]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="RefreshTimer" type="Timer" parent="." unique_id=2100196180]

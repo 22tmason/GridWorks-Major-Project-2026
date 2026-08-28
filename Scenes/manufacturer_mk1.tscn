@@ -21,7 +21,7 @@ size = Vector2(182, 182)
 
 [node name="ManufacturerMK1" type="Node2D" unique_id=1905251074]
 script = ExtResource("1_vgodh")
-processing_time = 5.0
+processing_time = 10.0
 recipes = {
 "advanced_circuit": ExtResource("4_x6c1f"),
 "battery": ExtResource("6_vlwec"),

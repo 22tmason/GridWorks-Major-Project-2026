@@ -25,6 +25,9 @@ var is_placed := false
 var input_buffer: Array[String] = []
 var output_buffer: Array[PackedScene] = []
 
+# --- NEW: EJECTED ITEMS MEMORY ---
+var ejected_items: Array[Area2D] = []
+
 @export var recipes: Dictionary = {} 
 
 @onready var smelting_timer: Timer = $SmeltingTimer
@@ -36,7 +39,10 @@ var current_output_scene: PackedScene = null
 func _ready() -> void:
 	smelting_timer.one_shot = true
 	smelting_timer.timeout.connect(_on_smelting_finished)
+	
 	input_area.area_entered.connect(_on_item_entered)
+	# --- NEW: Detect when the item is finally taken away ---
+	input_area.area_exited.connect(_on_item_exited)
 	
 	_update_sprite_visibility()
 	
@@ -71,7 +77,6 @@ func _process(_delta: float) -> void:
 		modulate = Color(1.0, 1.0, 1.0, 0.5)
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		attempt_placement()
-	
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed:
@@ -122,6 +127,11 @@ func _physics_process(_delta: float) -> void:
 	if not is_placed:
 		return
 		
+	# --- NEW: Safely clean up any items that were deleted by inserters ---
+	for item in ejected_items.duplicate():
+		if not is_instance_valid(item):
+			ejected_items.erase(item)
+			
 	_try_start_smelting()
 	_try_empty_output_buffer()
 	_check_for_waiting_items()
@@ -137,6 +147,10 @@ func _on_item_entered(area: Area2D) -> void:
 	if not is_placed or area.is_queued_for_deletion():
 		return
 		
+	# --- NEW: Ignore items we just spat out! ---
+	if area in ejected_items:
+		return
+		
 	if input_buffer.size() >= max_storage:
 		return
 		
@@ -145,6 +159,11 @@ func _on_item_entered(area: Area2D) -> void:
 		if recipes.has(incoming_ore):
 			input_buffer.append(incoming_ore)
 			area.queue_free()
+
+# --- NEW: Clear the item from memory once an inserter grabs it ---
+func _on_item_exited(area: Area2D) -> void:
+	if area in ejected_items:
+		ejected_items.erase(area)
 
 func _try_start_smelting() -> void:
 	if is_smelting or input_buffer.is_empty():
@@ -171,12 +190,17 @@ func _try_empty_output_buffer() -> void:
 	new_item.global_position = output_marker.global_position
 	get_parent().add_child(new_item)
 	
+	# --- NEW: Register this item so we don't instantly eat it ---
+	ejected_items.append(new_item)
+	
 	if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
 		TutorialManager.notify_item_produced(new_item.item_id)
+		StatisticsManager.log_production(new_item.item_id, 1)
 
 func _check_for_waiting_items() -> void:
 	for area in input_area.get_overlapping_areas():
 		if area.is_queued_for_deletion(): continue
+		if area in ejected_items: continue # --- NEW
 		if input_buffer.size() >= max_storage: break
 			
 		if area.is_in_group("items") and "item_id" in area:

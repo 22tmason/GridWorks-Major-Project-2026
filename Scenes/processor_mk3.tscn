@@ -17,7 +17,7 @@ size = Vector2(120, 119)
 [node name="ProcessorMK3" type="Node2D" unique_id=1905251074]
 script = ExtResource("1_8w3ub")
 building_item_id = "processor_mk3"
-processing_time = 1.0
+processing_time = 2.5
 recipes = {
 "copper_wire": ExtResource("2_k2iul"),
 "iron_gear": ExtResource("3_q84b1"),

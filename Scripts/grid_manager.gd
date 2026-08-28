@@ -148,5 +148,7 @@ func remove_item(grid_pos: Vector2i) -> void:
 		if is_instance_valid(item_to_remove):
 			AudioManager.play_sound(AudioManager.demolish_sound)
 			item_to_remove.queue_free()
+			if get_node_or_null("/root/TutorialManager"):
+				TutorialManager.notify_item_demolished()
 			
 		print("Demolished item! Cleared cells: ", cells_to_clear)

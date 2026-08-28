@@ -53,7 +53,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	var machine_ui = get_tree().get_first_node_in_group("machine_ui")
 	if $InventoryUI.visible or (machine_ui and machine_ui.visible):
 		return
-		
+	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if BuildManager.current_preview == null:
 			attempt_item_pickup()
@@ -65,6 +65,17 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		if not Input.is_key_pressed(KEY_SHIFT):
 			attempt_demolition()
+	# --- TIME MULTIPLIER CONTROLS ---
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_BRACKETRIGHT: # The ']' key to speed up
+			Engine.time_scale = min(Engine.time_scale + 1.0, 10.0) 
+			print("Time Scale: ", Engine.time_scale, "x")
+			get_viewport().set_input_as_handled()
+			
+		elif event.keycode == KEY_BRACKETLEFT: # The '[' key to slow down
+			Engine.time_scale = max(Engine.time_scale - 1.0, 1.0) 
+			print("Time Scale: ", Engine.time_scale, "x")
+			get_viewport().set_input_as_handled()
 
 
 func attempt_item_pickup() -> void:

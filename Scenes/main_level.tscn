@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" uid="uid://btbltisdh3c0v" path="res://GridWorks Major Project 2026/Scenes/space_elevator.tscn" id="20_easix"]
 [ext_resource type="PackedScene" uid="uid://1ado7lxiux0w" path="res://GridWorks Major Project 2026/Scenes/pause_menu.tscn" id="24_r5041"]
 [ext_resource type="PackedScene" uid="uid://dvuuenn74mnx0" path="res://GridWorks Major Project 2026/Scenes/WaypointUI.tscn" id="25_grygw"]
+[ext_resource type="PackedScene" uid="uid://24r3ehudus0r" path="res://GridWorks Major Project 2026/Scenes/ProductionUI.tscn" id="32_1usig"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ivtk"]
 content_margin_left = 12.0
@@ -297,3 +298,5 @@ position = Vector2(352, 612)
 [node name="PauseMenu" parent="." unique_id=240073865 instance=ExtResource("24_r5041")]
 
 [node name="WaypointUi" parent="." unique_id=1132716818 instance=ExtResource("25_grygw")]
+
+[node name="ProductionUi" parent="." unique_id=196198903 instance=ExtResource("32_1usig")]

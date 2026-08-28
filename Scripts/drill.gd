@@ -194,6 +194,7 @@ func _try_spawn_item() -> void:
 		
 		if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
 			TutorialManager.notify_item_produced(new_item.item_id)
+			StatisticsManager.log_production(new_item.item_id, 1)
 			
 		is_item_ready = false
 		

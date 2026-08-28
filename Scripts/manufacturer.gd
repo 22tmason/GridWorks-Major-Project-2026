@@ -247,6 +247,7 @@ func _try_empty_output_buffer() -> void:
 	
 	if "item_id" in new_item and get_node_or_null("/root/TutorialManager"):
 		TutorialManager.notify_item_produced(new_item.item_id)
+		StatisticsManager.log_production(new_item.item_id, 1)
 
 func _check_for_waiting_items() -> void:
 	for area in input_area.get_overlapping_areas():

@@ -26,15 +26,45 @@ extends CanvasLayer
 
 var current_machine: Node2D = null
 var selected_recipe_id: String = ""
+var space_elevator: Node2D = null # Persistent reference
 
 func _ready() -> void:
 	visible = false
+	
+	# Delay the extraction to ensure the scene tree is fully loaded
+	call_deferred("_setup_permanent_elevator_hud")
+
+func _setup_permanent_elevator_hud() -> void:
+	# Extract Space Elevator UI to its own permanent layer!
+	var hud_layer = CanvasLayer.new()
+	hud_layer.layer = 5 # Keeps it above game world but below pause/inventory menus
+	get_parent().add_child(hud_layer)
+	
+	elevator_panel.reparent(hud_layer)
+	elevator_panel.visible = true
+	
+	# Lock the Elevator Panel to the top right of the screen
+	elevator_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	elevator_panel.offset_left = -570
+	elevator_panel.offset_top = 20
+	elevator_panel.offset_right = -20
+	elevator_panel.offset_bottom = 420
+	
 	_apply_ui_theme()
 	
 	if seal_button:
 		seal_button.pressed.connect(_on_seal_button_pressed)
 	if confirm_button:
 		confirm_button.pressed.connect(_on_confirm_recipe_pressed)
+		
+	_bind_elevator()
+
+func _bind_elevator() -> void:
+	space_elevator = get_tree().get_first_node_in_group("space_elevator")
+	if space_elevator:
+		space_elevator.item_delivered.connect(_on_elevator_updated)
+		space_elevator.phase_completed.connect(_on_elevator_updated)
+		_refresh_elevator_ui()
 
 # --- THEME & LAYOUT STYLING ---
 func _apply_ui_theme() -> void:
@@ -56,18 +86,15 @@ func _apply_ui_theme() -> void:
 	$ProcessorPanel/HBoxContainer/RightPanel.add_theme_stylebox_override("panel", sub_panel_style)
 
 	# --- HEADER PROMINENCE STYLING ---
-	# Left Title Header ("Select Recipe")
 	title_label.add_theme_font_size_override("font_size", 20)
 	title_label.add_theme_color_override("font_color", Color(0.95, 0.95, 0.95))
 
-	# Right Item Title Header ("Copper Wire")
 	detail_name.add_theme_font_size_override("font_size", 22)
 	detail_name.add_theme_color_override("font_color", Color(1.0, 0.82, 0.35)) # Warm Gold Highlight
 	detail_name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	
 	detail_icon.custom_minimum_size = Vector2(56, 56)
 
-	# Section Headers ("INPUTS", "OUTPUT")
 	var inputs_label = $ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox/InputsLabel
 	var outputs_label = $ProcessorPanel/HBoxContainer/RightPanel/DetailsVBox/OutputsLabel
 	if inputs_label:
@@ -77,7 +104,6 @@ func _apply_ui_theme() -> void:
 		outputs_label.add_theme_font_size_override("font_size", 13)
 		outputs_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
 
-	# Container Expansion Rules
 	left_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -103,24 +129,19 @@ func _style_button(btn: Button) -> void:
 	btn.custom_minimum_size = Vector2(0, 40)
 
 func open_ui(machine: Node2D) -> void:
-	_disconnect_machine_signals()
+	if "phase_requirements" in machine:
+		return # Ignore clicks on the Space Elevator since its UI is permanent!
+		
 	current_machine = machine
 	visible = true
-
-	if "phase_requirements" in machine:
-		processor_panel.visible = false
-		elevator_panel.visible = true
-		_connect_machine_signals()
-		_refresh_elevator_ui()
-	elif "recipes" in machine:
-		elevator_panel.visible = false
+	
+	if "recipes" in machine:
 		processor_panel.visible = true
 		_setup_processor_ui()
 	else:
 		close_ui()
 
 func close_ui() -> void:
-	_disconnect_machine_signals()
 	visible = false
 	current_machine = null
 	selected_recipe_id = ""
@@ -133,7 +154,6 @@ func _setup_processor_ui() -> void:
 	if not current_machine or not "recipes" in current_machine:
 		return
 
-	# Group recipes by subcategory using InventoryManager
 	var grouped_recipes: Dictionary = {}
 	for recipe_id in current_machine.recipes.keys():
 		var subcat = "UNCATEGORIZED"
@@ -144,7 +164,6 @@ func _setup_processor_ui() -> void:
 			grouped_recipes[subcat] = []
 		grouped_recipes[subcat].append(recipe_id)
 
-	# Build category sections with GridContainers
 	for subcat_name in grouped_recipes.keys():
 		var header = Label.new()
 		header.text = subcat_name
@@ -164,7 +183,6 @@ func _setup_processor_ui() -> void:
 			slot.setup_display_slot(recipe_id)
 			slot.pressed.connect(func(): _display_recipe_details(recipe_id))
 
-	# Select current machine recipe or first available
 	var default_recipe = current_machine.selected_recipe if current_machine.selected_recipe != "" else current_machine.recipes.keys()[0]
 	_display_recipe_details(default_recipe)
 
@@ -181,7 +199,6 @@ func _display_recipe_details(recipe_id: String) -> void:
 	var craft_time = current_machine.recipe_times.get(recipe_id, current_machine.processing_time) if "recipe_times" in current_machine else current_machine.processing_time
 	detail_time_label.text = "Craft Time: %.1fs" % craft_time
 
-	# Clear and rebuild Inputs
 	for child in inputs_hbox.get_children(): child.queue_free()
 	var reqs = current_machine.recipe_requirements.get(recipe_id, {}) if "recipe_requirements" in current_machine else {}
 	
@@ -192,7 +209,6 @@ func _display_recipe_details(recipe_id: String) -> void:
 		slot.setup_display_slot(input_id)
 		slot.count_label.text = str(amount)
 
-	# Clear and rebuild Output
 	for child in outputs_hbox.get_children(): child.queue_free()
 	var out_slot = slot_scene.instantiate()
 	outputs_hbox.add_child(out_slot)
@@ -205,29 +221,14 @@ func _on_confirm_recipe_pressed() -> void:
 		close_ui()
 
 # --- SPACE ELEVATOR LOGIC ---
-func _connect_machine_signals() -> void:
-	if not current_machine: return
-	if current_machine.has_signal("item_delivered") and not current_machine.item_delivered.is_connected(_on_elevator_updated):
-		current_machine.item_delivered.connect(_on_elevator_updated)
-	if current_machine.has_signal("phase_completed") and not current_machine.phase_completed.is_connected(_on_elevator_updated):
-		current_machine.phase_completed.connect(_on_elevator_updated)
-
-func _disconnect_machine_signals() -> void:
-	if not current_machine: return
-	if current_machine.has_signal("item_delivered") and current_machine.item_delivered.is_connected(_on_elevator_updated):
-		current_machine.item_delivered.disconnect(_on_elevator_updated)
-	if current_machine.has_signal("phase_completed") and current_machine.phase_completed.is_connected(_on_elevator_updated):
-		current_machine.phase_completed.disconnect(_on_elevator_updated)
-
 func _on_elevator_updated(_arg1 = null, _arg2 = null, _arg3 = null) -> void:
-	if visible and elevator_panel.visible:
-		_refresh_elevator_ui()
+	_refresh_elevator_ui()
 
 func _refresh_elevator_ui() -> void:
-	if not current_machine: return
+	if not space_elevator: return
 
-	var current_phase: int = current_machine.current_phase
-	if current_phase >= current_machine.phase_requirements.size():
+	var current_phase: int = space_elevator.current_phase
+	if current_phase >= space_elevator.phase_requirements.size():
 		phase_title_label.text = "PROJECT ASSEMBLY COMPLETE"
 		_clear_item_rows()
 		seal_button.disabled = true
@@ -237,8 +238,8 @@ func _refresh_elevator_ui() -> void:
 	phase_title_label.text = "Phase " + str(current_phase + 1) + " Delivery Progress"
 	_clear_item_rows()
 
-	var active_reqs: Dictionary = current_machine.phase_requirements[current_phase]
-	var active_deliveries: Dictionary = current_machine.current_deliveries
+	var active_reqs: Dictionary = space_elevator.phase_requirements[current_phase]
+	var active_deliveries: Dictionary = space_elevator.current_deliveries
 
 	for item_id in active_reqs.keys():
 		var total_required: int = active_reqs[item_id]
@@ -248,7 +249,7 @@ func _refresh_elevator_ui() -> void:
 		var row = _build_item_row(item_id, remaining, total_required, delivered)
 		item_container.add_child(row)
 
-	var is_ready = current_machine.is_phase_ready_to_seal()
+	var is_ready = space_elevator.is_phase_ready_to_seal()
 	seal_button.disabled = not is_ready
 	seal_button.text = "Seal Phase" if is_ready else "Awaiting Resources"
 
@@ -292,8 +293,8 @@ func _clear_item_rows() -> void:
 		child.queue_free()
 
 func _on_seal_button_pressed() -> void:
-	if current_machine and current_machine.has_method("seal_phase") and current_machine.is_phase_ready_to_seal():
-		current_machine.seal_phase()
+	if space_elevator and space_elevator.has_method("seal_phase") and space_elevator.is_phase_ready_to_seal():
+		space_elevator.seal_phase()
 		_refresh_elevator_ui()
 
 func _unhandled_input(event: InputEvent) -> void:
