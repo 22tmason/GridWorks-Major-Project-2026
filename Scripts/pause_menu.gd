@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var resume_button: Button = $ColorRect/PanelContainer/VBoxContainer/ResumeButton
 @onready var save_button: Button = $ColorRect/PanelContainer/VBoxContainer/SaveButton 
 @onready var menu_button: Button = $ColorRect/PanelContainer/VBoxContainer/MenuButton
+@onready var settings_button: Button = $ColorRect/PanelContainer/VBoxContainer/SettingsButton # --- NEW
 
 # --- NEW: Notification Label ---
 var save_notification: Label
@@ -17,6 +18,7 @@ func _ready() -> void:
 	
 	resume_button.pressed.connect(_on_resume_pressed)
 	save_button.pressed.connect(_on_save_pressed)
+	settings_button.pressed.connect(_on_settings_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
 	
 	# --- NEW: Build the notification label dynamically ---
@@ -47,7 +49,14 @@ func _apply_factorio_theme() -> void:
 	
 	var btn_hover = btn_normal.duplicate()
 	btn_hover.bg_color = Color(0.65, 0.65, 0.65, 1.0)
+	_style_button(save_button, btn_normal, btn_hover)
+	save_button.text = "Save Game"
 
+	# --- NEW: Style the Settings button with the standard grey ---
+	_style_button(settings_button, btn_normal, btn_hover)
+	settings_button.text = "Settings"
+
+	var quit_normal = btn_normal.duplicate()
 	var resume_normal = btn_normal.duplicate()
 	resume_normal.bg_color = Color(0.45, 0.75, 0.45, 1.0)
 	var resume_hover = resume_normal.duplicate()
@@ -58,8 +67,6 @@ func _apply_factorio_theme() -> void:
 	_style_button(save_button, btn_normal, btn_hover)
 	save_button.text = "Save Game"
 
-	var quit_normal = btn_normal.duplicate()
-	quit_normal.bg_color = Color(0.9, 0.4, 0.4, 1.0)
 	var quit_hover = quit_normal.duplicate()
 	quit_hover.bg_color = Color(1.0, 0.5, 0.5, 1.0)
 	
@@ -112,3 +119,9 @@ func _on_save_pressed() -> void:
 func _on_menu_pressed() -> void:
 	get_tree().paused = false 
 	get_tree().change_scene_to_file("res://GridWorks Major Project 2026/Scenes/main_menu.tscn")
+	
+func _on_settings_pressed() -> void:
+	var settings_menu = preload("res://GridWorks Major Project 2026/Scenes/settings_ui.tscn").instantiate()
+	settings_menu.parent_menu = self # Give Settings a reference to this menu
+	add_child(settings_menu)
+	panel.visible = false # Hide the pause menu

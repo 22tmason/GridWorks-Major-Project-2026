@@ -85,22 +85,26 @@ func _gui_input(event: InputEvent) -> void:
 			
 		if is_crafting_button:
 			var craft_amount = 0
-			
-			# --- NEW: Multiply the clicks by the global slider value! ---
 			var base_batch = InventoryManager.craft_multiplier
 			
 			if event.button_index == MOUSE_BUTTON_LEFT:
-				craft_amount = base_batch # Left click crafts exact slider amount
+				craft_amount = base_batch 
 			elif event.button_index == MOUSE_BUTTON_RIGHT:
-				craft_amount = base_batch * 5 # Right click crafts 5x the slider amount for massive bulk
+				craft_amount = base_batch * 5 
 				
 			if craft_amount > 0:
+				# --- RESTORED: Play the crafting sound! ---
+				AudioManager.play_sound(AudioManager.craft_sound)
+				
 				InventoryManager.add_item(current_item_id, craft_amount)
 				if get_node_or_null("/root/TutorialManager") != null:
 					for i in range(craft_amount):
 						TutorialManager.notify_item_crafted(current_item_id)
 		else:
 			if event.button_index == MOUSE_BUTTON_LEFT:
+				# --- RESTORED: Play the UI click sound when selecting a building! ---
+				AudioManager.play_sound(AudioManager.click_sound)
+				
 				var data = InventoryManager.item_database[current_item_id]
 				if data.has("scene"):
 					var building_scene = load(data["scene"])

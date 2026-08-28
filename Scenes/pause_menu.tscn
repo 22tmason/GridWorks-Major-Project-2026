@@ -4,7 +4,7 @@
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=240073865]
 process_mode = 3
-layer = 100
+layer = 29
 script = ExtResource("1_aejho")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=806185328]
@@ -36,6 +36,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="SaveButton" type="Button" parent="ColorRect/PanelContainer/VBoxContainer" unique_id=1331394922]
+layout_mode = 2
+
+[node name="SettingsButton" type="Button" parent="ColorRect/PanelContainer/VBoxContainer" unique_id=361297271]
 layout_mode = 2
 
 [node name="MenuButton" type="Button" parent="ColorRect/PanelContainer/VBoxContainer" unique_id=1670025943]

@@ -105,12 +105,11 @@ func place_item(cells: Array[Vector2i], item_node: Node) -> bool:
 	# 5. Claim every requested cell in the dictionary
 	for cell in cells:
 		grid_data[cell] = item_node
-		
+	AudioManager.play_sound(AudioManager.build_sound)
 	print("Successfully placed item covering cells: ", cells)
 	return true
 	
 
-# --- UPDATED DEMOLISH FUNCTION ---
 # --- UPDATED DEMOLISH FUNCTION ---
 func remove_item(grid_pos: Vector2i) -> void:
 	if grid_data.has(grid_pos):
@@ -147,6 +146,7 @@ func remove_item(grid_pos: Vector2i) -> void:
 		
 		# 3. Destroy the physical building
 		if is_instance_valid(item_to_remove):
+			AudioManager.play_sound(AudioManager.demolish_sound)
 			item_to_remove.queue_free()
 			
 		print("Demolished item! Cleared cells: ", cells_to_clear)

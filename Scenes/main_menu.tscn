@@ -52,6 +52,9 @@ text = "New Game"
 layout_mode = 2
 text = "Load Game"
 
+[node name="SettingsButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=134226295]
+layout_mode = 2
+
 [node name="QuitButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=13119193]
 layout_mode = 2
 text = "Quit"

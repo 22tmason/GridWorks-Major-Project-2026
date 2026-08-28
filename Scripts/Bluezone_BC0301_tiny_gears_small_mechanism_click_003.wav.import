@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dkl2l075eomxl"
+path="res://.godot/imported/Bluezone_BC0301_tiny_gears_small_mechanism_click_003.wav-b65b0e93f562d6c58ca83bf2b4f8038b.sample"
+
+[deps]
+
+source_file="res://GridWorks Major Project 2026/Scripts/Bluezone_BC0301_tiny_gears_small_mechanism_click_003.wav"
+dest_files=["res://.godot/imported/Bluezone_BC0301_tiny_gears_small_mechanism_click_003.wav-b65b0e93f562d6c58ca83bf2b4f8038b.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

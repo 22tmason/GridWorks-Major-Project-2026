@@ -7,6 +7,7 @@ extends Control
 @onready var play_button: Button = $PanelContainer/VBoxContainer/PlayButton
 @onready var load_button: Button = $PanelContainer/VBoxContainer/LoadButton
 @onready var quit_button: Button = $PanelContainer/VBoxContainer/QuitButton
+@onready var settings_button: Button = $PanelContainer/VBoxContainer/SettingsButton # --- NEW
 
 func _ready() -> void:
 	get_tree().paused = false
@@ -16,21 +17,18 @@ func _ready() -> void:
 	play_button.pressed.connect(_on_play_pressed)
 	load_button.pressed.connect(_on_load_pressed) 
 	quit_button.pressed.connect(_on_quit_pressed)
-
+	settings_button.pressed.connect(_on_settings_pressed)
 func _apply_factorio_theme() -> void:
-	# 1. Style the Main Background Box
 	var panel_style = StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.2, 0.2, 0.2, 1.0) # Dark grey background
+	panel_style.bg_color = Color(0.2, 0.2, 0.2, 1.0) 
 	panel_style.border_color = Color(0.1, 0.1, 0.1, 1.0)
 	panel_style.set_border_width_all(4)
 	panel_style.set_content_margin_all(16)
 	panel.add_theme_stylebox_override("panel", panel_style)
 	
-	# Widen the menu and space out buttons
 	vbox.custom_minimum_size = Vector2(400, 0)
 	vbox.add_theme_constant_override("separation", 12)
 	
-	# 2. Create Base Button Style (Factorio Gray)
 	var btn_normal = StyleBoxFlat.new()
 	btn_normal.bg_color = Color(0.55, 0.55, 0.55, 1.0)
 	btn_normal.border_color = Color(0.15, 0.15, 0.15, 1.0)
@@ -38,21 +36,23 @@ func _apply_factorio_theme() -> void:
 	btn_normal.set_content_margin_all(12)
 	
 	var btn_hover = btn_normal.duplicate()
-	btn_hover.bg_color = Color(0.65, 0.65, 0.65, 1.0) # Brighter on hover
+	btn_hover.bg_color = Color(0.65, 0.65, 0.65, 1.0)
 
-	# 3. Apply to Play Button (Standard Gray)
-	_style_button(play_button, btn_normal, btn_hover)
+	# --- FIXED: Apply Green to Play Button (New Game) ---
+	var play_normal = btn_normal.duplicate()
+	play_normal.bg_color = Color(0.45, 0.75, 0.45, 1.0)
+	var play_hover = play_normal.duplicate()
+	play_hover.bg_color = Color(0.55, 0.85, 0.55, 1.0)
+	_style_button(play_button, play_normal, play_hover)
 	play_button.text = "New Game"
 	
-	# 4. Apply to Load Button (Factorio Green)
-	var load_normal = btn_normal.duplicate()
-	load_normal.bg_color = Color(0.45, 0.75, 0.45, 1.0)
-	var load_hover = load_normal.duplicate()
-	load_hover.bg_color = Color(0.55, 0.85, 0.55, 1.0)
-	_style_button(load_button, load_normal, load_hover)
+	# --- FIXED: Apply Standard Gray to Load Button (Continue) ---
+	_style_button(load_button, btn_normal, btn_hover)
 	load_button.text = "Continue Game"
 
-	# 5. Apply to Quit Button (Factorio Red)
+	_style_button(settings_button, btn_normal, btn_hover)
+	settings_button.text = "Settings"
+
 	var quit_normal = btn_normal.duplicate()
 	quit_normal.bg_color = Color(0.9, 0.4, 0.4, 1.0)
 	var quit_hover = quit_normal.duplicate()
@@ -60,10 +60,9 @@ func _apply_factorio_theme() -> void:
 	
 	_style_button(quit_button, quit_normal, quit_hover)
 	quit_button.text = "Exit"
-	# Make the quit button smaller and left-aligned like Factorio
 	quit_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	quit_button.custom_minimum_size = Vector2(400, 0)
-
+	
 # Helper function to apply font colors and styleboxes
 func _style_button(btn: Button, normal: StyleBox, hover: StyleBox) -> void:
 	btn.add_theme_stylebox_override("normal", normal)
@@ -86,3 +85,9 @@ func _on_load_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+
+func _on_settings_pressed() -> void:
+	var settings_menu = preload("res://GridWorks Major Project 2026/Scenes/settings_ui.tscn").instantiate()
+	settings_menu.parent_menu = self # Give Settings a reference to this menu
+	add_child(settings_menu)
+	panel.visible = false # Hide the main menu
