@@ -68,6 +68,8 @@ func grid_to_world(grid_pos: Vector2i) -> Vector2:
 var natural_resources: Dictionary = {}
 	
 func is_placement_blocked(cells: Array[Vector2i], item_id: String = "") -> bool:
+	if not BuildManager.is_placement_safe():
+		return true # Briefly block placement
 	# 1. Check if the physical grid space is blocked
 	for cell in cells:
 		if grid_data.has(cell):
@@ -82,6 +84,8 @@ func is_placement_blocked(cells: Array[Vector2i], item_id: String = "") -> bool:
 
 # --- UPGRADED: Handles grid placement AND inventory consumption! ---
 func place_item(cells: Array[Vector2i], item_node: Node) -> bool:
+	if not BuildManager.is_placement_safe():
+		return false
 	# 1. Extract the item ID safely
 	var cost_id = ""
 	if "building_item_id" in item_node:

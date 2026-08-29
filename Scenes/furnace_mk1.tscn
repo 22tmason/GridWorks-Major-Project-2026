@@ -16,11 +16,26 @@ size = Vector2(120, 119)
 [node name="FurnaceMK1" type="Node2D" unique_id=1905251074]
 script = ExtResource("1_qg34s")
 building_item_id = "furnace_mk1"
-smelting_time = 10.0
 recipes = {
-"copper_ore": ExtResource("2_20nwo"),
-"iron_ore": ExtResource("3_36agx"),
-"iron_plate": ExtResource("4_mtbee")
+"copper_plate": ExtResource("2_20nwo"),
+"iron_plate": ExtResource("3_36agx"),
+"steel_plate": ExtResource("4_mtbee")
+}
+recipe_requirements = {
+"copper_plate": {
+"copper_ore": 1
+},
+"iron_plate": {
+"iron_ore": 1
+},
+"steel_plate": {
+"iron_plate": 5
+}
+}
+recipe_times = {
+"copper_plate": 1,
+"iron_plate": 1,
+"steel_plate": 5
 }
 
 [node name="FurnaceOff" type="Sprite2D" parent="." unique_id=2067550932]

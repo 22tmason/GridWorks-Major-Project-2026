@@ -83,3 +83,13 @@ func cancel_preview() -> void:
 			
 	current_preview = null
 	current_item_id = "" # --- NEW: Clear the ID when cancelled ---
+	
+# --- NEW: UI Cooldown tracking ---
+var last_ui_close_time: int = 0
+
+func notify_ui_closed() -> void:
+	last_ui_close_time = Time.get_ticks_msec()
+
+func is_placement_safe() -> bool:
+	# Requires 250 milliseconds to pass after closing a UI before building is allowed
+	return Time.get_ticks_msec() - last_ui_close_time > 250

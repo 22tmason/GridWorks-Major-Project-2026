@@ -145,7 +145,8 @@ func close_ui() -> void:
 	visible = false
 	current_machine = null
 	selected_recipe_id = ""
-
+	BuildManager.notify_ui_closed() # <--- NEW
+	
 # --- CATEGORIZED PROCESSOR LOGIC ---
 func _setup_processor_ui() -> void:
 	for child in category_container.get_children():

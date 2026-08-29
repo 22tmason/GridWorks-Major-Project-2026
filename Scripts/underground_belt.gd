@@ -2,11 +2,11 @@ extends Node2D
 
 # --- MATCHING STRAIGHT BELT VARIABLES ---
 enum Direction { UP, RIGHT, DOWN, LEFT }
-@export var current_direction: Direction = Direction.RIGHT
+@export var current_direction: Direction = Direction.RIGHT # <--- Set to RIGHT
 var is_placed := false
 @export var speed: float = 128.0
-var push_direction: Vector2 = Vector2.RIGHT
-@export var lane_offset: float = 16.0 
+var push_direction: Vector2 = Vector2.RIGHT # <--- Set to RIGHT
+@export var lane_offset: float = 16.0
 
 @export var building_item_id: String = "underground_belt"
 
@@ -59,19 +59,7 @@ func _process(delta: float) -> void:
 		var axis_diff = 0.0
 		
 		match current_direction:
-			Direction.UP: #Left
-				snapped_position.y = anchor_pos.y
-				axis_diff = snapped_position.x - anchor_pos.x
-				if axis_diff <= 0: 
-					snapped_position.x = clamp(snapped_position.x, anchor_pos.x - max_dist, anchor_pos.x - min_dist)
-					is_entrance = false
-					linked_partner.is_entrance = true
-				else: 
-					snapped_position.x = clamp(snapped_position.x, anchor_pos.x + min_dist, anchor_pos.x + max_dist)
-					is_entrance = true
-					linked_partner.is_entrance = false
-					
-			Direction.DOWN: #Right
+			Direction.RIGHT: # Flow is Horizontal (Left to Right)
 				snapped_position.y = anchor_pos.y
 				axis_diff = snapped_position.x - anchor_pos.x
 				if axis_diff >= 0: 
@@ -83,29 +71,41 @@ func _process(delta: float) -> void:
 					is_entrance = true
 					linked_partner.is_entrance = false
 					
-			Direction.LEFT: #Down
-				snapped_position.x = anchor_pos.x
-				axis_diff = snapped_position.y - anchor_pos.y
+			Direction.LEFT: # Flow is Horizontal (Right to Left)
+				snapped_position.y = anchor_pos.y
+				axis_diff = snapped_position.x - anchor_pos.x
 				if axis_diff <= 0: 
-					snapped_position.y = clamp(snapped_position.y, anchor_pos.y - max_dist, anchor_pos.y - min_dist)
-					is_entrance = true
-					linked_partner.is_entrance = false
-				else: 
-					snapped_position.y = clamp(snapped_position.y, anchor_pos.y + min_dist, anchor_pos.y + max_dist)
+					snapped_position.x = clamp(snapped_position.x, anchor_pos.x - max_dist, anchor_pos.x - min_dist)
 					is_entrance = false
 					linked_partner.is_entrance = true
-					
-			Direction.RIGHT: #Up
+				else: 
+					snapped_position.x = clamp(snapped_position.x, anchor_pos.x + min_dist, anchor_pos.x + max_dist)
+					is_entrance = true
+					linked_partner.is_entrance = false
+
+			Direction.DOWN: # Flow is Vertical (Top to Bottom)
 				snapped_position.x = anchor_pos.x
 				axis_diff = snapped_position.y - anchor_pos.y
 				if axis_diff >= 0: 
 					snapped_position.y = clamp(snapped_position.y, anchor_pos.y + min_dist, anchor_pos.y + max_dist)
+					is_entrance = false
+					linked_partner.is_entrance = true
+				else: 
+					snapped_position.y = clamp(snapped_position.y, anchor_pos.y - max_dist, anchor_pos.y - min_dist)
 					is_entrance = true
 					linked_partner.is_entrance = false
-				else: 
+					
+			Direction.UP: # Flow is Vertical (Bottom to Top)
+				snapped_position.x = anchor_pos.x
+				axis_diff = snapped_position.y - anchor_pos.y
+				if axis_diff <= 0: 
 					snapped_position.y = clamp(snapped_position.y, anchor_pos.y - max_dist, anchor_pos.y - min_dist)
 					is_entrance = false
 					linked_partner.is_entrance = true
+				else: 
+					snapped_position.y = clamp(snapped_position.y, anchor_pos.y + min_dist, anchor_pos.y + max_dist)
+					is_entrance = true
+					linked_partner.is_entrance = false
 					
 	global_position = snapped_position
 
