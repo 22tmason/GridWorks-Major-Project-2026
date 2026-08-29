@@ -16,36 +16,29 @@ func _ready() -> void:
 		BuildManager.current_preview = self
 		modulate.a = 0.5
 		
-	# --- THE FIX: Force the new belt to sync with the rest of the factory ---
-	sync_animation_with_existing_belts()
-
-# Scans the grid for an existing belt and copies its animation frame
-# Scans the grid for an existing belt and copies its animation frame
-func sync_animation_with_existing_belts() -> void:
+	# Pause the internal sprite timer so it doesn't fight our Master Clock
 	var my_sprite = get_node_or_null("AnimatedSprite2D")
-	if my_sprite == null:
-		return
-		
-	# Loop through all buildings currently placed in the world
-	for cell in GridManager.grid_data:
-		var building = GridManager.grid_data[cell]
-		
-		# THE FIX: Ensure the building is actually alive and not in the process of being deleted!
-		if is_instance_valid(building) and not building.is_queued_for_deletion():
-			if "building_item_id" in building and building.building_item_id == building_item_id:
-				var other_sprite = building.get_node_or_null("AnimatedSprite2D")
-				
-				if other_sprite != null:
-					# Copy the exact frame and progress of the older belt
-					my_sprite.set_frame_and_progress(other_sprite.frame, other_sprite.frame_progress)
-					
-					# We only need to sync with ONE belt, so we can stop looking!
-					return
+	if my_sprite:
+		my_sprite.pause()
+
 
 func get_occupied_cells(center_cell: Vector2i) -> Array[Vector2i]:
 	return [center_cell]
 
 func _process(_delta: float) -> void:
+	# --- NEW: Absolute Perfect Global Sync ---
+	var my_sprite = get_node_or_null("AnimatedSprite2D")
+	if my_sprite and my_sprite.sprite_frames:
+		var fps = my_sprite.sprite_frames.get_animation_speed("default") * my_sprite.speed_scale
+		var total_frames = float(my_sprite.sprite_frames.get_frame_count("default"))
+		
+		# Mathematically calculate the exact frame based on the Master Clock
+		var progress = GridManager.belt_time * fps
+		var exact_frame = fmod(progress, total_frames)
+		
+		my_sprite.set_frame_and_progress(int(exact_frame), exact_frame - int(exact_frame))
+
+	# --- IMPORTANT: This must happen AFTER the animation logic! ---
 	if is_placed:
 		return
 		
@@ -54,11 +47,11 @@ func _process(_delta: float) -> void:
 
 	var cells_to_check = get_occupied_cells(current_grid_cell)
 	
-	# --- NEW: Check if placement is blocked OR inventory is empty ---
 	if GridManager.is_placement_blocked(cells_to_check) or InventoryManager.get_item_count(building_item_id) <= 0:
 		modulate = Color(1.0, 0.4, 0.4, 0.8) # Red if blocked or out of stock
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) # White if clear and in stock
+		
 	# Continuous placement check (Supports holding left-click while moving with WASD)
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		attempt_placement()

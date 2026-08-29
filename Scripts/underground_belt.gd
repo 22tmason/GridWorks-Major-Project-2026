@@ -2,11 +2,11 @@ extends Node2D
 
 # --- MATCHING STRAIGHT BELT VARIABLES ---
 enum Direction { UP, RIGHT, DOWN, LEFT }
-@export var current_direction: Direction = Direction.RIGHT # <--- Set to RIGHT
+@export var current_direction: Direction = Direction.DOWN # <--- FIXED
 var is_placed := false
 @export var speed: float = 128.0
-var push_direction: Vector2 = Vector2.RIGHT # <--- Set to RIGHT
-@export var lane_offset: float = 16.0
+var push_direction: Vector2 = Vector2.DOWN # <--- FIXED
+@export var lane_offset: float = 16.0 
 
 @export var building_item_id: String = "underground_belt"
 
@@ -25,6 +25,12 @@ var ejecting_items: Array = []
 		_update_visuals()
 
 func _ready() -> void:
+	# --- NEW: Rotate sprites to perfectly match the Straight Belt's DOWN orientation ---
+	if entrance_sprite:
+		entrance_sprite.rotation_degrees = 90
+	if exit_sprite:
+		exit_sprite.rotation_degrees = 90
+		
 	_update_visuals()
 	
 	if not is_placed:
@@ -59,6 +65,18 @@ func _process(delta: float) -> void:
 		var axis_diff = 0.0
 		
 		match current_direction:
+			Direction.UP: # Flow is Vertical (Bottom to Top)
+				snapped_position.x = anchor_pos.x
+				axis_diff = snapped_position.y - anchor_pos.y
+				if axis_diff <= 0: 
+					snapped_position.y = clamp(snapped_position.y, anchor_pos.y - max_dist, anchor_pos.y - min_dist)
+					is_entrance = false
+					linked_partner.is_entrance = true
+				else: 
+					snapped_position.y = clamp(snapped_position.y, anchor_pos.y + min_dist, anchor_pos.y + max_dist)
+					is_entrance = true
+					linked_partner.is_entrance = false
+					
 			Direction.RIGHT: # Flow is Horizontal (Left to Right)
 				snapped_position.y = anchor_pos.y
 				axis_diff = snapped_position.x - anchor_pos.x
@@ -68,18 +86,6 @@ func _process(delta: float) -> void:
 					linked_partner.is_entrance = true
 				else: 
 					snapped_position.x = clamp(snapped_position.x, anchor_pos.x - max_dist, anchor_pos.x - min_dist)
-					is_entrance = true
-					linked_partner.is_entrance = false
-					
-			Direction.LEFT: # Flow is Horizontal (Right to Left)
-				snapped_position.y = anchor_pos.y
-				axis_diff = snapped_position.x - anchor_pos.x
-				if axis_diff <= 0: 
-					snapped_position.x = clamp(snapped_position.x, anchor_pos.x - max_dist, anchor_pos.x - min_dist)
-					is_entrance = false
-					linked_partner.is_entrance = true
-				else: 
-					snapped_position.x = clamp(snapped_position.x, anchor_pos.x + min_dist, anchor_pos.x + max_dist)
 					is_entrance = true
 					linked_partner.is_entrance = false
 
@@ -94,16 +100,16 @@ func _process(delta: float) -> void:
 					snapped_position.y = clamp(snapped_position.y, anchor_pos.y - max_dist, anchor_pos.y - min_dist)
 					is_entrance = true
 					linked_partner.is_entrance = false
-					
-			Direction.UP: # Flow is Vertical (Bottom to Top)
-				snapped_position.x = anchor_pos.x
-				axis_diff = snapped_position.y - anchor_pos.y
+
+			Direction.LEFT: # Flow is Horizontal (Right to Left)
+				snapped_position.y = anchor_pos.y
+				axis_diff = snapped_position.x - anchor_pos.x
 				if axis_diff <= 0: 
-					snapped_position.y = clamp(snapped_position.y, anchor_pos.y - max_dist, anchor_pos.y - min_dist)
+					snapped_position.x = clamp(snapped_position.x, anchor_pos.x - max_dist, anchor_pos.x - min_dist)
 					is_entrance = false
 					linked_partner.is_entrance = true
 				else: 
-					snapped_position.y = clamp(snapped_position.y, anchor_pos.y + min_dist, anchor_pos.y + max_dist)
+					snapped_position.x = clamp(snapped_position.x, anchor_pos.x + min_dist, anchor_pos.x + max_dist)
 					is_entrance = true
 					linked_partner.is_entrance = false
 					
@@ -116,8 +122,6 @@ func _process(delta: float) -> void:
 		modulate = Color(1.0, 0.4, 0.4, 0.8) 
 	else:
 		modulate = Color(1.0, 1.0, 1.0, 0.5) 
-		
-	# REMOVED: The Continuous WASD check block was deleted from here!
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_placed: return
@@ -187,7 +191,8 @@ func _on_area_entered(hit_area: Area2D) -> void:
 		hit_area.set_deferred("monitorable", false)
 		hit_area.visible = false
 		
-		var world_forward = Vector2.RIGHT.rotated(global_rotation).round()
+		# --- FIXED: Use Vector2.DOWN to match the new defaults ---
+		var world_forward = Vector2.DOWN.rotated(global_rotation).round()
 		var sideways_dir = Vector2(-world_forward.y, world_forward.x)
 		var saved_lane_offset = (hit_area.global_position - global_position).project(sideways_dir)
 		
@@ -212,7 +217,8 @@ func _physics_process(delta: float) -> void:
 	if not is_placed or is_entrance: 
 		return
 	
-	var world_dir = Vector2.RIGHT.rotated(global_rotation).round()
+	# --- FIXED: Use Vector2.DOWN to match the new defaults ---
+	var world_dir = Vector2.DOWN.rotated(global_rotation).round()
 	
 	for item in ejecting_items.duplicate():
 		if is_instance_valid(item):

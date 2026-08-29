@@ -1,7 +1,11 @@
 extends Node
 
 const CELL_SIZE := Vector2(64, 64)
+# --- NEW: Master Clock for perfect animation sync ---
+var belt_time: float = 0.0
 
+func _process(delta: float) -> void:
+	belt_time += delta
 # Tracks which building is in which cell -> Keys: Vector2i, Values: Node/String
 var grid_data := {}
 # Inside your GridManager.gd script
