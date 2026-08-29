@@ -84,6 +84,10 @@ func _try_absorb_item(area: Area2D) -> bool:
 		var req_amt: int = phase_requirements[current_phase][item_id]
 		item_delivered.emit(item_id, current_deliveries[item_id], req_amt)
 		
+		# --- NEW: Tell the TutorialManager an item was delivered! ---
+		if get_node_or_null("/root/TutorialManager"):
+			TutorialManager.notify_item_delivered(item_id)
+		
 		area.queue_free()
 		return true
 		

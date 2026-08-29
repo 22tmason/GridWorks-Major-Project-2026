@@ -47,7 +47,14 @@ func _unhandled_input(event: InputEvent) -> void:
 			visible = not visible
 			if visible:
 				populate_ui_views()
+			else:
+				# --- FIXED: Only trigger the build cooldown when CLOSING the menu! ---
 				BuildManager.notify_ui_closed() 
+				
+			# --- FIXED: Tell the TutorialManager the inventory was toggled! ---
+			if get_node_or_null("/root/TutorialManager"):
+				TutorialManager.notify_inventory_toggled(visible)
+				
 			get_viewport().set_input_as_handled()
 
 func _on_tab_changed(tab_idx: int) -> void:

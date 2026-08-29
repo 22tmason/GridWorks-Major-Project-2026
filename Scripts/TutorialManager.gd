@@ -6,22 +6,15 @@ signal tutorial_finished
 var current_step: int = 0
 var current_progress: int = 0
 
-# Step Types: 
-# "ui_toggle" -> Inventory open/closed state
-# "tab_select" -> Switching crafting UI tabs
-# "craft"      -> Hand-crafting an item
-# "placement"  -> Placing a building on the grid
-# "production" -> Machine producing/smelting an item
-
 var tutorial_steps: Array = [
-	# --- PHASE 1: UI & CRAFTING ---
+	# --- PHASE 1: UI & BATCH CRAFTING ---
 	{
 		"text": "Press 'E' to open your Inventory & Crafting menu.",
 		"type": "ui_toggle",
 		"target_state": true
 	},
 	{
-		"text": "Craft 5 Straight Belts from the Logistics tab.",
+		"text": "Use the Batch Size slider to craft 5 Straight Belts at once.",
 		"type": "craft",
 		"target_item": "straight_belt_mk1",
 		"required_amount": 5
@@ -32,12 +25,17 @@ var tutorial_steps: Array = [
 		"target_state": false
 	},
 
-	# --- PHASE 2: BELTS & ROTATION ---
+	# --- PHASE 2: BELTS & DEMOLITION ---
 	{
 		"text": "Place 3 Straight Belts on the ground. (Press 'R' to rotate)",
 		"type": "placement",
 		"target_item": "straight_belt_mk1",
 		"required_amount": 3
+	},
+	{
+		"text": "Right-click a placed belt to Demolish it and get a refund.",
+		"type": "demolish",
+		"required_amount": 1
 	},
 
 	# --- PHASE 3: DRILLS & PROCESSING TAB ---
@@ -63,76 +61,33 @@ var tutorial_steps: Array = [
 		"target_state": false
 	},
 	{
-		"text": "Use WASD and zoom in/out (scroll) to find an iron ore deposit (greyish blue) and place the Mining Drill.",
+		"text": "Press 'Q' to exit building mode, use WASD to move and scroll to zoom in/out to find an iron ore deposit, you can find out the type by hovering your mouse over it. Place the Drill there.",
 		"type": "placement",
 		"target_item": "drill_mk1",
 		"required_amount": 1
 	},
 
-	# --- PHASE 4: SMELTING (Furnace) ---
+	# --- PHASE 4: SMELTING & AUTOMATION ---
 	{
-		"text": "Craft and place 1 Furnace near your drill.",
+		"text": "Craft and place 1 Furnace a few tiles away from your drill.",
 		"type": "placement",
 		"target_item": "furnace_mk1",
 		"required_amount": 1
 	},
 	{
-		"text": "Place Straight Belts to create a path for the ore from the drill output to the Furnace, leaving a one tile gap between the Furnace. (Press 'R' to rotate)",
-		"type": "placement",
-		"target_item": "straight_belt_mk1",
-		"required_amount": 3
-	},
-
-	{
-		"text": "Place an Inserter to feed raw ore into the Furnace, face it towards the belt, with the Furnace behind.",
+		"text": "Place an Inserter in front of the furnace with its claw facing away to feed raw ore from the Drill into the Furnace (using belts to cover the distance).",
 		"type": "placement",
 		"target_item": "inserter",
 		"required_amount": 1
 	},
 	{
-		"text": "Smelt raw ore into 1 Iron Plate using the Furnace MK1.",
+		"text": "Left-click your Furnace, select the 'Iron Plate' recipe, and wait for it to smelt.",
 		"type": "production",
 		"target_item": "iron_plate",
 		"required_amount": 1
 	},
-
-	# --- PHASE 5: BELT CORNERS & ROUTING ---
-	{
-		"text": "Place a Corner Belt to turn your conveyor line.",
-		"type": "placement",
-		"target_item": "corner_belt_right_mk1",
-		"required_amount": 1
-	},
-
-	# --- PHASE 6: 1-INPUT PROCESSING (Processor MK1) ---
-	{
-		"text": "Craft and place a Processor MK1 from the Manufacturing tab.",
-		"type": "placement",
-		"target_item": "processor_mk1",
-		"required_amount": 1
-	},
-	{
-		"text": "Feed Iron Plates into the Processor MK1 to produce an Intermediate Part in the same way as the Furnace",
-		"type": "production",
-		"target_item": "iron_gear",
-		"required_amount": 1
-	},
-
-	# --- PHASE 7: 2-INPUT MANUFACTURING (Manufacturer MK1) ---
-	{
-		"text": "Craft and place a Manufacturer MK1.",
-		"type": "placement",
-		"target_item": "manufacturer_mk1",
-		"required_amount": 1
-	},
-	{
-		"text": "Feed both Iron Plates and Copper Wire into the Manufacturer to produce Electronic Circuits!",
-		"type": "production",
-		"target_item": "electronic_circuit",
-		"required_amount": 1
-	},
-
-	# --- PHASE 8: ADVANCED TOOLS ---
+	
+	# --- PHASE 5: STATISTICS & ENDGAME ---
 	{
 		"text": "Press 'P' to view your live Production Statistics.",
 		"type": "stats_toggle",
@@ -144,15 +99,10 @@ var tutorial_steps: Array = [
 		"target_state": false
 	},
 	{
-		"text": "Use the Batch Size slider in your Crafting Menu ('E') to craft 5 Belts at once.",
-		"type": "craft",
-		"target_item": "straight_belt",
-		"required_amount": 5
-	},
-	{
-		"text": "Right-click any placed building or belt to Demolish it and get a refund.",
-		"type": "demolish",
-		"required_amount": 1
+		"text": "Use Belts to transport your finished Iron Plates into the Space Elevator. Continue to meet the delivery quotas to unlock new machines and finish the game!",
+		"type": "delivery",
+		"target_item": "iron_plate",
+		"required_amount": 10
 	}
 ]
 
@@ -162,29 +112,24 @@ func get_current_objective() -> String:
 		if step_data.has("required_amount") and step_data["required_amount"] > 1:
 			return step_data["text"] + " (%d/%d)" % [current_progress, step_data["required_amount"]]
 		return step_data["text"]
-	return "Tutorial Complete! You've mastered factory basics."
+	return "Tutorial Complete! Feed 100 Iron & Copper plates into the Space Elevator to unlock Phase 1."
 
-# Called when Inventory opens/closes
 func notify_inventory_toggled(is_open: bool) -> void:
 	_check_step("ui_toggle", func(step): return step["target_state"] == is_open)
 
-# Called when UI Tab is clicked (logistics, processing, manufacturing, intermediates)
 func notify_tab_selected(tab_name: String) -> void:
 	_check_step("tab_select", func(step): return step["target_tab"].to_lower() == tab_name.to_lower())
 
-# Called when player clicks hand-craft button
 func notify_item_crafted(item_id: String) -> void:
 	_check_step("craft", func(step): return step["target_item"] == item_id)
 
-# Called when player places a building on grid
 func notify_item_placed(item_id: String) -> void:
 	_check_step("placement", func(step): 
-		if step["target_item"] == "corner_belt_right":
-			return item_id in ["corner_belt_right", "corner_belt_left"]
+		if step["target_item"] == "corner_belt_right_mk1":
+			return item_id in ["corner_belt_right_mk1", "corner_belt_left_mk1"]
 		return step["target_item"] == item_id
 	)
 
-# Called when a machine (Furnace, Processor, Manufacturer, Drill) produces an item
 func notify_item_produced(item_id: String) -> void:
 	_check_step("production", func(step): 
 		if step["target_item"] in ["iron_plate", "iron_ingot"]:
@@ -214,10 +159,11 @@ func advance_step() -> void:
 	else:
 		tutorial_finished.emit()
 
-# Called when Production UI opens/closes
 func notify_stats_toggled(is_open: bool) -> void:
 	_check_step("stats_toggle", func(step): return step["target_state"] == is_open)
 
-# Called when player demolishes a building
 func notify_item_demolished() -> void:
 	_check_step("demolish", func(step): return true)
+
+func notify_item_delivered(item_id: String) -> void:
+	_check_step("delivery", func(step): return step.get("target_item", item_id) == item_id)
